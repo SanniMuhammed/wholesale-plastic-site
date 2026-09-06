@@ -2,15 +2,17 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
 
-export async function generateMetadata({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) return {};
-  const dict = getDictionary(params.locale);
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const dict = getDictionary(rawLocale);
   return { title: dict.meta.about.title, description: dict.meta.about.description };
 }
 
-export default function AboutPage({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) notFound();
-  const locale = params.locale as Locale;
+export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
   const ap = dict.aboutPage;
 

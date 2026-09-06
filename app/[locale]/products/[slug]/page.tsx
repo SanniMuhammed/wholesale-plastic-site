@@ -13,24 +13,26 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: string; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  if (!isLocale(params.locale)) return {};
-  const locale = params.locale as Locale;
-  const product = getProductBySlug(params.slug);
+  const { locale: rawLocale, slug } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const locale = rawLocale as Locale;
+  const product = getProductBySlug(slug);
   if (!product) return {};
   return { title: product.name[locale], description: product.shortDescription[locale] };
 }
 
-export default function ProductDetailPage({
+export default async function ProductDetailPage({
   params,
 }: {
-  params: { locale: string; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  if (!isLocale(params.locale)) notFound();
-  const locale = params.locale as Locale;
+  const { locale: rawLocale, slug } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
-  const product = getProductBySlug(params.slug);
+  const product = getProductBySlug(slug);
   if (!product) notFound();
 
   const category = getCategory(product.category);

@@ -4,15 +4,17 @@ import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
 import { generalInquiryLink } from "@/lib/whatsapp";
 
-export async function generateMetadata({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) return {};
-  const dict = getDictionary(params.locale);
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const dict = getDictionary(rawLocale);
   return { title: dict.meta.contact.title, description: dict.meta.contact.description };
 }
 
-export default function ContactPage({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) notFound();
-  const locale = params.locale as Locale;
+export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
   const cp = dict.contactPage;
 

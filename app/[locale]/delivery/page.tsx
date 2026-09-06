@@ -3,15 +3,17 @@ import Link from "next/link";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
 
-export async function generateMetadata({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) return {};
-  const dict = getDictionary(params.locale);
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const dict = getDictionary(rawLocale);
   return { title: dict.meta.delivery.title, description: dict.meta.delivery.description };
 }
 
-export default function DeliveryPage({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) notFound();
-  const locale = params.locale as Locale;
+export default async function DeliveryPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
   const dp = dict.deliveryPage;
 

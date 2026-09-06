@@ -11,15 +11,17 @@ import { StartBusinessSection } from "@/components/StartBusinessSection";
 import { DeliveryTeaser } from "@/components/DeliveryTeaser";
 import { FinalCta } from "@/components/FinalCta";
 
-export async function generateMetadata({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) return {};
-  const dict = getDictionary(params.locale);
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const dict = getDictionary(rawLocale);
   return { title: dict.meta.home.title, description: dict.meta.home.description };
 }
 
-export default function HomePage({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) notFound();
-  const locale = params.locale as Locale;
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
 
   return (

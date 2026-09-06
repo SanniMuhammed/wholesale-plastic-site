@@ -46,7 +46,10 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
         capacity: product.capacity,
       };
     })
-    .filter((i): i is { slug: string; quantity: number; name: string; capacity?: string } => Boolean(i));
+    .filter(
+      (i): i is { slug: string; quantity: number; name: string; capacity: string | undefined } =>
+        Boolean(i)
+    );
 
   function updateDetail<K extends keyof DetailsState>(key: K, value: DetailsState[K]) {
     setDetails((d) => ({ ...d, [key]: value }));

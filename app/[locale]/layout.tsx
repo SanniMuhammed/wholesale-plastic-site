@@ -11,24 +11,26 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) return {};
-  const dict = getDictionary(params.locale);
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const dict = getDictionary(rawLocale);
   return {
     title: { default: dict.meta.home.title, template: `%s | ${dict.meta.home.title}` },
     description: dict.meta.home.description,
   };
 }
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: {
   children: ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  if (!isLocale(params.locale)) notFound();
-  const locale = params.locale as Locale;
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
 
   return (
