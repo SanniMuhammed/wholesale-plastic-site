@@ -1,0 +1,268 @@
+{
+  "locale": "en",
+  "meta": {
+    "home": {
+      "title": "Wholesale Plastic Products from Nigeria",
+      "description": "Source plastic buckets, basins, bowls and containers wholesale from Nigeria. Browse the catalog, build your order, and send it to us on WhatsApp — we coordinate delivery across West Africa."
+    },
+    "products": {
+      "title": "Products — Wholesale Plastic Catalog",
+      "description": "Browse the full wholesale catalog of plastic buckets, basins, bowls, containers and household products."
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "description": "How wholesale ordering works, from browsing the catalog to receiving your delivery."
+    },
+    "wholesale": {
+      "title": "Wholesale",
+      "description": "Wholesale plastic products for retailers, distributors and new businesses across West Africa."
+    },
+    "delivery": {
+      "title": "Delivery",
+      "description": "How we coordinate delivery of wholesale plastic products from Nigeria to your country."
+    },
+    "about": {
+      "title": "About Us",
+      "description": "A Nigerian wholesale plastic supplier serving businesses across West Africa."
+    },
+    "orderSummary": {
+      "title": "Your Order Summary",
+      "description": "Review the products and quantities you've selected, then send your order to our wholesale team on WhatsApp to confirm pricing and delivery."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Get in touch with our wholesale team."
+    }
+  },
+  "nav": {
+    "products": "Products",
+    "categories": "Categories",
+    "howItWorks": "How It Works",
+    "wholesale": "Wholesale",
+    "about": "About",
+    "delivery": "Delivery",
+    "contact": "Contact",
+    "forBusiness": "For Your Business",
+    "reviewOrder": "Review Order",
+    "whatsapp": "WhatsApp",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "common": {
+    "viewProduct": "View Product",
+    "addToOrder": "Add to Order",
+    "addedToOrder": "Added to order",
+    "removeFromOrder": "Remove",
+    "requestPrice": "Request Price",
+    "wholesalePricing": "Wholesale pricing available",
+    "reviewOrder": "Review Order",
+    "wholesaleOrdersOnly": "Wholesale orders only",
+    "whatsappUs": "WhatsApp Us",
+    "sendRequest": "Send Request",
+    "sending": "Sending…",
+    "learnMore": "Learn more",
+    "exploreProducts": "Explore Products",
+    "capacity": "Capacity",
+    "material": "Material",
+    "useCase": "Use",
+    "packaging": "Packaging",
+    "availableColors": "Available in",
+    "productDetails": "Product Details",
+    "country": "Country",
+    "city": "City",
+    "quantity": "Quantity",
+    "all": "All",
+    "searchPlaceholder": "Search products…",
+    "noResults": "No products match your search.",
+    "clearFilters": "Clear filters",
+    "backToProducts": "Back to Products"
+  },
+  "hero": {
+    "supporting": "Wholesale • Nigerian Supply • West Africa",
+    "title": "Buy Plastic Products Wholesale Directly From Nigeria",
+    "subtitle": "Source your products from Nigeria without travelling. Choose what you need, tell us your quantities, and we'll handle the rest.",
+    "primaryCta": "Explore Products",
+    "secondaryCta": "Review Order"
+  },
+  "trustBar": {
+    "items": ["Based in Nigeria", "Wholesale Quantities", "West Africa Delivery", "WhatsApp Support"]
+  },
+  "categoriesSection": {
+    "title": "Explore Our Products",
+    "subtitle": "Wholesale plastic products across every category your business needs."
+  },
+  "featured": {
+    "title": "Popular With Our Customers"
+  },
+  "travel": {
+    "title": "You Don't Need to Travel to Nigeria",
+    "problem": "Finding reliable suppliers in Nigeria can be difficult when you're in another country.",
+    "solution": "Tell us what you need, confirm your order, and we coordinate the supply and delivery.",
+    "flow": { "you": "You", "team": "Our Team in Nigeria", "products": "Products", "business": "Your Business" }
+  },
+  "howItWorksSection": {
+    "title": "How It Works",
+    "subtitle": "Five steps from browsing to delivery.",
+    "steps": [
+      { "number": "01", "title": "Choose", "description": "Browse our products." },
+      { "number": "02", "title": "Build Your Order", "description": "Add products and quantities to your order summary." },
+      { "number": "03", "title": "WhatsApp", "description": "Send your order to us on WhatsApp." },
+      { "number": "04", "title": "Confirm", "description": "Agree on pricing and confirm with our team." },
+      { "number": "05", "title": "Receive", "description": "We arrange delivery to your destination." }
+    ]
+  },
+  "startBusiness": {
+    "title": "Starting a Plastic Products Business?",
+    "body": "You don't need to know Nigeria or travel there to start sourcing wholesale plastic products. We help businesses across West Africa access products from Nigeria.",
+    "segments": {
+      "start": { "title": "Start", "description": "For new businesses placing their first wholesale order." },
+      "restock": { "title": "Restock", "description": "For retailers replenishing inventory." },
+      "distribute": { "title": "Distribute", "description": "For wholesalers and established distributors buying in larger quantities." }
+    },
+    "cta": "Review Order"
+  },
+  "deliveryTeaser": {
+    "title": "From Nigeria to Your Country",
+    "subtitle": "We coordinate supply and delivery so you don't have to manage Nigerian logistics yourself.",
+    "cta": "See How Delivery Works"
+  },
+  "finalCta": {
+    "title": "Ready to Source From Nigeria?",
+    "subtitle": "Tell us what your business needs — we'll take it from there.",
+    "primaryCta": "Review Order",
+    "secondaryCta": "WhatsApp Us"
+  },
+  "footer": {
+    "tagline": "Wholesale plastic products from Nigeria to West Africa.",
+    "productsHeading": "Products",
+    "businessHeading": "Business",
+    "companyHeading": "Company",
+    "languageHeading": "Language",
+    "allProducts": "All Products",
+    "aboutUs": "About Us",
+    "catalog": "Catalog",
+    "copyright": "© {year} Your Company Name. All rights reserved."
+  },
+  "categories": {
+    "buckets": "Buckets",
+    "basins": "Basins",
+    "bowls": "Bowls",
+    "containers": "Containers",
+    "household": "Household Products",
+    "other": "Other Products"
+  },
+  "colors": {
+    "red": "Red",
+    "blue": "Blue",
+    "green": "Green",
+    "yellow": "Yellow",
+    "white": "White",
+    "black": "Black",
+    "orange": "Orange",
+    "gray": "Gray",
+    "assorted": "Assorted"
+  },
+  "wholesalePage": {
+    "heroTitle": "Wholesale, Built Around Your Business",
+    "heroSubtitle": "Whatever stage your business is at, we supply plastic products in the quantities you need — sourced and coordinated from Nigeria.",
+    "whoWeServeTitle": "Who We Serve",
+    "whoWeServe": ["Retailers", "Market traders", "Plastic-product dealers", "Distributors", "Supermarkets", "New entrepreneurs", "Existing wholesalers"],
+    "whatWeSupplyTitle": "What We Supply",
+    "whySection": {
+      "title": "Why Source From Us",
+      "points": [
+        "Direct sourcing from Nigerian manufacturers and stockists",
+        "Wholesale quantities across every product category",
+        "Guidance for first-time importers who are new to Nigerian sourcing",
+        "WhatsApp-first support in French and English"
+      ]
+    },
+    "howOrderingTitle": "How Wholesale Ordering Works",
+    "bulkTitle": "Bulk Orders",
+    "bulkBody": "For large or recurring orders, our team can work with you directly on quantities, packaging and delivery scheduling. Send us your order on WhatsApp to start the conversation.",
+    "faqTitle": "Frequently Asked Questions",
+    "faq": [
+      { "q": "Is there a minimum order quantity?", "a": "Minimum quantities vary by product. Tell us what you need when you reach out on WhatsApp and we'll confirm what's possible." },
+      { "q": "Which countries do you deliver to?", "a": "We currently serve customers across West Africa. Tell us your destination on WhatsApp and we'll confirm delivery details." },
+      { "q": "How is pricing determined?", "a": "Wholesale pricing depends on product, quantity and destination. Send us your order on WhatsApp and our team will confirm exact pricing." },
+      { "q": "How long does delivery take?", "a": "Delivery time depends on the destination, quantity and shipping method. Our team will confirm timing when you reach out." }
+    ],
+    "cta": "Review Order"
+  },
+  "deliveryPage": {
+    "title": "From Nigeria to Your Country",
+    "intro": "We coordinate the movement of your order from our warehouse in Nigeria to your destination. Here's how the process works.",
+    "steps": [
+      "You send your product list",
+      "We confirm availability",
+      "We prepare your quotation",
+      "We discuss delivery",
+      "You confirm the order",
+      "We prepare the goods",
+      "Shipment is arranged",
+      "You receive your goods"
+    ],
+    "factorsTitle": "Delivery time and cost can depend on",
+    "factors": ["Product quantity", "Destination", "Shipping method", "Current logistics conditions"],
+    "note": "We don't publish fixed delivery prices or timelines because they vary by order — our team will confirm the specifics for your destination on WhatsApp.",
+    "cta": "Review Order"
+  },
+  "aboutPage": {
+    "title": "About Us",
+    "placeholderNote": "Placeholder copy — replace each section with your company's real story before launch.",
+    "sections": [
+      { "heading": "Where We're Based", "body": "[Describe your base of operations in Nigeria — city, warehouse, or market location.]" },
+      { "heading": "What We Sell", "body": "[Describe the range of plastic products you supply, in your own words.]" },
+      { "heading": "Who We Serve", "body": "[Describe the retailers, traders and businesses you work with across West Africa.]" },
+      { "heading": "Our Wholesale Focus", "body": "[Explain why the business is built around wholesale quantities rather than single-item retail.]" },
+      { "heading": "Sourcing From Nigeria", "body": "[Explain your connection to Nigerian manufacturers, markets or suppliers.]" },
+      { "heading": "Our Experience", "body": "[Share real, verifiable background — only include details you can stand behind.]" }
+    ]
+  },
+  "orderSummaryPage": {
+    "title": "Your Order Summary",
+    "intro": "Here's everything you've added. Continue on WhatsApp to confirm pricing, availability and delivery with our team — no forms required.",
+    "orderSummaryTitle": "Your Order",
+    "orderEmpty": "You haven't added any products yet.",
+    "browseProducts": "Browse Products",
+    "receiptNote": "Screenshot or print this summary to keep a copy for yourself.",
+    "detailsTitle": "Add Details (optional)",
+    "detailsNote": "None of this is required — it just helps our team recognize you on WhatsApp.",
+    "fields": {
+      "customerName": "Your Name (optional)",
+      "businessName": "Business Name (optional)",
+      "otherInfo": "Anything else? (optional)"
+    },
+    "continueOnWhatsapp": "Continue on WhatsApp",
+    "printReceipt": "Print / Save as PDF",
+    "noWhatsappPrompt": "Don't have WhatsApp?",
+    "noWhatsappToggle": "Send your order another way",
+    "fallbackIntro": "We'll need a couple more details to reach you without WhatsApp.",
+    "fallbackFields": {
+      "country": "Country",
+      "city": "City",
+      "contact": "Email or Phone Number"
+    },
+    "submit": "Send Request",
+    "successMessage": "Request received. Our wholesale team will contact you with pricing and delivery information.",
+    "errorMessage": "Something went wrong. Please try again, or reach us directly on WhatsApp.",
+    "requiredField": "This field is required."
+  },
+  "contactPage": {
+    "title": "Contact Us",
+    "intro": "Have a question before placing your order? Reach us directly.",
+    "whatsappLabel": "WhatsApp",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "addressLabel": "Location"
+  },
+  "whatsapp": {
+    "general": "Hello, I'd like to know more about your wholesale plastic products.",
+    "productInquiry": "Hello, I am interested in {product}. I would like to know the wholesale price for {quantity} pieces with delivery to {city}, {country}.",
+    "orderLabel": "Order",
+    "quantityLabel": "Qty",
+    "nameLabel": "Name",
+    "businessLabel": "Business",
+    "noteLabel": "Note"
+  }
+}

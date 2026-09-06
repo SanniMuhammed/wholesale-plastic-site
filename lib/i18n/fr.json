@@ -1,0 +1,268 @@
+{
+  "locale": "fr",
+  "meta": {
+    "home": {
+      "title": "Produits Plastiques en Gros Depuis le Nigeria",
+      "description": "Approvisionnez-vous en seaux, bassines, bols et récipients plastiques en gros depuis le Nigeria. Parcourez le catalogue, composez votre commande et envoyez-la nous sur WhatsApp — nous coordonnons la livraison en Afrique de l'Ouest."
+    },
+    "products": {
+      "title": "Produits — Catalogue de Gros en Plastique",
+      "description": "Parcourez notre catalogue complet de seaux, bassines, bols, récipients et articles ménagers en plastique, vendus en gros."
+    },
+    "howItWorks": {
+      "title": "Comment ça marche",
+      "description": "Comment fonctionne la commande en gros, de la consultation du catalogue à la réception de votre livraison."
+    },
+    "wholesale": {
+      "title": "Vente en gros",
+      "description": "Produits plastiques en gros pour détaillants, distributeurs et nouvelles entreprises à travers l'Afrique de l'Ouest."
+    },
+    "delivery": {
+      "title": "Livraison",
+      "description": "Comment nous coordonnons la livraison de produits plastiques en gros depuis le Nigeria jusqu'à votre pays."
+    },
+    "about": {
+      "title": "À propos",
+      "description": "Un fournisseur nigérian de produits plastiques en gros, au service des entreprises d'Afrique de l'Ouest."
+    },
+    "orderSummary": {
+      "title": "Récapitulatif de votre commande",
+      "description": "Vérifiez les produits et quantités sélectionnés, puis envoyez votre commande à notre équipe commerciale sur WhatsApp pour confirmer le prix et la livraison."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Contactez notre équipe commerciale."
+    }
+  },
+  "nav": {
+    "products": "Produits",
+    "categories": "Catégories",
+    "howItWorks": "Comment ça marche",
+    "wholesale": "Vente en gros",
+    "about": "À propos",
+    "delivery": "Livraison",
+    "contact": "Contact",
+    "forBusiness": "Pour votre commerce",
+    "reviewOrder": "Voir ma commande",
+    "whatsapp": "WhatsApp",
+    "menu": "Menu",
+    "close": "Fermer"
+  },
+  "common": {
+    "viewProduct": "Voir le produit",
+    "addToOrder": "Ajouter à la commande",
+    "addedToOrder": "Ajouté à la commande",
+    "removeFromOrder": "Retirer",
+    "requestPrice": "Demander le prix",
+    "wholesalePricing": "Prix de gros disponible",
+    "reviewOrder": "Voir ma commande",
+    "wholesaleOrdersOnly": "Commandes en gros uniquement",
+    "whatsappUs": "Contactez-nous sur WhatsApp",
+    "sendRequest": "Envoyer la demande",
+    "sending": "Envoi en cours…",
+    "learnMore": "En savoir plus",
+    "exploreProducts": "Voir les produits",
+    "capacity": "Capacité",
+    "material": "Matière",
+    "useCase": "Usage",
+    "packaging": "Conditionnement",
+    "availableColors": "Disponible en",
+    "productDetails": "Détails du produit",
+    "country": "Pays",
+    "city": "Ville",
+    "quantity": "Quantité",
+    "all": "Tous",
+    "searchPlaceholder": "Rechercher un produit…",
+    "noResults": "Aucun produit ne correspond à votre recherche.",
+    "clearFilters": "Réinitialiser les filtres",
+    "backToProducts": "Retour aux produits"
+  },
+  "hero": {
+    "supporting": "Vente en gros • Fourni depuis le Nigeria • Afrique de l'Ouest",
+    "title": "Achetez des produits plastiques en gros directement depuis le Nigeria",
+    "subtitle": "Approvisionnez votre commerce auprès d'un fournisseur nigérian sans avoir à vous déplacer. Choisissez vos produits, indiquez vos quantités et nous nous occupons du reste.",
+    "primaryCta": "Voir les produits",
+    "secondaryCta": "Voir ma commande"
+  },
+  "trustBar": {
+    "items": ["Basé au Nigeria", "Vente en gros", "Livraison en Afrique de l'Ouest", "Assistance WhatsApp"]
+  },
+  "categoriesSection": {
+    "title": "Découvrez nos produits",
+    "subtitle": "Des produits plastiques en gros dans toutes les catégories dont votre commerce a besoin."
+  },
+  "featured": {
+    "title": "Les produits les plus demandés"
+  },
+  "travel": {
+    "title": "Vous n'avez pas besoin de vous déplacer au Nigeria",
+    "problem": "Trouver des fournisseurs fiables au Nigeria peut être difficile lorsqu'on se trouve dans un autre pays.",
+    "solution": "Indiquez-nous vos besoins, confirmez votre commande, et nous coordonnons l'approvisionnement et la livraison.",
+    "flow": { "you": "Vous", "team": "Notre équipe au Nigeria", "products": "Produits", "business": "Votre commerce" }
+  },
+  "howItWorksSection": {
+    "title": "Comment ça marche",
+    "subtitle": "Cinq étapes, de la consultation du catalogue à la livraison.",
+    "steps": [
+      { "number": "01", "title": "Choisissez", "description": "Parcourez nos produits." },
+      { "number": "02", "title": "Composez votre commande", "description": "Ajoutez vos produits et quantités à votre récapitulatif." },
+      { "number": "03", "title": "WhatsApp", "description": "Envoyez votre commande sur WhatsApp." },
+      { "number": "04", "title": "Confirmez", "description": "Convenez du prix et confirmez avec notre équipe." },
+      { "number": "05", "title": "Recevez votre commande", "description": "Nous organisons la livraison vers votre destination." }
+    ]
+  },
+  "startBusiness": {
+    "title": "Vous souhaitez démarrer un commerce de produits plastiques ?",
+    "body": "Vous n'avez pas besoin de connaître le Nigeria ou de vous y déplacer pour commencer à vous approvisionner en produits plastiques en gros. Nous aidons les entreprises à travers l'Afrique de l'Ouest à accéder aux produits nigérians.",
+    "segments": {
+      "start": { "title": "Démarrer", "description": "Pour les nouvelles entreprises qui passent leur première commande en gros." },
+      "restock": { "title": "Réapprovisionner", "description": "Pour les détaillants qui renouvellent leur stock." },
+      "distribute": { "title": "Distribuer", "description": "Pour les grossistes et distributeurs établis qui achètent en grandes quantités." }
+    },
+    "cta": "Voir ma commande"
+  },
+  "deliveryTeaser": {
+    "title": "Du Nigeria à votre pays",
+    "subtitle": "Nous coordonnons l'approvisionnement et la livraison pour que vous n'ayez pas à gérer la logistique nigériane vous-même.",
+    "cta": "Voir comment fonctionne la livraison"
+  },
+  "finalCta": {
+    "title": "Prêt à vous approvisionner depuis le Nigeria ?",
+    "subtitle": "Indiquez-nous les besoins de votre commerce — nous nous occupons du reste.",
+    "primaryCta": "Voir ma commande",
+    "secondaryCta": "Contactez-nous sur WhatsApp"
+  },
+  "footer": {
+    "tagline": "Produits plastiques en gros, du Nigeria vers l'Afrique de l'Ouest.",
+    "productsHeading": "Produits",
+    "businessHeading": "Commerce",
+    "companyHeading": "Entreprise",
+    "languageHeading": "Langue",
+    "allProducts": "Tous les produits",
+    "aboutUs": "À propos",
+    "catalog": "Catalogue",
+    "copyright": "© {year} Nom de votre entreprise. Tous droits réservés."
+  },
+  "categories": {
+    "buckets": "Seaux",
+    "basins": "Bassines",
+    "bowls": "Bols",
+    "containers": "Récipients",
+    "household": "Articles ménagers",
+    "other": "Autres produits"
+  },
+  "colors": {
+    "red": "Rouge",
+    "blue": "Bleu",
+    "green": "Vert",
+    "yellow": "Jaune",
+    "white": "Blanc",
+    "black": "Noir",
+    "orange": "Orange",
+    "gray": "Gris",
+    "assorted": "Assortis"
+  },
+  "wholesalePage": {
+    "heroTitle": "Une offre de gros pensée pour votre commerce",
+    "heroSubtitle": "Quel que soit le stade de votre commerce, nous fournissons des produits plastiques dans les quantités dont vous avez besoin — sourcés et coordonnés depuis le Nigeria.",
+    "whoWeServeTitle": "Qui nous servons",
+    "whoWeServe": ["Détaillants", "Commerçants de marché", "Revendeurs de produits plastiques", "Distributeurs", "Supermarchés", "Nouveaux entrepreneurs", "Grossistes déjà établis"],
+    "whatWeSupplyTitle": "Ce que nous fournissons",
+    "whySection": {
+      "title": "Pourquoi s'approvisionner chez nous",
+      "points": [
+        "Approvisionnement direct auprès de fabricants et grossistes nigérians",
+        "Quantités de gros dans toutes les catégories de produits",
+        "Accompagnement pour les nouveaux importateurs qui découvrent l'approvisionnement au Nigeria",
+        "Support prioritaire par WhatsApp, en français et en anglais"
+      ]
+    },
+    "howOrderingTitle": "Comment fonctionne la commande en gros",
+    "bulkTitle": "Commandes importantes",
+    "bulkBody": "Pour les commandes importantes ou récurrentes, notre équipe peut travailler directement avec vous sur les quantités, le conditionnement et la planification de la livraison. Envoyez-nous votre commande sur WhatsApp pour démarrer la conversation.",
+    "faqTitle": "Questions fréquentes",
+    "faq": [
+      { "q": "Existe-t-il une quantité minimale de commande ?", "a": "La quantité minimale varie selon le produit. Indiquez-nous vos besoins directement sur WhatsApp et nous confirmerons ce qui est possible." },
+      { "q": "Dans quels pays livrez-vous ?", "a": "Nous servons actuellement des clients à travers l'Afrique de l'Ouest. Indiquez votre destination sur WhatsApp et nous confirmerons les détails de livraison." },
+      { "q": "Comment les prix sont-ils déterminés ?", "a": "Le prix de gros dépend du produit, de la quantité et de la destination. Envoyez-nous votre commande sur WhatsApp et notre équipe vous confirmera le prix exact." },
+      { "q": "Combien de temps prend la livraison ?", "a": "Le délai de livraison dépend de la destination, de la quantité et du mode d'expédition. Notre équipe confirmera les délais lorsque vous nous contacterez." }
+    ],
+    "cta": "Voir ma commande"
+  },
+  "deliveryPage": {
+    "title": "Du Nigeria à votre pays",
+    "intro": "Nous coordonnons le transport de votre commande depuis notre entrepôt au Nigeria jusqu'à votre destination. Voici comment se déroule le processus.",
+    "steps": [
+      "Vous envoyez votre liste de produits",
+      "Nous confirmons la disponibilité",
+      "Nous préparons votre devis",
+      "Nous discutons de la livraison",
+      "Vous confirmez la commande",
+      "Nous préparons les marchandises",
+      "L'expédition est organisée",
+      "Vous recevez votre marchandise"
+    ],
+    "factorsTitle": "Le délai et le coût de livraison peuvent dépendre de",
+    "factors": ["La quantité de produits", "La destination", "Le mode d'expédition", "Les conditions logistiques actuelles"],
+    "note": "Nous ne publions pas de prix ou de délais de livraison fixes, car ils varient selon la commande — notre équipe confirmera les détails pour votre destination sur WhatsApp.",
+    "cta": "Voir ma commande"
+  },
+  "aboutPage": {
+    "title": "À propos de nous",
+    "placeholderNote": "Texte provisoire — remplacez chaque section par l'histoire réelle de votre entreprise avant le lancement.",
+    "sections": [
+      { "heading": "Notre implantation", "body": "[Décrivez votre base d'opérations au Nigeria — ville, entrepôt ou marché.]" },
+      { "heading": "Ce que nous vendons", "body": "[Décrivez la gamme de produits plastiques que vous fournissez, avec vos propres mots.]" },
+      { "heading": "Qui nous servons", "body": "[Décrivez les détaillants, commerçants et entreprises avec qui vous travaillez en Afrique de l'Ouest.]" },
+      { "heading": "Notre orientation vers la vente en gros", "body": "[Expliquez pourquoi votre activité est construite autour de quantités de gros plutôt que la vente au détail à l'unité.]" },
+      { "heading": "Approvisionnement depuis le Nigeria", "body": "[Expliquez votre lien avec les fabricants, marchés ou fournisseurs nigérians.]" },
+      { "heading": "Notre expérience", "body": "[Partagez des informations réelles et vérifiables — n'incluez que ce que vous pouvez assumer publiquement.]" }
+    ]
+  },
+  "orderSummaryPage": {
+    "title": "Récapitulatif de votre commande",
+    "intro": "Voici tout ce que vous avez ajouté. Continuez sur WhatsApp pour confirmer le prix, la disponibilité et la livraison avec notre équipe — aucun formulaire n'est nécessaire.",
+    "orderSummaryTitle": "Votre commande",
+    "orderEmpty": "Vous n'avez encore ajouté aucun produit.",
+    "browseProducts": "Voir les produits",
+    "receiptNote": "Faites une capture d'écran ou imprimez ce récapitulatif pour en garder une copie.",
+    "detailsTitle": "Ajouter des détails (facultatif)",
+    "detailsNote": "Rien n'est obligatoire ici — cela aide simplement notre équipe à vous reconnaître sur WhatsApp.",
+    "fields": {
+      "customerName": "Votre nom (facultatif)",
+      "businessName": "Nom de l'entreprise (facultatif)",
+      "otherInfo": "Autre chose à préciser ? (facultatif)"
+    },
+    "continueOnWhatsapp": "Continuer sur WhatsApp",
+    "printReceipt": "Imprimer / Enregistrer en PDF",
+    "noWhatsappPrompt": "Pas de WhatsApp ?",
+    "noWhatsappToggle": "Envoyer votre commande autrement",
+    "fallbackIntro": "Il nous faut quelques détails supplémentaires pour vous joindre sans WhatsApp.",
+    "fallbackFields": {
+      "country": "Pays",
+      "city": "Ville",
+      "contact": "E-mail ou numéro de téléphone"
+    },
+    "submit": "Envoyer la demande",
+    "successMessage": "Demande reçue. Notre équipe commerciale vous contactera avec les informations sur les prix et la livraison.",
+    "errorMessage": "Une erreur s'est produite. Veuillez réessayer ou nous contacter directement sur WhatsApp.",
+    "requiredField": "Ce champ est obligatoire."
+  },
+  "contactPage": {
+    "title": "Contactez-nous",
+    "intro": "Une question avant de demander un devis ? Contactez-nous directement.",
+    "whatsappLabel": "WhatsApp",
+    "emailLabel": "E-mail",
+    "phoneLabel": "Téléphone",
+    "addressLabel": "Localisation"
+  },
+  "whatsapp": {
+    "general": "Bonjour, j'aimerais en savoir plus sur vos produits plastiques en gros.",
+    "productInquiry": "Bonjour, je suis intéressé par le produit {product}. Je voudrais connaître le prix de gros pour {quantity} pièces avec livraison à {city}, {country}.",
+    "orderLabel": "Commande",
+    "quantityLabel": "Qté",
+    "nameLabel": "Nom",
+    "businessLabel": "Entreprise",
+    "noteLabel": "Remarque"
+  }
+}
