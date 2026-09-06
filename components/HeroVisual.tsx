@@ -1,29 +1,50 @@
-// A deliberately simple stand-in for real product photography: a loose
-// grid of solid color blocks in the hues the actual buckets/basins come in.
-// Swap this whole component out once real photography is available.
-const SWATCHES: { color: string; size: string }[] = [
-  { color: "#C0392B", size: "h-24 w-24" },
-  { color: "#1C4632", size: "h-16 w-16" },
-  { color: "#2E5C8A", size: "h-20 w-20" },
-  { color: "#D4A017", size: "h-14 w-14" },
-  { color: "#BE7332", size: "h-16 w-16" },
-  { color: "#3A3A33", size: "h-12 w-12" },
+import { CategoryIllustration } from "@/components/illustrations/CategoryIllustration";
+
+// A deliberately simple stand-in for real product photography: an
+// overlapping composition of actual product silhouettes (bucket, basin,
+// bowl) rather than unlabeled color dots, so the visual explains what the
+// business sells even before real photography is available.
+const PIECES: {
+  category: "buckets" | "basins" | "bowls";
+  tint: string;
+  ink: string;
+  wrapperClass: string;
+}[] = [
+  {
+    category: "basins",
+    tint: "bg-clay-light",
+    ink: "text-clay",
+    wrapperClass: "h-40 w-40 sm:h-48 sm:w-48",
+  },
+  {
+    category: "buckets",
+    tint: "bg-brand-light",
+    ink: "text-brand",
+    wrapperClass: "h-28 w-28 sm:h-32 sm:w-32 -ml-8 -mt-16 sm:-ml-10 sm:-mt-20",
+  },
+  {
+    category: "bowls",
+    tint: "bg-ochre-light",
+    ink: "text-ochre",
+    wrapperClass: "h-20 w-20 sm:h-24 sm:w-24 ml-24 -mt-6 sm:ml-28 sm:-mt-8",
+  },
 ];
 
 export function HeroVisual() {
   return (
-    <div className="relative flex aspect-square w-full items-center justify-center rounded border border-border bg-surface p-8">
-      <div className="grid grid-cols-3 gap-5">
-        {SWATCHES.map((s, i) => (
+    <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="relative flex items-center justify-center">
+        {PIECES.map((piece, i) => (
           <div
             key={i}
-            className={`${s.size} rounded-full`}
-            style={{ backgroundColor: s.color }}
-            aria-hidden="true"
-          />
+            className={`relative flex shrink-0 items-center justify-center rounded-full ${piece.tint} ${piece.wrapperClass}`}
+            style={{ zIndex: i }}
+          >
+            <CategoryIllustration category={piece.category} className={`h-[55%] w-[55%] ${piece.ink}`} />
+          </div>
         ))}
       </div>
-      <span className="sr-only">Wholesale plastic products in a range of colors</span>
+      <span className="sr-only">Wholesale plastic buckets, basins and bowls</span>
     </div>
   );
 }
