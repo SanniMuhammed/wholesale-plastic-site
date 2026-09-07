@@ -9,6 +9,53 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const IMAGE_BUCKET = "product-images";
 function imageUrl(path: string) { return `${SUPABASE_URL}/storage/v1/object/public/${IMAGE_BUCKET}/${path}`; }
 
+const HERO_MAX_DIMENSIONS = {
+  desktop: 1920,
+  mobile: 1080,
+} as const;
+
+/**
+ * Normalize browser-uploaded hero images before sending them to Supabase.
+ * Generated PNGs can be unusually large or contain encoding/metadata that is
+ * less reliable across image/CDN pipelines. Re-encoding raster images as a
+ * high-quality JPEG gives the CMS one predictable format and keeps uploads
+ * reasonably small without changing the visible composition.
+ */
+async function normalizeHeroImage(file: File, slot: "desktop" | "mobile"): Promise<File> {
+  if (!file.type.startsWith("image/") || file.type === "image/svg+xml") return file;
+
+  const maxDimension = HERO_MAX_DIMENSIONS[slot];
+  const objectUrl = URL.createObjectURL(file);
+
+  try {
+    const image = new Image();
+    image.decoding = "async";
+    image.src = objectUrl;
+    await image.decode();
+
+    if (!image.naturalWidth || !image.naturalHeight) return file;
+
+    const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
+    const width = Math.max(1, Math.round(image.naturalWidth * scale));
+    const height = Math.max(1, Math.round(image.naturalHeight * scale));
+
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+    if (!context) return file;
+
+    context.drawImage(image, 0, 0, width, height);
+
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.88));
+    if (!blob) return file;
+
+    return new File([blob], `${slot}-hero.jpg`, { type: "image/jpeg", lastModified: Date.now() });
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
 export function HomepageSectionManager({ sections, labels }: { sections: HomepageSection[]; labels: Record<string, string> }) {
   const [openId, setOpenId] = useState<string | null>(null);
   return <div className="grid gap-3">{sections.map((section) => <SectionRow key={section.id} section={section} label={labels[section.key] || section.key} open={openId === section.id} onToggle={() => setOpenId(openId === section.id ? null : section.id)} />)}</div>;
@@ -39,21 +86,41 @@ function ResponsiveHeroImageControl({ desktopPath, mobilePath, onChange }: { des
   return <div className="grid gap-3">
     <div><div className="text-sm font-medium text-ink">Hero images</div><p className="text-xs text-muted">Use a wide desktop image and a dedicated mobile image. If mobile is empty, the desktop image is used automatically.</p></div>
     <div className="grid gap-4 md:grid-cols-2">
-      <HeroSlot label="Desktop hero" hint="Recommended: 1920 × 720 (16:6)" icon={<Monitor size={18} />} path={desktopPath} onUpload={uploadHomepageHeroImageAction} onRemove={removeHomepageHeroImageAction} onChange={(p) => onChange(p, mobilePath)} />
-      <HeroSlot label="Mobile hero" hint="Recommended: 1080 × 1920 (9:16)" icon={<Smartphone size={18} />} path={mobilePath} onUpload={uploadHomepageMobileHeroImageAction} onRemove={removeHomepageMobileHeroImageAction} onChange={(p) => onChange(desktopPath, p)} />
+      <HeroSlot label="Desktop hero" slot="desktop" hint="Recommended: 1920 × 720 (16:6)" icon={<Monitor size={18} />} path={desktopPath} onUpload={uploadHomepageHeroImageAction} onRemove={removeHomepageHeroImageAction} onChange={(p) => onChange(p, mobilePath)} />
+      <HeroSlot label="Mobile hero" slot="mobile" hint="Recommended: 1080 × 1920 (9:16)" icon={<Smartphone size={18} />} path={mobilePath} onUpload={uploadHomepageMobileHeroImageAction} onRemove={removeHomepageMobileHeroImageAction} onChange={(p) => onChange(desktopPath, p)} />
     </div>
   </div>;
 }
 
-function HeroSlot({ label, hint, icon, path, onUpload, onRemove, onChange }: { label: string; hint: string; icon: React.ReactNode; path: string | null; onUpload: (form: FormData) => Promise<HomepageSection>; onRemove: () => Promise<HomepageSection>; onChange: (path: string | null) => void }) {
-  const inputRef = useRef<HTMLInputElement>(null); const [busy, setBusy] = useState(false); const [current, setCurrent] = useState(path);
-  async function handleFile(file: File | null) { if (!file) return; setBusy(true); try { const fd = new FormData(); fd.set("file", file); const updated = await onUpload(fd); const next = label === "Desktop hero" ? updated.hero_image_path : updated.hero_mobile_image_path; setCurrent(next); onChange(next); } finally { setBusy(false); if (inputRef.current) inputRef.current.value = ""; } }
-  async function handleRemove(e: MouseEvent) { e.stopPropagation(); setBusy(true); try { const updated = await onRemove(); const next = label === "Desktop hero" ? updated.hero_image_path : updated.hero_mobile_image_path; setCurrent(next); onChange(next); } finally { setBusy(false); } }
+function HeroSlot({ label, slot, hint, icon, path, onUpload, onRemove, onChange }: { label: string; slot: "desktop" | "mobile"; hint: string; icon: React.ReactNode; path: string | null; onUpload: (form: FormData) => Promise<HomepageSection>; onRemove: () => Promise<HomepageSection>; onChange: (path: string | null) => void }) {
+  const inputRef = useRef<HTMLInputElement>(null); const [busy, setBusy] = useState(false); const [error, setError] = useState<string | null>(null); const [current, setCurrent] = useState(path);
+  async function handleFile(file: File | null) {
+    if (!file) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const normalized = await normalizeHeroImage(file, slot);
+      const fd = new FormData();
+      fd.set("file", normalized);
+      const updated = await onUpload(fd);
+      const next = slot === "desktop" ? updated.hero_image_path : updated.hero_mobile_image_path;
+      setCurrent(next);
+      onChange(next);
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : "Upload failed — try again");
+    } finally {
+      setBusy(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+  async function handleRemove(e: MouseEvent) { e.stopPropagation(); setBusy(true); setError(null); try { const updated = await onRemove(); const next = slot === "desktop" ? updated.hero_image_path : updated.hero_mobile_image_path; setCurrent(next); onChange(next); } catch (removeError) { setError(removeError instanceof Error ? removeError.message : "Remove failed — try again"); } finally { setBusy(false); } }
   return <div className="rounded-lg border border-border p-3">
     <div className="mb-2 flex items-start gap-2">{icon}<div><div className="text-sm font-medium text-ink">{label}</div><div className="text-xs text-muted">{hint}</div></div></div>
     <button type="button" disabled={busy} onClick={() => inputRef.current?.click()} className="group relative block aspect-[16/7] w-full overflow-hidden rounded-md border border-border bg-background text-left disabled:opacity-60">
-      {current ? <><img src={imageUrl(current)} alt={`${label} preview`} className="h-full w-full object-cover" /><span role="button" aria-label={`Remove ${label}`} onClick={handleRemove} className="absolute right-2 top-2 rounded-full bg-ink/75 p-2 text-surface opacity-0 transition-opacity group-hover:opacity-100"><X size={16} /></span><span className="absolute bottom-2 left-2 rounded bg-ink/75 px-2 py-1 text-xs text-surface">Tap to replace</span></> : <span className="flex h-full flex-col items-center justify-center gap-2 text-muted"><ImageIcon size={26} /><span className="text-sm font-medium text-ink">Add {label.toLowerCase()}</span><span className="text-xs">Tap to choose a photo</span></span>}
+      {current ? <><img src={imageUrl(current)} alt={`${label} preview`} className="h-full w-full object-cover" /><span role="button" aria-label={`Remove ${label}`} onClick={handleRemove} className="absolute right-2 top-2 rounded-full bg-ink/75 p-2 text-surface opacity-0 transition-opacity group-hover:opacity-100"><X size={16} /></span><span className="absolute bottom-2 left-2 rounded bg-ink/75 px-2 py-1 text-xs text-surface">{busy ? "Working…" : "Tap to replace"}</span></> : <span className="flex h-full flex-col items-center justify-center gap-2 text-muted"><ImageIcon size={26} /><span className="text-sm font-medium text-ink">Add {label.toLowerCase()}</span><span className="text-xs">Tap to choose a photo</span></span>}
       <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleFile(e.target.files?.[0] ?? null)} />
     </button>
+    {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+    {busy && !error && <p className="mt-2 text-xs text-muted">Optimizing and uploading…</p>}
   </div>;
 }
