@@ -31,19 +31,33 @@ const PIECES: {
   },
 ];
 
-export function HeroVisual({ dict }: { dict: Dictionary }) {
+export function HeroVisual({
+  dict,
+  categoryImages,
+}: {
+  dict: Dictionary;
+  categoryImages?: Record<string, string>;
+}) {
   return (
     <div className="relative mx-auto flex aspect-square w-full max-w-[420px] items-center justify-center overflow-visible">
       <div className="relative flex items-center justify-center">
-        {PIECES.map((piece, i) => (
-          <div
-            key={i}
-            className={`relative flex shrink-0 items-center justify-center rounded-full ${piece.tint} ${piece.wrapperClass}`}
-            style={{ zIndex: i }}
-          >
-            <CategoryIllustration category={piece.category} className={`h-[55%] w-[55%] ${piece.ink}`} />
-          </div>
-        ))}
+        {PIECES.map((piece, i) => {
+          const photoUrl = categoryImages?.[piece.category];
+          return (
+            <div
+              key={i}
+              className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-full ${piece.tint} ${piece.wrapperClass}`}
+              style={{ zIndex: i }}
+            >
+              {photoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={photoUrl} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <CategoryIllustration category={piece.category} className={`h-[55%] w-[55%] ${piece.ink}`} />
+              )}
+            </div>
+          );
+        })}
 
         {/* Hand-labelled annotations, like a margin note on a catalogue
             plate -- reuses the same rotated-tag language as the hero

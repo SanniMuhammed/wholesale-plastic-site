@@ -3,7 +3,15 @@ import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { HeroVisual } from "@/components/HeroVisual";
 
-export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function Hero({
+  locale,
+  dict,
+  categoryImages,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+  categoryImages?: Record<string, string>;
+}) {
   const base = `/${locale}`;
 
   return (
@@ -33,7 +41,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </div>
         </div>
         <div className="animate-settle-up" style={{ animationDelay: "120ms" }}>
-          <HeroVisual dict={dict} />
+          <HeroVisual dict={dict} categoryImages={categoryImages} />
         </div>
       </div>
     </section>

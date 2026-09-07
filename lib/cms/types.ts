@@ -5,6 +5,7 @@ export interface Category {
   name_fr: string;
   sort_order: number;
   is_active: boolean;
+  cover_image_path: string | null;
 }
 
 export interface Color {

@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
+import { getCategoryCoverImageMap } from "@/lib/cms/categories";
 import { Hero } from "@/components/Hero";
 import { TrustBar } from "@/components/TrustBar";
 import { ProductCategories } from "@/components/ProductCategories";
@@ -24,12 +25,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
+  // Categories with an admin-uploaded photo render that photo; anything
+  // without one keeps the illustration exactly as before (see
+  // CategoryIllustration.tsx) -- this never blocks or breaks the page.
+  const categoryImages = await getCategoryCoverImageMap();
 
   return (
     <>
-      <Hero locale={locale} dict={dict} />
+      <Hero locale={locale} dict={dict} categoryImages={categoryImages} />
       <TrustBar dict={dict} />
-      <ProductCategories locale={locale} dict={dict} />
+      <ProductCategories locale={locale} dict={dict} categoryImages={categoryImages} />
       <FeaturedProducts locale={locale} dict={dict} />
       <TravelSection dict={dict} />
       <HowItWorksSection dict={dict} />
