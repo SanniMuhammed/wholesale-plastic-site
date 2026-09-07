@@ -110,6 +110,7 @@ export interface HomepageSection {
   is_visible: boolean;
   sort_order: number;
   hero_image_path: string | null;
+  hero_mobile_image_path: string | null;
 }
 
 export type OrderChannel = "whatsapp" | "fallback_form";
