@@ -3,7 +3,7 @@
 import { useRef, useState, type MouseEvent } from "react";
 import { Plus, Image as ImageIcon, X } from "lucide-react";
 import { ConfirmButton } from "@/components/admin/AdminUI";
-import { buildCategoryImageUrl } from "@/lib/cms/categories";
+import { buildCategoryImageUrl } from "@/lib/cms/category-images";
 import {
   createCategoryAction,
   updateCategoryAction,
