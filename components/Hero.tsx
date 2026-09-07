@@ -7,7 +7,7 @@ export function Hero({ locale, dict, categoryImages, heroImage, mobileHeroImage 
   const base = `/${locale}`;
   return (
     <section className="mx-auto max-w-content px-4 pb-16 pt-12 sm:px-6 sm:pb-24 sm:pt-16 lg:pt-20">
-      <div className="grid items-center gap-12 lg:grid-cols-[1.05fr,0.95fr] lg:gap-14 xl:grid-cols-[1.15fr,0.85fr] xl:gap-16">
+      <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14 xl:grid-cols-[1.15fr,0.85fr] xl:gap-16">
         <div className="animate-settle-up">
           <p className="eyebrow inline-block -rotate-1 rounded border border-border px-3 py-1.5">{dict.hero.supporting}</p>
           <h1 className="mt-6 font-display text-[2.75rem] font-semibold leading-[0.98] tracking-tight text-ink sm:text-6xl lg:text-[4.75rem]">{dict.hero.title}</h1>
