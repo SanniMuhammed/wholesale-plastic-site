@@ -2,7 +2,7 @@ import { listHomepageSections } from "@/lib/cms/settings";
 import { listCategories } from "@/lib/cms/categories";
 import { PageHeader } from "@/components/admin/AdminUI";
 import { HomepageSectionManager } from "./HomepageSectionManager";
-import { CategoryManager } from "../../categories/CategoryManager";
+import { ExploreCategoriesManager } from "./ExploreCategoriesManager";
 
 export const dynamic = "force-dynamic";
 
@@ -34,15 +34,7 @@ export default async function HomepageContentPage() {
 
       <HomepageSectionManager sections={otherSections} labels={SECTION_LABELS} />
 
-      <section className="my-3 rounded-lg border border-border bg-surface">
-        <div className="border-b border-border p-4">
-          <h2 className="text-sm font-medium text-ink">Explore categories</h2>
-          <p className="mt-1 text-xs text-muted">
-            Upload, replace, or remove the photos used by the homepage Explore grid.
-          </p>
-        </div>
-        <CategoryManager initialCategories={categories} />
-      </section>
+      <ExploreCategoriesManager initialCategories={categories} />
 
       <HomepageSectionManager sections={finalCta} labels={SECTION_LABELS} />
     </div>
