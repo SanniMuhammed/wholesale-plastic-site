@@ -1,0 +1,73 @@
+import { notFound } from "next/navigation";
+import { getOrder } from "@/lib/cms/orders";
+import { PageHeader, OrderStatusBadge } from "@/components/admin/AdminUI";
+import { OrderStatusControl } from "./OrderStatusControl";
+
+export const dynamic = "force-dynamic";
+
+export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const order = await getOrder(id);
+  if (!order) notFound();
+
+  return (
+    <div>
+      <PageHeader
+        title={order.customer_name || order.business_name || "Unnamed contact"}
+        description={`${new Date(order.created_at).toLocaleString()} \u00b7 via ${
+          order.channel === "whatsapp" ? "WhatsApp" : "contact form"
+        }`}
+        action={<OrderStatusBadge status={order.status} />}
+      />
+
+      <div className="grid gap-4">
+        <div className="rounded-lg border border-border bg-surface p-4 sm:p-5">
+          <h2 className="mb-3 text-sm font-semibold text-ink">Contact</h2>
+          <dl className="grid gap-2 text-sm sm:grid-cols-2">
+            <Detail label="Customer" value={order.customer_name} />
+            <Detail label="Business" value={order.business_name} />
+            <Detail label="Contact" value={order.contact} />
+            <Detail label="Country / City" value={[order.country, order.city].filter(Boolean).join(", ")} />
+            <Detail label="Language" value={order.locale?.toUpperCase()} />
+          </dl>
+          {order.note && (
+            <div className="mt-3 border-t border-dashed border-border pt-3">
+              <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted">Note</p>
+              <p className="text-sm text-ink-soft">{order.note}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="rounded-lg border border-border bg-surface p-4 sm:p-5">
+          <h2 className="mb-3 text-sm font-semibold text-ink">Items</h2>
+          <ul className="divide-y divide-border">
+            {(order.items ?? []).map((item) => (
+              <li key={item.id} className="flex items-center justify-between gap-3 py-2.5 text-sm">
+                <div>
+                  <p className="font-medium text-ink">{item.product_name}</p>
+                  {item.capacity && <p className="text-xs text-muted">{item.capacity}</p>}
+                </div>
+                <span className="font-mono text-ink-soft">&times;{item.quantity}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-lg border border-border bg-surface p-4 sm:p-5">
+          <h2 className="mb-3 text-sm font-semibold text-ink">Status</h2>
+          <OrderStatusControl orderId={order.id} currentStatus={order.status} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Detail({ label, value }: { label: string; value?: string | null }) {
+  if (!value) return null;
+  return (
+    <div>
+      <dt className="text-xs font-medium uppercase tracking-wide text-muted">{label}</dt>
+      <dd className="text-ink-soft">{value}</dd>
+    </div>
+  );
+}

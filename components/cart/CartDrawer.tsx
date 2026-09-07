@@ -8,6 +8,7 @@ import { getProductBySlug } from "@/lib/products";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { orderInquiryLink } from "@/lib/whatsapp";
+import { recordOrderOnWhatsAppClick } from "@/lib/recordOrder";
 import { cx } from "@/lib/utils";
 
 export function CartDrawer({
@@ -54,6 +55,19 @@ export function CartDrawer({
   const whatsappHref = orderInquiryLink(dict, {
     items: resolved.map((i) => ({ name: i.name, quantity: i.quantity })),
   });
+
+  function handleWhatsAppClick() {
+    recordOrderOnWhatsAppClick({
+      channel: "whatsapp",
+      locale,
+      items: resolved.map((i) => ({
+        slug: i.slug,
+        name: i.name,
+        capacity: i.capacity,
+        quantity: i.quantity,
+      })),
+    });
+  }
 
   return (
     <>
@@ -148,6 +162,7 @@ export function CartDrawer({
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={handleWhatsAppClick}
                 className="inline-flex items-center justify-center rounded bg-brand px-5 py-3 text-sm font-medium text-surface transition-all hover:bg-brand-dark active:scale-[0.98]"
               >
                 {dict.orderSummaryPage.continueOnWhatsapp}

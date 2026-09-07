@@ -1,8 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { locales, defaultLocale } from "@/lib/i18n/config";
+import { updateAdminSession } from "@/lib/supabase/proxy";
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // /admin is a locale-free area (see app/admin/layout.tsx) with its own
+  // auth handling -- keep it out of the locale-detection logic below
+  // entirely, or every /admin visit would get redirected to /en/admin.
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    return updateAdminSession(request);
+  }
 
   const pathnameHasLocale = locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)

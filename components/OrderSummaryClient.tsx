@@ -8,6 +8,7 @@ import { getProductBySlug } from "@/lib/products";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { orderInquiryLink } from "@/lib/whatsapp";
+import { recordOrderOnWhatsAppClick } from "@/lib/recordOrder";
 import { cx } from "@/lib/utils";
 
 interface DetailsState {
@@ -110,6 +111,22 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
     businessName: details.businessName,
     note: details.otherInfo,
   });
+
+  function handleWhatsAppClick() {
+    recordOrderOnWhatsAppClick({
+      channel: "whatsapp",
+      customerName: details.customerName,
+      businessName: details.businessName,
+      note: details.otherInfo,
+      locale,
+      items: resolvedItems.map((i) => ({
+        slug: i.slug,
+        name: i.name,
+        capacity: i.capacity,
+        quantity: i.quantity,
+      })),
+    });
+  }
 
   if (status === "success") {
     return (
@@ -228,6 +245,7 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={handleWhatsAppClick}
                 className="inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-all hover:bg-brand-dark active:scale-[0.98]"
               >
                 {sp.continueOnWhatsapp}
