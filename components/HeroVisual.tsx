@@ -1,10 +1,6 @@
 import type { Dictionary } from "@/lib/getDictionary";
 import { CategoryIllustration } from "@/components/illustrations/CategoryIllustration";
 
-// A deliberately simple stand-in for real product photography: an
-// overlapping composition of actual product silhouettes (bucket, basin,
-// bowl) rather than unlabeled color dots, so the visual explains what the
-// business sells even before real photography is available.
 const PIECES: {
   category: "buckets" | "basins" | "bowls";
   tint: string;
@@ -34,10 +30,26 @@ const PIECES: {
 export function HeroVisual({
   dict,
   categoryImages,
+  heroImage,
 }: {
   dict: Dictionary;
   categoryImages?: Record<string, string>;
+  heroImage?: string | null;
 }) {
+  if (heroImage) {
+    return (
+      <div className="relative mx-auto aspect-[4/3] w-full max-w-[520px] overflow-hidden rounded-lg border border-border shadow-lifted">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={heroImage} alt="" className="h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+        <span className="eyebrow absolute bottom-4 left-4 rounded border border-white/40 bg-black/25 px-2 py-1 text-[10px] text-white backdrop-blur-sm">
+          {dict.categories.buckets}, {dict.categories.basins} &amp; {dict.categories.bowls}
+        </span>
+        <span className="sr-only">Wholesale plastic products</span>
+      </div>
+    );
+  }
+
   return (
     <div className="relative mx-auto flex aspect-square w-full max-w-[420px] items-center justify-center overflow-visible">
       <div className="relative flex items-center justify-center">
@@ -45,7 +57,7 @@ export function HeroVisual({
           const photoUrl = categoryImages?.[piece.category];
           return (
             <div
-              key={i}
+              key={piece.category}
               className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-full ${piece.tint} ${piece.wrapperClass}`}
               style={{ zIndex: i }}
             >
@@ -58,10 +70,6 @@ export function HeroVisual({
             </div>
           );
         })}
-
-        {/* Hand-labelled annotations, like a margin note on a catalogue
-            plate -- reuses the same rotated-tag language as the hero
-            eyebrow so the whole composition reads as one system. */}
         <span className="eyebrow absolute -right-2 top-1 rotate-3 rounded border border-border bg-surface px-2 py-1 text-[10px] sm:-right-4 sm:top-4">
           {dict.categories.bowls}
         </span>
