@@ -22,7 +22,7 @@ export function ProductOrderPanel({
   dict: Dictionary;
 }) {
   const { addItem } = useOrder();
-  const { flyToCart, openDrawer } = useCartUI();
+  const { flyToCart } = useCartUI();
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -39,7 +39,6 @@ export function ProductOrderPanel({
   function handleAdd() {
     addItem(product.slug, quantity);
     flyToCart(buttonRef.current);
-    openDrawer();
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
   }

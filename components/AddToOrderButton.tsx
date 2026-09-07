@@ -16,14 +16,13 @@ interface AddToOrderButtonProps {
 
 export function AddToOrderButton({ slug, dict, className, fullWidth }: AddToOrderButtonProps) {
   const { addItem } = useOrder();
-  const { flyToCart, openDrawer } = useCartUI();
+  const { flyToCart } = useCartUI();
   const [added, setAdded] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   function handleClick() {
     addItem(slug, 1);
     flyToCart(buttonRef.current);
-    openDrawer();
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
   }

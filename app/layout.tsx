@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces, Space_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -27,6 +27,15 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "Wholesale Plastic Products",
   description: "Wholesale plastic products from Nigeria to West Africa.",
+};
+
+// Explicit, rather than relying on Next's implicit default -- without this,
+// some mobile browsers have been seen falling back to a ~980px desktop-width
+// layout viewport, which flips every `md:` breakpoint on for phone-width
+// screens (desktop nav, cramped cart drawer, etc.).
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 // This is the one root layout Next.js allows to render <html>/<body>.
