@@ -44,14 +44,20 @@ export function ProductCard({
         </Link>
         {product.capacity && <p className="font-mono text-xs text-muted">{product.capacity}</p>}
         <p className="text-xs font-medium text-brand">{dict.common.wholesalePricing}</p>
-        <div className="mt-3 flex items-center gap-2">
+        {/* Stacked rather than side-by-side -- this grid runs 2/3/4 columns
+            depending on breakpoint, and at every one of those column counts
+            the resulting card is narrow enough (~150-230px) that two
+            full-length button labels side by side would squeeze the second
+            one into a multi-line wrap. Stacking guarantees each label always
+            has the full card width to lay out on one line, on any screen. */}
+        <div className="mt-3 flex flex-col gap-2">
           <Link
             href={href}
-            className="inline-flex flex-1 items-center justify-center rounded border border-border px-3 py-2 text-sm font-medium text-ink transition-colors hover:border-ink"
+            className="inline-flex w-full items-center justify-center rounded border border-border px-3 py-2 text-sm font-medium text-ink transition-colors hover:border-ink"
           >
             {dict.common.viewProduct}
           </Link>
-          <AddToOrderButton slug={product.slug} productName={product.name[locale]} dict={dict} />
+          <AddToOrderButton slug={product.slug} productName={product.name[locale]} dict={dict} fullWidth />
         </div>
       </div>
     </div>
