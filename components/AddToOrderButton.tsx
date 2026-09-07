@@ -9,20 +9,22 @@ import { cx } from "@/lib/utils";
 
 interface AddToOrderButtonProps {
   slug: string;
+  productName: string;
   dict: Dictionary;
   className?: string;
   fullWidth?: boolean;
 }
 
-export function AddToOrderButton({ slug, dict, className, fullWidth }: AddToOrderButtonProps) {
+export function AddToOrderButton({ slug, productName, dict, className, fullWidth }: AddToOrderButtonProps) {
   const { addItem } = useOrder();
-  const { flyToCart } = useCartUI();
+  const { flyToCart, notifyAdded } = useCartUI();
   const [added, setAdded] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   function handleClick() {
     addItem(slug, 1);
     flyToCart(buttonRef.current);
+    notifyAdded(productName);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
   }

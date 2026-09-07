@@ -63,15 +63,25 @@ export function Nav({ locale, dict }: NavProps) {
           <CartTrigger dict={dict} />
         </div>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-label={open ? dict.nav.close : dict.nav.menu}
-          className="inline-flex h-10 w-10 items-center justify-center rounded border border-border text-ink md:hidden"
-        >
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          {/* Always visible, independent of the menu below -- this used to
+              live only inside the collapsible menu, wrapped in a div that
+              closed the menu on click via onClickCapture. That raced with
+              this button's own click handler on real touch devices and
+              could swallow the tap entirely. Promoting it to a persistent,
+              standalone button also means people can see their order count
+              without opening the nav menu at all. */}
+          <CartTrigger dict={dict} variant="icon" />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-label={open ? dict.nav.close : dict.nav.menu}
+            className="inline-flex h-10 w-10 items-center justify-center rounded border border-border text-ink"
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -91,9 +101,6 @@ export function Nav({ locale, dict }: NavProps) {
           <div className="flex items-center justify-between border-t border-border px-4 py-4">
             <LanguageSwitcher locale={locale} />
             <WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="text" />
-          </div>
-          <div className="px-4 pb-4" onClickCapture={() => setOpen(false)}>
-            <CartTrigger dict={dict} variant="mobile" />
           </div>
         </div>
       )}

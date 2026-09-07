@@ -38,7 +38,7 @@ export function ProductCard({
           >
             {dict.common.viewProduct}
           </Link>
-          <AddToOrderButton slug={product.slug} dict={dict} />
+          <AddToOrderButton slug={product.slug} productName={product.name[locale]} dict={dict} />
         </div>
       </div>
     </div>
