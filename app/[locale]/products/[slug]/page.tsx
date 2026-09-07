@@ -11,11 +11,6 @@ import { CATEGORIES } from "@/lib/products";
 import { ProductImage } from "@/components/ProductImage";
 import { ProductOrderPanel } from "@/components/ProductOrderPanel";
 
-export async function generateStaticParams() {
-  const products = await getAllProducts();
-  return products.map((p) => ({ slug: p.slug }));
-}
-
 export async function generateMetadata({
   params,
 }: {
