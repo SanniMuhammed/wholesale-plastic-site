@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { isLocale, type Locale } from "@/lib/i18n/config";
