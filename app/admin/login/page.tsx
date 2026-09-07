@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function AdminLoginPage() {
@@ -58,6 +59,15 @@ export default function AdminLoginPage() {
               className="w-full rounded border border-border px-3 py-2.5 text-sm text-ink focus:border-ink focus:outline-none"
             />
           </label>
+
+          <div className="-mt-2 text-right">
+            <Link
+              href="/admin/forgot-password"
+              className="text-xs font-medium text-muted underline underline-offset-2 hover:text-ink"
+            >
+              Forgot password?
+            </Link>
+          </div>
 
           {error && <p className="text-sm text-red-700">{error}</p>}
 

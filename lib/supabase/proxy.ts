@@ -39,15 +39,21 @@ export async function updateAdminSession(request: NextRequest): Promise<NextResp
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
-  const isLoginPage = pathname === "/admin/login";
 
-  if (!user && !isLoginPage) {
+  const isLoginPage = pathname === "/admin/login";
+  const isForgotPasswordPage = pathname === "/admin/forgot-password";
+  const isResetPasswordPage = pathname === "/admin/reset-password";
+
+  const isPublicAdminPage =
+    isLoginPage || isForgotPasswordPage || isResetPasswordPage;
+
+  if (!user && !isPublicAdminPage) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
     return NextResponse.redirect(url);
   }
 
-  if (user && isLoginPage) {
+  if (user && (isLoginPage || isForgotPasswordPage)) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin";
     return NextResponse.redirect(url);
