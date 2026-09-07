@@ -33,14 +33,12 @@ export interface Product {
   id: string;
   slug: string;
   category_id: string | null;
-
   name_en: string;
   name_fr: string;
   short_description_en: string;
   short_description_fr: string;
   description_en: string;
   description_fr: string;
-
   capacity: string | null;
   material_en: string;
   material_fr: string;
@@ -48,29 +46,20 @@ export interface Product {
   packaging_fr: string;
   use_case_en: string;
   use_case_fr: string;
-
   wholesale_only: boolean;
   availability_status: AvailabilityStatus;
   is_featured: boolean;
   status: ProductStatus;
   sort_order: number;
   legacy_slug: string | null;
-
   created_at: string;
   updated_at: string;
-
-  // Populated by joined queries, not present on a raw row insert/update.
   category?: Category | null;
   images?: ProductImage[];
   colors?: Color[];
 }
 
-/** Shape accepted by createProduct/updateProduct -- everything but the
- *  generated id/timestamps, with images and colours handled separately. */
-export type ProductInput = Omit<
-  Product,
-  "id" | "created_at" | "updated_at" | "category" | "images" | "colors"
->;
+export type ProductInput = Omit<Product, "id" | "created_at" | "updated_at" | "category" | "images" | "colors">;
 
 export interface Faq {
   id: string;
@@ -120,16 +109,11 @@ export interface HomepageSection {
   body_fr: string;
   is_visible: boolean;
   sort_order: number;
+  hero_image_path: string | null;
 }
 
 export type OrderChannel = "whatsapp" | "fallback_form";
-export type OrderStatus =
-  | "new"
-  | "contacted"
-  | "quoted"
-  | "confirmed"
-  | "completed"
-  | "cancelled";
+export type OrderStatus = "new" | "contacted" | "quoted" | "confirmed" | "completed" | "cancelled";
 
 export interface OrderItem {
   id: string;
@@ -156,8 +140,6 @@ export interface Order {
   items?: OrderItem[];
 }
 
-/** Payload the public site posts to /api/orders when a customer completes
- *  the WhatsApp or fallback-form hand-off. */
 export interface NewOrderPayload {
   channel: OrderChannel;
   customerName?: string;
