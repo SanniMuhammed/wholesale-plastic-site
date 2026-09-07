@@ -37,14 +37,17 @@ export default async function ProductDetailPage({
 
   const category = getCategory(product.category);
   const base = `/${locale}`;
+  // Same fixed catalog position used on the listing grid, so "Nº 07" means
+  // the same product wherever it appears.
+  const plateNumber = getAllProducts().findIndex((p) => p.slug === product.slug) + 1;
 
   return (
     <div className="mx-auto max-w-content px-4 py-12 sm:px-6">
-      <Link href={`${base}/products`} className="text-sm text-muted hover:text-ink">
+      <Link href={`${base}/products`} className="text-sm text-muted transition-colors hover:text-ink">
         ← {dict.common.backToProducts}
       </Link>
 
-      <div className="mt-6 grid gap-10 lg:grid-cols-2">
+      <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:gap-16">
         <ProductImage
           product={product}
           locale={locale}
@@ -53,12 +56,17 @@ export default async function ProductDetailPage({
         />
 
         <div>
-          {category && <p className="text-sm text-muted">{category.name[locale]}</p>}
-          <h1 className="mt-1 font-display text-3xl font-semibold text-ink">{product.name[locale]}</h1>
-          <p className="mt-3 text-muted">{product.description[locale]}</p>
+          <p className="eyebrow">
+            {`Nº ${String(plateNumber).padStart(2, "0")}`}
+            {category && ` / ${category.name[locale]}`}
+          </p>
+          <h1 className="mt-2 font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">
+            {product.name[locale]}
+          </h1>
+          <p className="mt-4 max-w-md text-muted">{product.description[locale]}</p>
 
           {product.colors.length > 0 && (
-            <div className="mt-5">
+            <div className="mt-6">
               <p className="text-sm font-medium text-ink-soft">{dict.common.availableColors}</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {product.colors.map((color) => (
@@ -73,24 +81,24 @@ export default async function ProductDetailPage({
             </div>
           )}
 
-          <dl className="mt-6 grid grid-cols-2 gap-4 border-t border-border pt-6 text-sm">
+          <dl className="mt-6 border-t border-border">
             {product.capacity && (
-              <div>
-                <dt className="text-muted">{dict.common.capacity}</dt>
-                <dd className="mt-0.5 font-mono font-medium text-ink">{product.capacity}</dd>
+              <div className="rule-row">
+                <dt className="text-sm text-muted">{dict.common.capacity}</dt>
+                <dd className="font-mono text-sm font-medium text-ink">{product.capacity}</dd>
               </div>
             )}
-            <div>
-              <dt className="text-muted">{dict.common.material}</dt>
-              <dd className="mt-0.5 font-mono font-medium text-ink">{product.material[locale]}</dd>
+            <div className="rule-row">
+              <dt className="text-sm text-muted">{dict.common.material}</dt>
+              <dd className="font-mono text-sm font-medium text-ink">{product.material[locale]}</dd>
             </div>
-            <div>
-              <dt className="text-muted">{dict.common.packaging}</dt>
-              <dd className="mt-0.5 font-mono font-medium text-ink">{product.packaging[locale]}</dd>
+            <div className="rule-row">
+              <dt className="text-sm text-muted">{dict.common.packaging}</dt>
+              <dd className="font-mono text-sm font-medium text-ink">{product.packaging[locale]}</dd>
             </div>
-            <div>
-              <dt className="text-muted">{dict.common.useCase}</dt>
-              <dd className="mt-0.5 font-mono font-medium text-ink">{product.useCase[locale]}</dd>
+            <div className="rule-row">
+              <dt className="text-sm text-muted">{dict.common.useCase}</dt>
+              <dd className="font-mono text-sm font-medium text-ink">{product.useCase[locale]}</dd>
             </div>
           </dl>
 

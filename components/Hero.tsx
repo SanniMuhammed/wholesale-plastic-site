@@ -7,13 +7,16 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const base = `/${locale}`;
 
   return (
-    <section className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
-      <div className="grid items-center gap-12 lg:grid-cols-[1.1fr,0.9fr]">
+    <section className="mx-auto max-w-content px-4 pb-16 pt-12 sm:px-6 sm:pb-24 sm:pt-16 lg:pt-20">
+      <div className="grid items-center gap-12 lg:grid-cols-[1.15fr,0.85fr] lg:gap-16">
         <div className="animate-settle-up">
-          <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[3.4rem]">
+          <p className="eyebrow inline-block -rotate-1 rounded border border-border px-3 py-1.5">
+            {dict.hero.supporting}
+          </p>
+          <h1 className="mt-6 font-display text-[2.75rem] font-semibold leading-[0.98] tracking-tight text-ink sm:text-6xl lg:text-[4.75rem]">
             {dict.hero.title}
           </h1>
-          <p className="mt-5 max-w-lg text-lg text-muted">{dict.hero.subtitle}</p>
+          <p className="mt-6 max-w-lg text-lg text-muted">{dict.hero.subtitle}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href={`${base}/products`}
@@ -28,12 +31,9 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               {dict.hero.secondaryCta}
             </Link>
           </div>
-          <p className="mt-6 inline-block -rotate-1 rounded border border-border px-3 py-1.5 font-mono text-xs text-ink-soft">
-            {dict.hero.supporting}
-          </p>
         </div>
         <div className="animate-settle-up" style={{ animationDelay: "120ms" }}>
-          <HeroVisual />
+          <HeroVisual dict={dict} />
         </div>
       </div>
     </section>

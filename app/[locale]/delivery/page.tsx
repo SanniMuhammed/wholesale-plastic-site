@@ -19,12 +19,13 @@ export default async function DeliveryPage({ params }: { params: Promise<{ local
 
   return (
     <div className="mx-auto max-w-content px-4 py-14 sm:px-6">
-      <h1 className="font-display text-3xl font-semibold text-ink sm:text-4xl">{dp.title}</h1>
+      <p className="eyebrow">{dict.nav.delivery}</p>
+      <h1 className="mt-2 font-display text-4xl font-semibold text-ink sm:text-5xl">{dp.title}</h1>
       <p className="mt-4 max-w-xl text-muted">{dp.intro}</p>
 
-      <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <ol className="mt-10 grid gap-8 border-t-2 border-border pt-6 sm:grid-cols-2 lg:grid-cols-4">
         {dp.steps.map((step, i) => (
-          <li key={step} className="rounded border border-border p-4">
+          <li key={step}>
             <span className="font-mono text-lg font-bold text-brand">
               {String(i + 1).padStart(2, "0")}
             </span>
@@ -33,21 +34,21 @@ export default async function DeliveryPage({ params }: { params: Promise<{ local
         ))}
       </ol>
 
-      <div className="mt-12 rounded border border-border bg-surface p-6">
-        <h2 className="font-medium text-ink">{dp.factorsTitle}</h2>
-        <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+      <div className="mt-14 border-t border-border pt-8">
+        <h2 className="font-display text-lg font-semibold text-ink">{dp.factorsTitle}</h2>
+        <ul className="mt-4 grid gap-x-8 sm:grid-cols-2">
           {dp.factors.map((f) => (
-            <li key={f} className="text-sm text-muted">
-              • {f}
+            <li key={f} className="border-b border-border py-2.5 text-sm text-muted">
+              {f}
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-sm text-muted">{dp.note}</p>
+        <p className="mt-5 max-w-2xl text-sm text-muted">{dp.note}</p>
       </div>
 
       <Link
         href={`/${locale}/order-summary`}
-        className="mt-10 inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-brand-dark"
+        className="mt-12 inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-brand-dark"
       >
         {dp.cta}
       </Link>

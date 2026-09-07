@@ -46,75 +46,92 @@ export function CatalogClient({ locale, dict }: { locale: Locale; dict: Dictiona
     return list;
   }, [query, category]);
 
+  // A product's catalog number is its fixed position in the full list, not
+  // its position in the current (filtered) results -- so "Nº 07" always
+  // means the same product, whichever filter you're looking through.
+  const catalogIndex = useMemo(() => {
+    const map = new Map<string, number>();
+    getAllProducts().forEach((p, i) => map.set(p.slug, i + 1));
+    return map;
+  }, []);
+
   const hasFilters = Boolean(category || query);
 
   return (
     <div>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="relative flex-1 sm:max-w-sm">
-          <Search
-            size={16}
-            strokeWidth={1.75}
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
-          />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={dict.common.searchPlaceholder}
-            className="w-full rounded border border-border bg-surface py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-muted focus:border-ink focus:outline-none"
-          />
+      <div className="sticky top-16 z-30 -mx-4 border-b border-border bg-background/95 px-4 py-4 backdrop-blur sm:top-[4.5rem] sm:-mx-6 sm:px-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="relative flex-1 sm:max-w-sm">
+            <Search
+              size={16}
+              strokeWidth={1.75}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+            />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={dict.common.searchPlaceholder}
+              className="w-full rounded border border-border bg-surface py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-muted focus:border-ink focus:outline-none"
+            />
+          </div>
+
+          {hasFilters && (
+            <button
+              type="button"
+              onClick={() => {
+                setCategory(null);
+                setQuery("");
+              }}
+              className="inline-flex items-center gap-1 text-sm font-medium text-muted hover:text-ink"
+            >
+              <X size={14} />
+              {dict.common.clearFilters}
+            </button>
+          )}
         </div>
 
-        {hasFilters && (
+        <div className="mt-4 flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => {
-              setCategory(null);
-              setQuery("");
-            }}
-            className="inline-flex items-center gap-1 text-sm font-medium text-muted hover:text-ink"
-          >
-            <X size={14} />
-            {dict.common.clearFilters}
-          </button>
-        )}
-      </div>
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setCategory(null)}
-          className={cx(
-            "rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
-            category === null ? "border-ink bg-ink text-surface" : "border-border text-ink-soft hover:border-ink"
-          )}
-        >
-          {dict.common.all}
-        </button>
-        {CATEGORIES.map((c) => (
-          <button
-            key={c.slug}
-            type="button"
-            onClick={() => setCategory(c.slug)}
+            onClick={() => setCategory(null)}
             className={cx(
               "rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
-              category === c.slug ? "border-ink bg-ink text-surface" : "border-border text-ink-soft hover:border-ink"
+              category === null ? "border-ink bg-ink text-surface" : "border-border text-ink-soft hover:border-ink"
             )}
           >
-            {c.name[locale]}
+            {dict.common.all}
           </button>
-        ))}
+          {CATEGORIES.map((c) => (
+            <button
+              key={c.slug}
+              type="button"
+              onClick={() => setCategory(c.slug)}
+              className={cx(
+                "rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
+                category === c.slug ? "border-ink bg-ink text-surface" : "border-border text-ink-soft hover:border-ink"
+              )}
+            >
+              {c.name[locale]}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <p className="mt-6 font-mono text-sm text-muted">{results.length}</p>
+      <p className="mt-6 font-mono text-sm text-muted">{String(results.length).padStart(2, "0")}</p>
 
       {results.length === 0 ? (
         <p className="mt-4 text-muted">{dict.common.noResults}</p>
       ) : (
         <div className="mt-4 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
           {results.map((product) => (
-            <ProductCard key={product.slug} product={product} locale={locale} dict={dict} />
+            <ProductCard
+              key={product.slug}
+              product={product}
+              locale={locale}
+              dict={dict}
+              index={catalogIndex.get(product.slug)}
+            />
           ))}
         </div>
       )}

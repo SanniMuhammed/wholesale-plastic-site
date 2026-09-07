@@ -24,7 +24,8 @@ export default async function WholesalePage({ params }: { params: Promise<{ loca
   return (
     <div>
       <div className="mx-auto max-w-content px-4 py-14 sm:px-6">
-        <h1 className="max-w-2xl font-display text-3xl font-semibold text-ink sm:text-4xl">
+        <p className="eyebrow">{dict.nav.wholesale}</p>
+        <h1 className="mt-2 max-w-2xl font-display text-4xl font-semibold text-ink sm:text-5xl">
           {wp.heroTitle}
         </h1>
         <p className="mt-4 max-w-xl text-muted">{wp.heroSubtitle}</p>
@@ -39,21 +40,23 @@ export default async function WholesalePage({ params }: { params: Promise<{ loca
       <div className="border-y border-border bg-surface">
         <div className="mx-auto grid max-w-content gap-10 px-4 py-14 sm:px-6 md:grid-cols-2">
           <div>
-            <h2 className="font-display text-xl font-semibold text-ink">{wp.whoWeServeTitle}</h2>
-            <ul className="mt-4 space-y-2 text-sm text-ink-soft">
-              {wp.whoWeServe.map((item) => (
-                <li key={item} className="border-b border-border pb-2">
-                  {item}
+            <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{wp.whoWeServeTitle}</h2>
+            <ul className="mt-5 divide-y divide-border border-t border-border">
+              {wp.whoWeServe.map((item, i) => (
+                <li key={item} className="flex items-baseline gap-3 py-2.5 text-sm text-ink-soft">
+                  <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</span>
+                  <span>{item}</span>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h2 className="font-display text-xl font-semibold text-ink">{wp.whatWeSupplyTitle}</h2>
-            <ul className="mt-4 space-y-2 text-sm text-ink-soft">
-              {CATEGORIES.map((c) => (
-                <li key={c.slug} className="border-b border-border pb-2">
-                  <Link href={`${base}/products?category=${c.slug}`} className="hover:text-brand">
+            <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{wp.whatWeSupplyTitle}</h2>
+            <ul className="mt-5 divide-y divide-border border-t border-border">
+              {CATEGORIES.map((c, i) => (
+                <li key={c.slug} className="flex items-baseline gap-3 py-2.5 text-sm text-ink-soft">
+                  <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</span>
+                  <Link href={`${base}/products?category=${c.slug}`} className="transition-colors hover:text-brand">
                     {c.name[locale]}
                   </Link>
                 </li>
@@ -64,11 +67,12 @@ export default async function WholesalePage({ params }: { params: Promise<{ loca
       </div>
 
       <div className="mx-auto max-w-content px-4 py-14 sm:px-6">
-        <h2 className="font-display text-xl font-semibold text-ink">{wp.whySection.title}</h2>
-        <ul className="mt-5 grid gap-4 sm:grid-cols-2">
-          {wp.whySection.points.map((point) => (
-            <li key={point} className="rounded border border-border p-4 text-sm text-ink-soft">
-              {point}
+        <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{wp.whySection.title}</h2>
+        <ul className="mt-6 grid gap-6 border-t-2 border-border pt-6 sm:grid-cols-2">
+          {wp.whySection.points.map((point, i) => (
+            <li key={point}>
+              <span className="font-mono text-xs font-bold text-brand">{String(i + 1).padStart(2, "0")}</span>
+              <p className="mt-2 text-sm text-ink-soft">{point}</p>
             </li>
           ))}
         </ul>
@@ -77,14 +81,14 @@ export default async function WholesalePage({ params }: { params: Promise<{ loca
       <HowItWorksSection dict={dict} />
 
       <div className="mx-auto max-w-content px-4 py-14 sm:px-6">
-        <h2 className="font-display text-xl font-semibold text-ink">{wp.bulkTitle}</h2>
+        <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{wp.bulkTitle}</h2>
         <p className="mt-3 max-w-2xl text-muted">{wp.bulkBody}</p>
       </div>
 
       <div className="border-t border-border bg-surface">
         <div className="mx-auto max-w-content px-4 py-14 sm:px-6">
-          <h2 className="font-display text-xl font-semibold text-ink">{wp.faqTitle}</h2>
-          <div className="mt-5 divide-y divide-border border-t border-border">
+          <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{wp.faqTitle}</h2>
+          <div className="mt-6 divide-y divide-border border-t border-border">
             {wp.faq.map((item) => (
               <details key={item.q} className="group py-4">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-medium text-ink">

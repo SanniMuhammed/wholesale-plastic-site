@@ -14,8 +14,8 @@ export function FeaturedProducts({ locale, dict }: { locale: Locale; dict: Dicti
           {dict.featured.title}
         </h2>
         <div className="mt-8 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.slug} product={product} locale={locale} dict={dict} />
+          {products.map((product, i) => (
+            <ProductCard key={product.slug} product={product} locale={locale} dict={dict} index={i + 1} />
           ))}
         </div>
       </div>

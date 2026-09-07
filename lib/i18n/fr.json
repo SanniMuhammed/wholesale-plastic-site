@@ -75,6 +75,7 @@
     "searchPlaceholder": "Rechercher un produit…",
     "noResults": "Aucun produit ne correspond à votre recherche.",
     "clearFilters": "Réinitialiser les filtres",
+    "items": "articles",
     "backToProducts": "Retour aux produits"
   },
   "hero": {

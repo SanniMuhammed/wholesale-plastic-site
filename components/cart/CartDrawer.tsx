@@ -49,6 +49,8 @@ export function CartDrawer({
         i !== null
     );
 
+  const totalQuantity = resolved.reduce((sum, i) => sum + i.quantity, 0);
+
   const whatsappHref = orderInquiryLink(dict, {
     items: resolved.map((i) => ({ name: i.name, quantity: i.quantity })),
   });
@@ -69,20 +71,34 @@ export function CartDrawer({
         aria-label={dict.cartDrawer.title}
         aria-hidden={!open}
         className={cx(
-          "fixed inset-y-0 right-0 z-[61] flex w-full max-w-sm flex-col bg-surface shadow-lifted transition-transform duration-300 ease-out",
+          // Full-bleed below the sm breakpoint -- previously "max-w-sm" applied
+          // unconditionally, which on any viewport wider than ~384px (a
+          // resized browser window, a larger phone reporting a wider CSS
+          // viewport, a small tablet) capped the drawer short of the edge and
+          // left a visible strip of the page showing on the left, as seen in
+          // the screenshots. From sm: up it goes back to a fixed-width side
+          // panel, which is the right call once there's room to spare.
+          "fixed inset-y-0 right-0 z-[61] flex w-full flex-col bg-surface shadow-lifted transition-transform duration-300 ease-out sm:max-w-sm",
           open ? "translate-x-0" : "translate-x-full"
         )}
       >
-        <div className="flex items-center justify-between border-b border-border px-5 py-4">
-          <span className="font-display text-lg font-semibold text-ink">{dict.cartDrawer.title}</span>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label={dict.nav.close}
-            className="inline-flex h-9 w-9 items-center justify-center rounded text-ink-soft hover:bg-brand-light hover:text-ink"
-          >
-            <X size={18} />
-          </button>
+        <div className="border-b border-border px-5 py-4">
+          <div className="flex items-center justify-between">
+            <span className="font-display text-lg font-semibold text-ink">{dict.cartDrawer.title}</span>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label={dict.nav.close}
+              className="inline-flex h-9 w-9 items-center justify-center rounded text-ink-soft hover:bg-brand-light hover:text-ink"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          {totalQuantity > 0 && (
+            <p className="mt-0.5 font-mono text-xs text-muted">
+              {totalQuantity} {dict.common.items}
+            </p>
+          )}
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-2">
@@ -93,11 +109,14 @@ export function CartDrawer({
             </div>
           ) : (
             <ul className="divide-y divide-dashed divide-border">
-              {resolved.map((item) => (
+              {resolved.map((item, i) => (
                 <li key={item.slug} className="flex items-center justify-between gap-3 py-3.5">
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-ink">{item.name}</p>
-                    {item.capacity && <p className="font-mono text-xs text-muted">{item.capacity}</p>}
+                  <div className="flex min-w-0 items-baseline gap-2.5">
+                    <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-ink">{item.name}</p>
+                      {item.capacity && <p className="font-mono text-xs text-muted">{item.capacity}</p>}
+                    </div>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
                     <input

@@ -41,7 +41,7 @@ export function ProductCategories({ locale, dict }: { locale: Locale; dict: Dict
       <p className="mt-2 max-w-xl text-muted">{dict.categoriesSection.subtitle}</p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {featured.map((category) => (
+        {featured.map((category, i) => (
           <Link
             key={category.slug}
             href={`${base}/products?category=${category.slug}`}
@@ -50,6 +50,9 @@ export function ProductCategories({ locale, dict }: { locale: Locale; dict: Dict
               CATEGORY_TINTS[category.slug]
             )}
           >
+            <span className="absolute left-5 top-4 font-mono text-xs font-bold text-ink-soft/60">
+              {String(i + 1).padStart(2, "0")}
+            </span>
             <CategoryIllustration
               category={category.slug}
               className={cx(
@@ -66,15 +69,18 @@ export function ProductCategories({ locale, dict }: { locale: Locale; dict: Dict
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {rest.map((category) => (
+        {rest.map((category, i) => (
           <Link
             key={category.slug}
             href={`${base}/products?category=${category.slug}`}
             className={cx(
-              "group flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-border p-4 text-center transition-all hover:-translate-y-0.5 hover:shadow-lifted",
+              "group relative flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-border p-4 text-center transition-all hover:-translate-y-0.5 hover:shadow-lifted",
               CATEGORY_TINTS[category.slug]
             )}
           >
+            <span className="absolute left-3 top-3 font-mono text-[10px] font-bold text-ink-soft/60">
+              {String(i + FEATURED_COUNT + 1).padStart(2, "0")}
+            </span>
             <CategoryIllustration
               category={category.slug}
               className={cx("h-9 w-9", CATEGORY_INK[category.slug])}

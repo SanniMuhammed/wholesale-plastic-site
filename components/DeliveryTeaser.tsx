@@ -10,7 +10,7 @@ export function DeliveryTeaser({ locale, dict }: { locale: Locale; dict: Diction
     <section className="border-y border-border bg-surface">
       <div className="mx-auto flex max-w-content flex-col items-start gap-4 px-4 py-14 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div>
-          <h2 className="font-display text-xl font-semibold text-ink sm:text-2xl">
+          <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
             {dict.deliveryTeaser.title}
           </h2>
           <p className="mt-2 max-w-lg text-muted">{dict.deliveryTeaser.subtitle}</p>

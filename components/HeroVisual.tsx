@@ -1,3 +1,4 @@
+import type { Dictionary } from "@/lib/getDictionary";
 import { CategoryIllustration } from "@/components/illustrations/CategoryIllustration";
 
 // A deliberately simple stand-in for real product photography: an
@@ -14,25 +15,25 @@ const PIECES: {
     category: "basins",
     tint: "bg-clay-light",
     ink: "text-clay",
-    wrapperClass: "h-40 w-40 sm:h-48 sm:w-48",
+    wrapperClass: "h-40 w-40 sm:h-56 sm:w-56",
   },
   {
     category: "buckets",
     tint: "bg-brand-light",
     ink: "text-brand",
-    wrapperClass: "h-28 w-28 sm:h-32 sm:w-32 -ml-8 -mt-16 sm:-ml-10 sm:-mt-20",
+    wrapperClass: "h-28 w-28 sm:h-36 sm:w-36 -ml-8 -mt-16 sm:-ml-12 sm:-mt-24",
   },
   {
     category: "bowls",
     tint: "bg-ochre-light",
     ink: "text-ochre",
-    wrapperClass: "h-20 w-20 sm:h-24 sm:w-24 ml-24 -mt-6 sm:ml-28 sm:-mt-8",
+    wrapperClass: "h-20 w-20 sm:h-28 sm:w-28 ml-24 -mt-6 sm:ml-32 sm:-mt-10",
   },
 ];
 
-export function HeroVisual() {
+export function HeroVisual({ dict }: { dict: Dictionary }) {
   return (
-    <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-surface">
+    <div className="relative flex aspect-square w-full items-center justify-center overflow-visible">
       <div className="relative flex items-center justify-center">
         {PIECES.map((piece, i) => (
           <div
@@ -43,6 +44,16 @@ export function HeroVisual() {
             <CategoryIllustration category={piece.category} className={`h-[55%] w-[55%] ${piece.ink}`} />
           </div>
         ))}
+
+        {/* Hand-labelled annotations, like a margin note on a catalogue
+            plate -- reuses the same rotated-tag language as the hero
+            eyebrow so the whole composition reads as one system. */}
+        <span className="eyebrow absolute -right-2 top-1 rotate-3 rounded border border-border bg-surface px-2 py-1 text-[10px] sm:-right-4 sm:top-4">
+          {dict.categories.bowls}
+        </span>
+        <span className="eyebrow absolute -left-2 bottom-2 -rotate-2 rounded border border-border bg-surface px-2 py-1 text-[10px] sm:-left-4 sm:bottom-6">
+          {dict.categories.buckets}
+        </span>
       </div>
       <span className="sr-only">Wholesale plastic buckets, basins and bowls</span>
     </div>

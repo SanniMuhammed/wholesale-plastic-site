@@ -19,8 +19,9 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
 
   return (
     <div className="mx-auto max-w-content px-4 py-12 sm:px-6">
-      <h1 className="font-display text-3xl font-semibold text-ink">{dict.nav.products}</h1>
-      <div className="mt-8">
+      <p className="eyebrow">{dict.footer.catalog}</p>
+      <h1 className="mt-2 font-display text-4xl font-semibold text-ink sm:text-5xl">{dict.nav.products}</h1>
+      <div className="mt-10">
         <Suspense fallback={null}>
           <CatalogClient locale={locale} dict={dict} />
         </Suspense>

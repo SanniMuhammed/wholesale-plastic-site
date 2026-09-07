@@ -15,10 +15,11 @@ export function StartBusinessSection({ locale, dict }: { locale: Locale; dict: D
         <p className="mt-4 text-muted">{dict.startBusiness.body}</p>
       </div>
 
-      <div className="mt-8 grid gap-5 sm:grid-cols-3">
-        {segments.map((segment) => (
-          <div key={segment.title} className="rounded border border-border p-5">
-            <h3 className="font-display font-semibold text-ink">{segment.title}</h3>
+      <div className="mt-10 grid gap-8 border-t-2 border-border pt-6 sm:grid-cols-3 sm:gap-6">
+        {segments.map((segment, i) => (
+          <div key={segment.title}>
+            <span className="font-mono text-xs font-bold text-brand">{String(i + 1).padStart(2, "0")}</span>
+            <h3 className="mt-2 font-display text-lg font-semibold text-ink">{segment.title}</h3>
             <p className="mt-1.5 text-sm text-muted">{segment.description}</p>
           </div>
         ))}
@@ -26,7 +27,7 @@ export function StartBusinessSection({ locale, dict }: { locale: Locale; dict: D
 
       <Link
         href={`${base}/order-summary`}
-        className="mt-8 inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-brand-dark"
+        className="mt-10 inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-brand-dark"
       >
         {dict.startBusiness.cta}
       </Link>

@@ -25,27 +25,25 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
   return (
     <div className="mx-auto max-w-content px-4 py-14 sm:px-6">
-      <h1 className="font-display text-3xl font-semibold text-ink sm:text-4xl">{cp.title}</h1>
-      <p className="mt-3 max-w-xl text-muted">{cp.intro}</p>
+      <p className="eyebrow">{dict.nav.contact}</p>
+      <h1 className="mt-2 font-display text-4xl font-semibold text-ink sm:text-5xl">{cp.title}</h1>
+      <p className="mt-4 max-w-xl text-muted">{cp.intro}</p>
 
-      <div className="mt-8 grid gap-4 sm:max-w-md">
+      <div className="mt-10 max-w-md divide-y divide-border border-t border-border">
         <a
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 rounded border border-border p-4 transition-colors hover:border-ink"
+          className="flex items-center gap-3 py-4 transition-colors hover:text-brand"
         >
-          <MessageCircle size={18} className="shrink-0 text-brand" />
+          <MessageCircle size={16} strokeWidth={1.75} className="shrink-0 text-brand" />
           <div>
             <p className="text-xs text-muted">{cp.whatsappLabel}</p>
             <p className="text-sm font-medium text-ink">{dict.nav.whatsapp}</p>
           </div>
         </a>
-        <a
-          href={`mailto:${email}`}
-          className="flex items-center gap-3 rounded border border-border p-4 transition-colors hover:border-ink"
-        >
-          <Mail size={18} className="shrink-0 text-brand" />
+        <a href={`mailto:${email}`} className="flex items-center gap-3 py-4 transition-colors hover:text-brand">
+          <Mail size={16} strokeWidth={1.75} className="shrink-0 text-brand" />
           <div>
             <p className="text-xs text-muted">{cp.emailLabel}</p>
             <p className="text-sm font-medium text-ink">{email}</p>
@@ -54,9 +52,9 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
         {phone && (
           <a
             href={`tel:${phone.replace(/\s+/g, "")}`}
-            className="flex items-center gap-3 rounded border border-border p-4 transition-colors hover:border-ink"
+            className="flex items-center gap-3 py-4 transition-colors hover:text-brand"
           >
-            <Phone size={18} className="shrink-0 text-brand" />
+            <Phone size={16} strokeWidth={1.75} className="shrink-0 text-brand" />
             <div>
               <p className="text-xs text-muted">{cp.phoneLabel}</p>
               <p className="text-sm font-medium text-ink">{phone}</p>
@@ -64,8 +62,8 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
           </a>
         )}
         {address && (
-          <div className="flex items-center gap-3 rounded border border-border p-4">
-            <MapPin size={18} className="shrink-0 text-brand" />
+          <div className="flex items-center gap-3 py-4">
+            <MapPin size={16} strokeWidth={1.75} className="shrink-0 text-brand" />
             <div>
               <p className="text-xs text-muted">{cp.addressLabel}</p>
               <p className="text-sm font-medium text-ink">{address}</p>

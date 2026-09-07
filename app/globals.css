@@ -20,6 +20,23 @@ summary::-webkit-details-marker {
   display: none;
 }
 
+@layer components {
+  /* Small uppercase mono metadata label -- the recurring "eyebrow" used
+     above headings, on product plates and in section frames throughout
+     the editorial system. One definition so the tracking/size/color stay
+     identical everywhere it appears. */
+  .eyebrow {
+    @apply font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-muted;
+  }
+
+  /* Hairline rule with an index number set into it, used to break up
+     editorial lists (wholesale "who we serve", delivery factors, contact
+     channels) without falling back to bordered icon boxes. */
+  .rule-row {
+    @apply flex items-baseline justify-between gap-4 border-b border-border py-3;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

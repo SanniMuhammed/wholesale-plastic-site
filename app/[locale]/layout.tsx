@@ -40,7 +40,7 @@ export default async function LocaleLayout({
       <CartUIProvider locale={locale} dict={dict}>
         <div className="flex min-h-screen flex-col">
           <Nav locale={locale} dict={dict} />
-          <main className="flex-1">{children}</main>
+          <main>{children}</main>
           <Footer locale={locale} dict={dict} />
         </div>
       </CartUIProvider>
