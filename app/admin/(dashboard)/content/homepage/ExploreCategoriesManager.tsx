@@ -6,7 +6,7 @@ import { CategoryManager } from "../../categories/CategoryManager";
 import type { Category } from "@/lib/cms/types";
 
 export function ExploreCategoriesManager({ initialCategories }: { initialCategories: Category[] }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <section className="my-3 overflow-hidden rounded-lg border border-border bg-surface">
