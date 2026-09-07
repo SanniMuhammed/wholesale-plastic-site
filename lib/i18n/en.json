@@ -248,6 +248,12 @@
     "errorMessage": "Something went wrong. Please try again, or reach us directly on WhatsApp.",
     "requiredField": "This field is required."
   },
+  "cartDrawer": {
+    "title": "Your Order",
+    "empty": "Your order is empty.",
+    "viewFullOrder": "View Full Order",
+    "keepBrowsing": "Keep Browsing"
+  },
   "contactPage": {
     "title": "Contact Us",
     "intro": "Have a question before placing your order? Reach us directly.",

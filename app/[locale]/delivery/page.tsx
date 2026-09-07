@@ -25,7 +25,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ local
       <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {dp.steps.map((step, i) => (
           <li key={step} className="rounded border border-border p-4">
-            <span className="font-display text-lg font-semibold text-brand">
+            <span className="font-mono text-lg font-bold text-brand">
               {String(i + 1).padStart(2, "0")}
             </span>
             <p className="mt-2 text-sm text-ink-soft">{step}</p>

@@ -16,6 +16,10 @@ body {
   outline-offset: 2px;
 }
 
+summary::-webkit-details-marker {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

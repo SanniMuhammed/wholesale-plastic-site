@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
 import { CATEGORIES } from "@/lib/products";
@@ -86,8 +87,12 @@ export default async function WholesalePage({ params }: { params: Promise<{ loca
           <div className="mt-5 divide-y divide-border border-t border-border">
             {wp.faq.map((item) => (
               <details key={item.q} className="group py-4">
-                <summary className="cursor-pointer list-none text-sm font-medium text-ink">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-medium text-ink">
                   {item.q}
+                  <ChevronDown
+                    size={16}
+                    className="shrink-0 text-muted transition-transform duration-200 group-open:rotate-180"
+                  />
                 </summary>
                 <p className="mt-2 text-sm text-muted">{item.a}</p>
               </details>

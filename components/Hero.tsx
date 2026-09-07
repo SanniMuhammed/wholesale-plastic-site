@@ -9,7 +9,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <section className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
       <div className="grid items-center gap-12 lg:grid-cols-[1.1fr,0.9fr]">
-        <div>
+        <div className="animate-settle-up">
           <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight text-ink sm:text-5xl lg:text-[3.4rem]">
             {dict.hero.title}
           </h1>
@@ -28,9 +28,13 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               {dict.hero.secondaryCta}
             </Link>
           </div>
-          <p className="mt-6 text-sm text-muted">{dict.hero.supporting}</p>
+          <p className="mt-6 inline-block -rotate-1 rounded border border-border px-3 py-1.5 font-mono text-xs text-ink-soft">
+            {dict.hero.supporting}
+          </p>
         </div>
-        <HeroVisual />
+        <div className="animate-settle-up" style={{ animationDelay: "120ms" }}>
+          <HeroVisual />
+        </div>
       </div>
     </section>
   );

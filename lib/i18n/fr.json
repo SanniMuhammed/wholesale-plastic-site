@@ -248,6 +248,12 @@
     "errorMessage": "Une erreur s'est produite. Veuillez réessayer ou nous contacter directement sur WhatsApp.",
     "requiredField": "Ce champ est obligatoire."
   },
+  "cartDrawer": {
+    "title": "Votre Commande",
+    "empty": "Votre commande est vide.",
+    "viewFullOrder": "Voir la commande complète",
+    "keepBrowsing": "Continuer mes achats"
+  },
   "contactPage": {
     "title": "Contactez-nous",
     "intro": "Une question avant de demander un devis ? Contactez-nous directement.",

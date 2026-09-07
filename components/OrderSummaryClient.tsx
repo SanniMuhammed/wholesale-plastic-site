@@ -2,11 +2,13 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { PackageOpen } from "lucide-react";
 import { useOrder } from "@/components/OrderProvider";
 import { getProductBySlug } from "@/lib/products";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { orderInquiryLink } from "@/lib/whatsapp";
+import { cx } from "@/lib/utils";
 
 interface DetailsState {
   customerName: string;
@@ -26,12 +28,17 @@ const EMPTY_FALLBACK: FallbackState = { country: "", city: "", contact: "" };
 
 type FallbackStatus = "idle" | "sending" | "success" | "error";
 
+// How long the collapse animation runs before the item actually leaves
+// state -- keep in sync with the grid-rows transition duration below.
+const REMOVE_ANIMATION_MS = 260;
+
 export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const { items, updateQuantity, removeItem, clear } = useOrder();
   const [details, setDetails] = useState<DetailsState>(EMPTY_DETAILS);
   const [fallback, setFallback] = useState<FallbackState>(EMPTY_FALLBACK);
   const [showFallback, setShowFallback] = useState(false);
   const [status, setStatus] = useState<FallbackStatus>("idle");
+  const [removingSlugs, setRemovingSlugs] = useState<Set<string>>(new Set());
   const base = `/${locale}`;
   const sp = dict.orderSummaryPage;
 
@@ -57,6 +64,21 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
 
   function updateFallback<K extends keyof FallbackState>(key: K, value: FallbackState[K]) {
     setFallback((f) => ({ ...f, [key]: value }));
+  }
+
+  // Collapses the row first, then removes it from state once the
+  // animation finishes -- so removing an item shows what changed instead
+  // of just snapping the list shorter.
+  function handleRemove(slug: string) {
+    setRemovingSlugs((prev) => new Set(prev).add(slug));
+    window.setTimeout(() => {
+      removeItem(slug);
+      setRemovingSlugs((prev) => {
+        const next = new Set(prev);
+        next.delete(slug);
+        return next;
+      });
+    }, REMOVE_ANIMATION_MS);
   }
 
   function handlePrint() {
@@ -102,7 +124,9 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr,0.9fr]">
-      {/* Receipt card -- this block is what prints. */}
+      {/* Receipt card -- this block is what prints. Styled like a packing
+          slip (dashed rules, monospace quantities) since it's a document
+          people actually screenshot or print and hand to our team. */}
       <div className="rounded-lg border border-border bg-surface p-6 shadow-card sm:p-8">
         <h2 className="font-display text-lg font-semibold text-ink">{sp.orderSummaryTitle}</h2>
         {hasContext && (
@@ -112,39 +136,60 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
         )}
 
         {!hasItems ? (
-          <div className="mt-4 rounded border border-dashed border-border p-6 text-center">
+          <div className="mt-4 flex flex-col items-center gap-3 rounded border border-dashed border-border p-6 text-center">
+            <PackageOpen size={24} strokeWidth={1.25} className="text-muted" />
             <p className="text-sm text-muted">{sp.orderEmpty}</p>
-            <Link href={`${base}/products`} className="mt-3 inline-block text-sm font-medium text-brand hover:underline print:hidden">
+            <Link
+              href={`${base}/products`}
+              className="text-sm font-medium text-brand hover:underline print:hidden"
+            >
               {sp.browseProducts}
             </Link>
           </div>
         ) : (
-          <ul className="mt-4 divide-y divide-border border-t border-border">
+          <ul className="mt-4 divide-y divide-dashed divide-border border-t border-dashed border-border">
             {resolvedItems.map((item) => (
-              <li key={item.slug} className="flex items-center justify-between gap-3 py-3">
-                <div>
-                  <span className="text-sm text-ink">{item.name}</span>
-                  {item.capacity && <span className="ml-2 text-xs text-muted">({item.capacity})</span>}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="hidden text-sm text-ink print:inline">
-                    {dict.common.quantity}: {item.quantity}
-                  </span>
-                  <input
-                    type="number"
-                    min={1}
-                    value={item.quantity}
-                    onChange={(e) => updateQuantity(item.slug, Number(e.target.value) || 1)}
-                    className="w-16 rounded border border-border px-2 py-1 text-sm print:hidden"
-                    aria-label={dict.common.quantity}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeItem(item.slug)}
-                    className="text-xs text-muted hover:text-ink print:hidden"
+              <li
+                key={item.slug}
+                className={cx(
+                  "grid transition-[grid-template-rows] duration-300 ease-in-out",
+                  removingSlugs.has(item.slug) ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
+                )}
+              >
+                <div className="overflow-hidden">
+                  <div
+                    className={cx(
+                      "flex items-center justify-between gap-3 py-3 transition-opacity duration-150",
+                      removingSlugs.has(item.slug) && "opacity-0"
+                    )}
                   >
-                    {dict.common.removeFromOrder}
-                  </button>
+                    <div>
+                      <span className="text-sm text-ink">{item.name}</span>
+                      {item.capacity && (
+                        <span className="ml-2 font-mono text-xs text-muted">({item.capacity})</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="hidden font-mono text-sm text-ink print:inline">
+                        {dict.common.quantity}: {item.quantity}
+                      </span>
+                      <input
+                        type="number"
+                        min={1}
+                        value={item.quantity}
+                        onChange={(e) => updateQuantity(item.slug, Number(e.target.value) || 1)}
+                        className="w-16 rounded border border-border px-2 py-1 font-mono text-sm print:hidden"
+                        aria-label={dict.common.quantity}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemove(item.slug)}
+                        className="text-xs text-muted hover:text-ink print:hidden"
+                      >
+                        {dict.common.removeFromOrder}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </li>
             ))}
@@ -183,7 +228,7 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-brand-dark"
+                className="inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-all hover:bg-brand-dark active:scale-[0.98]"
               >
                 {sp.continueOnWhatsapp}
               </a>
@@ -199,7 +244,7 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
               type="button"
               onClick={handlePrint}
               disabled={!hasItems}
-              className="inline-flex items-center justify-center rounded border border-ink px-6 py-3 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center justify-center rounded border border-ink px-6 py-3 text-sm font-medium text-ink transition-all hover:bg-ink hover:text-surface active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {sp.printReceipt}
             </button>
@@ -246,7 +291,7 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
                 <button
                   type="submit"
                   disabled={status === "sending" || !hasItems}
-                  className="inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-brand-dark disabled:opacity-60"
+                  className="inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-all hover:bg-brand-dark active:scale-[0.98] disabled:opacity-60"
                 >
                   {status === "sending" ? dict.common.sending : sp.submit}
                 </button>

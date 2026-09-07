@@ -29,7 +29,7 @@ export function ProductCard({
         >
           {product.name[locale]}
         </Link>
-        {product.capacity && <p className="text-sm text-muted">{product.capacity}</p>}
+        {product.capacity && <p className="font-mono text-xs text-muted">{product.capacity}</p>}
         <p className="text-xs font-medium text-brand">{dict.common.wholesalePricing}</p>
         <div className="mt-3 flex items-center gap-2">
           <Link

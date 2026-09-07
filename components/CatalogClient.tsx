@@ -86,7 +86,7 @@ export function CatalogClient({ locale, dict }: { locale: Locale; dict: Dictiona
           type="button"
           onClick={() => setCategory(null)}
           className={cx(
-            "rounded border px-3 py-1.5 text-sm font-medium transition-colors",
+            "rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
             category === null ? "border-ink bg-ink text-surface" : "border-border text-ink-soft hover:border-ink"
           )}
         >
@@ -98,7 +98,7 @@ export function CatalogClient({ locale, dict }: { locale: Locale; dict: Dictiona
             type="button"
             onClick={() => setCategory(c.slug)}
             className={cx(
-              "rounded border px-3 py-1.5 text-sm font-medium transition-colors",
+              "rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
               category === c.slug ? "border-ink bg-ink text-surface" : "border-border text-ink-soft hover:border-ink"
             )}
           >
@@ -107,7 +107,7 @@ export function CatalogClient({ locale, dict }: { locale: Locale; dict: Dictiona
         ))}
       </div>
 
-      <p className="mt-6 text-sm text-muted">{results.length}</p>
+      <p className="mt-6 font-mono text-sm text-muted">{results.length}</p>
 
       {results.length === 0 ? (
         <p className="mt-4 text-muted">{dict.common.noResults}</p>

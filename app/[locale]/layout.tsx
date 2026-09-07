@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { locales, isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
 import { OrderProvider } from "@/components/OrderProvider";
+import { CartUIProvider } from "@/components/cart/CartUIProvider";
 import { HtmlLangSync } from "@/components/HtmlLangSync";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
@@ -36,11 +37,13 @@ export default async function LocaleLayout({
   return (
     <OrderProvider>
       <HtmlLangSync locale={locale} />
-      <div className="flex min-h-screen flex-col">
-        <Nav locale={locale} dict={dict} />
-        <main className="flex-1">{children}</main>
-        <Footer locale={locale} dict={dict} />
-      </div>
+      <CartUIProvider locale={locale} dict={dict}>
+        <div className="flex min-h-screen flex-col">
+          <Nav locale={locale} dict={dict} />
+          <main className="flex-1">{children}</main>
+          <Footer locale={locale} dict={dict} />
+        </div>
+      </CartUIProvider>
     </OrderProvider>
   );
 }

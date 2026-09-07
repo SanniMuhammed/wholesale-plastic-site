@@ -64,7 +64,7 @@ export default async function ProductDetailPage({
                 {product.colors.map((color) => (
                   <span
                     key={color}
-                    className="rounded border border-border px-2.5 py-1 text-xs text-ink-soft"
+                    className="rounded border border-border px-2.5 py-1 font-mono text-xs text-ink-soft"
                   >
                     {dict.colors[color]}
                   </span>
@@ -77,20 +77,20 @@ export default async function ProductDetailPage({
             {product.capacity && (
               <div>
                 <dt className="text-muted">{dict.common.capacity}</dt>
-                <dd className="mt-0.5 font-medium text-ink">{product.capacity}</dd>
+                <dd className="mt-0.5 font-mono font-medium text-ink">{product.capacity}</dd>
               </div>
             )}
             <div>
               <dt className="text-muted">{dict.common.material}</dt>
-              <dd className="mt-0.5 font-medium text-ink">{product.material[locale]}</dd>
+              <dd className="mt-0.5 font-mono font-medium text-ink">{product.material[locale]}</dd>
             </div>
             <div>
               <dt className="text-muted">{dict.common.packaging}</dt>
-              <dd className="mt-0.5 font-medium text-ink">{product.packaging[locale]}</dd>
+              <dd className="mt-0.5 font-mono font-medium text-ink">{product.packaging[locale]}</dd>
             </div>
             <div>
               <dt className="text-muted">{dict.common.useCase}</dt>
-              <dd className="mt-0.5 font-medium text-ink">{product.useCase[locale]}</dd>
+              <dd className="mt-0.5 font-mono font-medium text-ink">{product.useCase[locale]}</dd>
             </div>
           </dl>
 

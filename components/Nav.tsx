@@ -8,6 +8,7 @@ import type { Dictionary } from "@/lib/getDictionary";
 import { generalInquiryLink } from "@/lib/whatsapp";
 import { WhatsAppLink } from "@/components/WhatsAppLink";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { CartTrigger } from "@/components/cart/CartTrigger";
 
 interface NavProps {
   locale: Locale;
@@ -59,12 +60,7 @@ export function Nav({ locale, dict }: NavProps) {
         <div className="hidden items-center gap-4 md:flex">
           <LanguageSwitcher locale={locale} />
           <WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="icon" />
-          <Link
-            href={`${base}/order-summary`}
-            className="inline-flex items-center rounded bg-brand px-4 py-2 text-sm font-medium text-surface hover:bg-brand-dark transition-colors"
-          >
-            {dict.nav.reviewOrder}
-          </Link>
+          <CartTrigger dict={dict} />
         </div>
 
         <button
@@ -96,14 +92,8 @@ export function Nav({ locale, dict }: NavProps) {
             <LanguageSwitcher locale={locale} />
             <WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="text" />
           </div>
-          <div className="px-4 pb-4">
-            <Link
-              href={`${base}/order-summary`}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-center rounded bg-brand px-4 py-3 text-sm font-medium text-surface"
-            >
-              {dict.nav.reviewOrder}
-            </Link>
+          <div className="px-4 pb-4" onClickCapture={() => setOpen(false)}>
+            <CartTrigger dict={dict} variant="mobile" />
           </div>
         </div>
       )}

@@ -87,9 +87,7 @@ export function ProductImage({ product, locale, className, sizes }: ProductImage
         className={cx("relative h-[52%] w-[52%]", CATEGORY_INK[product.category])}
       />
       {product.capacity && (
-        <span className="relative mt-2 text-xs font-medium text-ink-soft/70">
-          {product.capacity}
-        </span>
+        <span className="relative mt-2 font-mono text-xs text-ink-soft/70">{product.capacity}</span>
       )}
       {swatches.length > 0 && (
         <div className="relative mt-2 flex items-center gap-1">
