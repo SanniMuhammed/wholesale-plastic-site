@@ -21,7 +21,7 @@ export default async function HomepageContentPage() {
     <div>
       <PageHeader
         title="Homepage sections"
-        description="Edit the text in each section. Hiding a section removes it from the homepage."
+        description="Edit homepage text, manage the hero photo, and manage the Explore category photos from their category settings."
       />
       <HomepageSectionManager sections={sections} labels={SECTION_LABELS} />
     </div>

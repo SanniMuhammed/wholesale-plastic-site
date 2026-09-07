@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { updateHomepageSectionAction } from "../actions";
+import { useRef, useState, type MouseEvent } from "react";
+import { ChevronDown, ChevronUp, Image as ImageIcon, X } from "lucide-react";
+import { updateHomepageSectionAction, uploadHomepageHeroImageAction, removeHomepageHeroImageAction } from "../actions";
 import type { HomepageSection } from "@/lib/cms/types";
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const IMAGE_BUCKET = "product-images";
+
+function imageUrl(path: string) {
+  return `${SUPABASE_URL}/storage/v1/object/public/${IMAGE_BUCKET}/${path}`;
+}
 
 export function HomepageSectionManager({
   sections,
@@ -53,8 +60,11 @@ function SectionRow({
     const next = { ...form, ...patch };
     setForm(next);
     setSaving(true);
-    await updateHomepageSectionAction(section.id, next);
-    setSaving(false);
+    try {
+      await updateHomepageSectionAction(section.id, next);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -75,6 +85,16 @@ function SectionRow({
 
       {open && (
         <div className="grid gap-4 border-t border-border p-4">
+          {section.key === "hero" && (
+            <HeroImageControl
+              imagePath={section.hero_image_path}
+              onChange={(hero_image_path) => {
+                // Keep the local preview in sync after an upload/remove.
+                section.hero_image_path = hero_image_path;
+              }}
+            />
+          )}
+
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
               <span className="mb-1 block text-sm font-medium text-ink-soft">Title (English)</span>
@@ -124,6 +144,91 @@ function SectionRow({
           </label>
         </div>
       )}
+    </div>
+  );
+}
+
+function HeroImageControl({
+  imagePath,
+  onChange,
+}: {
+  imagePath: string | null;
+  onChange: (path: string | null) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [path, setPath] = useState(imagePath);
+  const [busy, setBusy] = useState(false);
+
+  async function handleFile(file: File | null) {
+    if (!file) return;
+    setBusy(true);
+    try {
+      const formData = new FormData();
+      formData.set("file", file);
+      const updated = await uploadHomepageHeroImageAction(formData);
+      setPath(updated.hero_image_path);
+      onChange(updated.hero_image_path);
+    } finally {
+      setBusy(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  async function handleRemove(e: MouseEvent) {
+    e.stopPropagation();
+    setBusy(true);
+    try {
+      await removeHomepageHeroImageAction();
+      setPath(null);
+      onChange(null);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between gap-2">
+        <span className="text-sm font-medium text-ink-soft">Hero image</span>
+        <span className="text-xs text-muted">Optional — illustrated hero remains the fallback</span>
+      </div>
+      <button
+        type="button"
+        disabled={busy}
+        onClick={() => inputRef.current?.click()}
+        className="group relative block aspect-[16/7] w-full overflow-hidden rounded-lg border border-border bg-background text-left disabled:opacity-60"
+      >
+        {path ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={imageUrl(path)} alt="Homepage hero" className="h-full w-full object-cover" />
+            <span
+              role="button"
+              aria-label="Remove hero image"
+              onClick={handleRemove}
+              className="absolute right-3 top-3 rounded-full bg-ink/75 p-2 text-surface opacity-0 transition-opacity group-hover:opacity-100"
+            >
+              <X size={16} />
+            </span>
+            <span className="absolute bottom-3 left-3 rounded bg-ink/75 px-2 py-1 text-xs text-surface">
+              Tap to replace
+            </span>
+          </>
+        ) : (
+          <span className="flex h-full flex-col items-center justify-center gap-2 text-muted">
+            <ImageIcon size={28} />
+            <span className="text-sm font-medium text-ink">Add hero photo</span>
+            <span className="text-xs">Recommended: wide product/business photography</span>
+          </span>
+        )}
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
+        />
+      </button>
     </div>
   );
 }

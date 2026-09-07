@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { locales, isLocale, type Locale } from "@/lib/i18n/config";
