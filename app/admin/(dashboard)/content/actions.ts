@@ -6,6 +6,8 @@ import {
   updateDeliveryContent,
   updateWholesaleContent,
   updateHomepageSection,
+  uploadHomepageHeroImage,
+  removeHomepageHeroImage,
 } from "@/lib/cms/settings";
 import type { CompanySettings, DeliveryContent, WholesaleContent, HomepageSection } from "@/lib/cms/types";
 
@@ -33,5 +35,22 @@ export async function updateHomepageSectionAction(
 ) {
   const section = await updateHomepageSection(id, input);
   revalidatePath("/admin/content/homepage");
+  revalidatePath("/[locale]", "page");
+  return section;
+}
+
+export async function uploadHomepageHeroImageAction(formData: FormData) {
+  const file = formData.get("file") as File | null;
+  if (!file) throw new Error("No file provided");
+  const section = await uploadHomepageHeroImage(file);
+  revalidatePath("/admin/content/homepage");
+  revalidatePath("/[locale]", "page");
+  return section;
+}
+
+export async function removeHomepageHeroImageAction() {
+  const section = await removeHomepageHeroImage();
+  revalidatePath("/admin/content/homepage");
+  revalidatePath("/[locale]", "page");
   return section;
 }
