@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Plus, Star } from "lucide-react";
 import { listProducts } from "@/lib/cms/products";
-import { buildProductImageUrl } from "@/lib/cms/products";
+import { buildProductImageUrl } from "@/lib/cms/productImages";
 import { PageHeader } from "@/components/admin/AdminUI";
 import { ProductRowActions } from "./ProductRowActions";
 

@@ -3,7 +3,10 @@
 import { useState, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { SaveStatusPill, type SaveState } from "@/components/admin/AdminUI";
-import { createProductAction, updateProductAction } from "../products/actions";
+import {
+  createProductAction,
+  updateProductAction,
+} from "@/app/admin/(dashboard)/products/actions";
 import type { Category, Color, Product, ProductInput } from "@/lib/cms/types";
 
 function slugify(value: string) {

@@ -3,7 +3,7 @@
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, Star, Trash2, Upload } from "lucide-react";
-import { buildProductImageUrl } from "@/lib/cms/products";
+import { buildProductImageUrl } from "@/lib/cms/productImages";
 import {
   uploadProductImageAction,
   setMainProductImageAction,

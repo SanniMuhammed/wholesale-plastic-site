@@ -3,13 +3,6 @@ import type { Product, ProductInput, ProductImage, Color } from "@/lib/cms/types
 
 const PRODUCT_IMAGES_BUCKET = "product-images";
 
-/** Builds the public URL for a stored product photo from its storage path.
- *  Safe to call from Server Components -- doesn't need a Supabase call. */
-export function buildProductImageUrl(storagePath: string): string {
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  return `${base}/storage/v1/object/public/${PRODUCT_IMAGES_BUCKET}/${storagePath}`;
-}
-
 const PRODUCT_SELECT = `
   *,
   category:categories(*),
