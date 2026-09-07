@@ -44,7 +44,10 @@ export function CartDrawer({
       if (!product) return null;
       return { slug: i.slug, quantity: i.quantity, name: product.name[locale], capacity: product.capacity };
     })
-    .filter((i): i is { slug: string; quantity: number; name: string; capacity?: string } => Boolean(i));
+    .filter(
+      (i): i is { slug: string; quantity: number; name: string; capacity: string | undefined } =>
+        i !== null
+    );
 
   const whatsappHref = orderInquiryLink(dict, {
     items: resolved.map((i) => ({ name: i.name, quantity: i.quantity })),
