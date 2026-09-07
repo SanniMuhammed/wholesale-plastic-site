@@ -56,24 +56,27 @@ export function Nav({ locale, dict }: NavProps) {
         scrolled ? "border-border shadow-card" : "border-transparent"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-content items-center justify-between px-4 sm:h-[4.5rem] sm:px-6">
-        <Link href={base} className="font-display text-lg font-semibold tracking-tight text-ink sm:text-xl">
+      <div className="mx-auto flex h-14 max-w-content items-center justify-between px-3 sm:h-14 sm:px-6">
+        <Link
+          href={base}
+          className="shrink-0 whitespace-nowrap font-display text-base font-semibold tracking-tight text-ink sm:text-lg"
+        >
           Sherinab Venture<span className="text-brand">.</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-5 md:flex">
           {desktopLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="relative py-1 text-[13px] font-medium uppercase tracking-[0.06em] text-ink-soft transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-brand after:transition-transform after:duration-300 after:ease-out hover:text-ink hover:after:scale-x-100"
+              className="relative whitespace-nowrap py-1 text-[12px] font-medium uppercase tracking-[0.05em] text-ink-soft transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-brand after:transition-transform after:duration-300 after:ease-out hover:text-ink hover:after:scale-x-100"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 md:flex">
+        <div className="hidden items-center gap-3 md:flex">
           <LanguageSwitcher locale={locale} />
           <span className="h-4 w-px bg-border" aria-hidden />
           <WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="icon" />
