@@ -23,7 +23,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           href={base}
           className="font-display text-[2.75rem] font-semibold leading-none tracking-tight text-ink transition-colors hover:text-brand sm:text-6xl"
         >
-          Company<span className="text-brand">.</span>
+          Sherinab Venture<span className="text-brand">.</span>
         </Link>
         <p className="mt-4 max-w-sm text-sm text-muted">{dict.footer.tagline}</p>
 

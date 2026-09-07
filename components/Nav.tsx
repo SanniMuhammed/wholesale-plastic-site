@@ -62,7 +62,7 @@ export function Nav({ locale, dict }: NavProps) {
     >
       <div className="mx-auto flex h-16 max-w-content items-center justify-between px-4 sm:h-[4.5rem] sm:px-6">
         <Link href={base} className="font-display text-lg font-semibold tracking-tight text-ink sm:text-xl">
-          Company<span className="text-brand">.</span>
+          Sherinab Venture<span className="text-brand">.</span>
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
