@@ -2,11 +2,11 @@ import type { Dictionary } from "@/lib/getDictionary";
 
 export function TravelSection({ dict }: { dict: Dictionary }) {
   // The four-stop "You -> Our Team in Nigeria -> Products -> Your Business"
-  // sequence used to render here as its own numbered grid, immediately
-  // above the How It Works section's five-step process. The two read as
-  // one idea told twice, so this section now just makes the problem/
-  // solution case in prose and leaves the numbered walkthrough to How It
-  // Works.
+  // flow. dict.travel.flow carries this copy in both en.json and fr.json,
+  // rendered here as the same numbered-mono strip TrustBar uses, so it
+  // doesn't duplicate How It Works' step-by-step card layout below.
+  const stops = [dict.travel.flow.you, dict.travel.flow.team, dict.travel.flow.products, dict.travel.flow.business];
+
   return (
     <section className="mx-auto max-w-content px-4 py-16 sm:px-6 sm:py-20">
       <div className="max-w-2xl">
@@ -15,6 +15,18 @@ export function TravelSection({ dict }: { dict: Dictionary }) {
         </h2>
         <p className="mt-4 text-muted">{dict.travel.problem}</p>
         <p className="mt-4 font-medium text-ink-soft">{dict.travel.solution}</p>
+      </div>
+
+      <div className="mt-8 grid grid-cols-2 border-t border-border sm:mt-10 sm:grid-cols-4 sm:divide-x sm:divide-border">
+        {stops.map((stop, i) => (
+          <div
+            key={stop}
+            className="flex items-baseline gap-2.5 border-b border-border px-0 py-4 odd:pr-4 even:pl-4 sm:border-b-0 sm:px-6 sm:py-5 sm:odd:pr-6 sm:even:pl-6"
+          >
+            <span className="font-mono text-xs font-bold text-brand">{String(i + 1).padStart(2, "0")}</span>
+            <span className="text-sm font-medium text-ink-soft">{stop}</span>
+          </div>
+        ))}
       </div>
     </section>
   );
