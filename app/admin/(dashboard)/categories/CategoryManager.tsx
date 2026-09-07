@@ -108,9 +108,6 @@ export function CategoryManager({ initialCategories }: { initialCategories: Cate
   );
 }
 
-/** Small square cover-photo control for one category row: shows the photo
- *  (or a placeholder), tap to upload/replace, X to remove. Falls back to
- *  the illustrated line art on the public site whenever this is empty. */
 function CategoryThumb({
   category,
   onChange,
@@ -120,63 +117,98 @@ function CategoryThumb({
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState<"idle" | "uploading" | "saved" | "removing" | "error">("idle");
+
+  function showSaved() {
+    setStatus("saved");
+    window.setTimeout(() => setStatus("idle"), 2200);
+  }
 
   async function handleFile(file: File | null) {
     if (!file) return;
     setBusy(true);
-    const formData = new FormData();
-    formData.set("file", file);
-    const updated = await uploadCategoryImageAction(category.id, formData);
-    onChange({ cover_image_path: updated.cover_image_path });
-    setBusy(false);
-    if (fileInputRef.current) fileInputRef.current.value = "";
+    setStatus("uploading");
+    try {
+      const formData = new FormData();
+      formData.set("file", file);
+      const updated = await uploadCategoryImageAction(category.id, formData);
+      onChange({ cover_image_path: updated.cover_image_path });
+      showSaved();
+    } catch {
+      setStatus("error");
+    } finally {
+      setBusy(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   }
 
   async function handleRemove(e: MouseEvent) {
     e.stopPropagation();
     setBusy(true);
-    await removeCategoryImageAction(category.id);
-    onChange({ cover_image_path: null });
-    setBusy(false);
+    setStatus("removing");
+    try {
+      await removeCategoryImageAction(category.id);
+      onChange({ cover_image_path: null });
+      showSaved();
+    } catch {
+      setStatus("error");
+    } finally {
+      setBusy(false);
+    }
   }
 
+  const statusLabel = {
+    idle: null,
+    uploading: "Uploading…",
+    saved: "Saved ✓",
+    removing: "Removing…",
+    error: "Failed — try again",
+  }[status];
+
   return (
-    <button
-      type="button"
-      onClick={() => fileInputRef.current?.click()}
-      disabled={busy}
-      title={category.cover_image_path ? "Replace photo" : "Upload a photo"}
-      className="group relative h-12 w-12 shrink-0 overflow-hidden rounded border border-border bg-background disabled:opacity-60"
-    >
-      {category.cover_image_path ? (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={buildCategoryImageUrl(category.cover_image_path)}
-            alt=""
-            className="h-full w-full object-cover"
-          />
-          <span
-            role="button"
-            onClick={handleRemove}
-            aria-label="Remove photo"
-            className="absolute right-0.5 top-0.5 rounded-full bg-ink/70 p-0.5 text-surface opacity-0 transition-opacity group-hover:opacity-100"
-          >
-            <X size={11} />
+    <div className="flex shrink-0 flex-col items-center gap-1">
+      <button
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        disabled={busy}
+        title={category.cover_image_path ? "Replace photo" : "Upload a photo"}
+        className="group relative h-12 w-12 overflow-hidden rounded border border-border bg-background disabled:opacity-60"
+      >
+        {category.cover_image_path ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={buildCategoryImageUrl(category.cover_image_path)}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+            <span
+              role="button"
+              onClick={handleRemove}
+              aria-label="Remove photo"
+              className="absolute right-0.5 top-0.5 rounded-full bg-ink/70 p-0.5 text-surface opacity-0 transition-opacity group-hover:opacity-100"
+            >
+              <X size={11} />
+            </span>
+          </>
+        ) : (
+          <span className="flex h-full w-full items-center justify-center text-border">
+            <ImageIcon size={18} />
           </span>
-        </>
-      ) : (
-        <span className="flex h-full w-full items-center justify-center text-border">
-          <ImageIcon size={18} />
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
+        />
+      </button>
+      {statusLabel && (
+        <span className={`whitespace-nowrap text-[10px] ${status === "error" ? "text-red-600" : "text-muted"}`}>
+          {statusLabel}
         </span>
       )}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
-      />
-    </button>
+    </div>
   );
 }
