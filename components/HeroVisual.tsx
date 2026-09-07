@@ -12,7 +12,7 @@ export function HeroVisual({ dict, categoryImages, heroImage, mobileHeroImage }:
     const desktop = heroImage ?? mobileHeroImage;
     const mobile = mobileHeroImage ?? heroImage;
     return (
-      <div className="relative mx-auto h-[300px] w-full max-w-[620px] overflow-hidden rounded-lg border border-border shadow-lifted sm:h-[360px] md:h-full md:min-h-[400px] md:max-w-none lg:min-h-[440px]">
+      <div className="relative mx-auto h-[520px] w-full max-w-none overflow-hidden rounded-lg border border-border shadow-lifted md:h-[620px] lg:h-[680px]">
         <picture>
           <source media="(max-width: 1023px)" srcSet={mobile ?? desktop ?? ""} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
