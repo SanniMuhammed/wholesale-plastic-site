@@ -59,8 +59,7 @@ export interface Product {
 /**
  * PLACEHOLDER CATALOG DATA.
  * Replace every entry below with the real product catalog before launch --
- * names, specs, colors and especially photography (see `image`, currently
- * unset so the UI falls back to a placeholder block instead of a stock photo).
+ * names, specs, colors and especially photography (see `image`).
  */
 export const PRODUCTS: Product[] = [
   {
@@ -101,6 +100,7 @@ export const PRODUCTS: Product[] = [
     packaging: { en: "Bulk, carton of 24", fr: "Vrac, carton de 24" },
     useCase: { en: "Storage and transport", fr: "Stockage et transport" },
     wholesaleOnly: true,
+    image: "/product-images/15l-bucket-with-lid.jpg",
   },
   {
     slug: "10l-mini-bucket",
@@ -120,6 +120,7 @@ export const PRODUCTS: Product[] = [
     packaging: { en: "Bulk, carton of 30", fr: "Vrac, carton de 30" },
     useCase: { en: "Household use", fr: "Usage domestique" },
     wholesaleOnly: true,
+    image: "/product-images/10l-mini-bucket.jpg",
   },
   {
     slug: "40l-large-basin",
@@ -140,6 +141,7 @@ export const PRODUCTS: Product[] = [
     useCase: { en: "Laundry and household use", fr: "Lessive et usage domestique" },
     wholesaleOnly: true,
     featured: true,
+    image: "/product-images/40l-large-basin.jpg",
   },
   {
     slug: "20l-round-basin",
@@ -159,6 +161,7 @@ export const PRODUCTS: Product[] = [
     packaging: { en: "Bulk, carton of 15", fr: "Vrac, carton de 15" },
     useCase: { en: "Household use", fr: "Usage domestique" },
     wholesaleOnly: true,
+    image: "/product-images/20l-round-basin.jpg",
   },
   {
     slug: "5l-bowl-set",
@@ -273,6 +276,7 @@ export const PRODUCTS: Product[] = [
     packaging: { en: "Bulk, carton of 20", fr: "Vrac, carton de 20" },
     useCase: { en: "Kitchen use", fr: "Cuisine" },
     wholesaleOnly: true,
+    image: "/product-images/dish-rack.jpg",
   },
   {
     slug: "plastic-stool",
@@ -291,6 +295,7 @@ export const PRODUCTS: Product[] = [
     packaging: { en: "Bulk, carton of 10", fr: "Vrac, carton de 10" },
     useCase: { en: "Household and commercial use", fr: "Usage domestique et commercial" },
     wholesaleOnly: true,
+    image: "/product-images/plastic-stool.jpg",
   },
   {
     slug: "stackable-crate",
