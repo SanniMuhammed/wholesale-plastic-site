@@ -22,10 +22,6 @@ export function Nav({ locale, dict }: NavProps) {
   const base = `/${locale}`;
   const whatsappHref = generalInquiryLink(dict);
 
-  // Purely cosmetic: the header tightens and picks up a hairline shadow
-  // once the page has actually scrolled, so it reads as "floating above
-  // content" rather than a flat bar that happens to be sticky. No effect
-  // on layout or any interactive behaviour below.
   useEffect(() => {
     function onScroll() {
       setScrolled(window.scrollY > 8);
@@ -65,7 +61,7 @@ export function Nav({ locale, dict }: NavProps) {
           Sherinab Venture<span className="text-brand">.</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center gap-8 md:flex">
           {desktopLinks.map((link) => (
             <Link
               key={link.href}
@@ -77,21 +73,14 @@ export function Nav({ locale, dict }: NavProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-4 md:flex">
           <LanguageSwitcher locale={locale} />
           <span className="h-4 w-px bg-border" aria-hidden />
           <WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="icon" />
           <CartTrigger dict={dict} />
         </div>
 
-        <div className="flex items-center gap-2 lg:hidden">
-          {/* Always visible, independent of the menu below -- this used to
-              live only inside the collapsible menu, wrapped in a div that
-              closed the menu on click via onClickCapture. That raced with
-              this button's own click handler on real touch devices and
-              could swallow the tap entirely. Promoting it to a persistent,
-              standalone button also means people can see their order count
-              without opening the nav menu at all. */}
+        <div className="flex items-center gap-2 md:hidden">
           <CartTrigger dict={dict} variant="icon" />
           <button
             type="button"
@@ -106,7 +95,7 @@ export function Nav({ locale, dict }: NavProps) {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-surface lg:hidden">
+        <div className="border-t border-border bg-surface md:hidden">
           <nav className="flex flex-col divide-y divide-border px-4">
             {mobileLinks.map((link) => (
               <Link
