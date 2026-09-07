@@ -7,10 +7,12 @@ export function Hero({
   locale,
   dict,
   categoryImages,
+  heroImage,
 }: {
   locale: Locale;
   dict: Dictionary;
   categoryImages?: Record<string, string>;
+  heroImage?: string | null;
 }) {
   const base = `/${locale}`;
 
@@ -41,7 +43,7 @@ export function Hero({
           </div>
         </div>
         <div className="animate-settle-up" style={{ animationDelay: "120ms" }}>
-          <HeroVisual dict={dict} categoryImages={categoryImages} />
+          <HeroVisual dict={dict} categoryImages={categoryImages} heroImage={heroImage} />
         </div>
       </div>
     </section>
