@@ -2,12 +2,17 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
-import { getAllProducts, getProductBySlug, getCategory } from "@/lib/products";
+import {
+  getAllProducts,
+  getProductBySlug,
+} from "@/lib/catalog/products";
+import { CATEGORIES } from "@/lib/products";
 import { ProductImage } from "@/components/ProductImage";
 import { ProductOrderPanel } from "@/components/ProductOrderPanel";
 
-export function generateStaticParams() {
-  return getAllProducts().map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const products = await getAllProducts();
+  return products.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -18,7 +23,7 @@ export async function generateMetadata({
   const { locale: rawLocale, slug } = await params;
   if (!isLocale(rawLocale)) return {};
   const locale = rawLocale as Locale;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) return {};
   return { title: product.name[locale], description: product.shortDescription[locale] };
 }
@@ -32,14 +37,15 @@ export default async function ProductDetailPage({
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const category = getCategory(product.category);
+  const category = CATEGORIES.find((c) => c.slug === product.category);
   const base = `/${locale}`;
   // Same fixed catalog position used on the listing grid, so "Nº 07" means
   // the same product wherever it appears.
-  const plateNumber = getAllProducts().findIndex((p) => p.slug === product.slug) + 1;
+  const allProducts = await getAllProducts();
+  const plateNumber = allProducts.findIndex((p) => p.slug === product.slug) + 1;
 
   return (
     <div className="mx-auto max-w-content px-4 py-12 sm:px-6">

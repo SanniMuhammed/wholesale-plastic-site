@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { Product, ProductInput, ProductImage, Color } from "@/lib/cms/types";
 
 const PRODUCT_IMAGES_BUCKET = "product-images";
@@ -22,7 +23,9 @@ function normalizeProduct(row: any): Product {
 }
 
 export async function listProducts(opts?: { status?: "draft" | "published" }): Promise<Product[]> {
-  const supabase = await createClient();
+  const supabase = opts?.status === "published"
+    ? createPublicClient()
+    : await createClient();
   let query = supabase
     .from("products")
     .select(PRODUCT_SELECT)

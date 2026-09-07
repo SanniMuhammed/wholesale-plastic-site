@@ -7,6 +7,7 @@ import { CartUIProvider } from "@/components/cart/CartUIProvider";
 import { HtmlLangSync } from "@/components/HtmlLangSync";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { getAllProducts } from "@/lib/catalog/products";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -33,11 +34,12 @@ export default async function LocaleLayout({
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
+  const products = await getAllProducts();
 
   return (
     <OrderProvider>
       <HtmlLangSync locale={locale} />
-      <CartUIProvider locale={locale} dict={dict}>
+      <CartUIProvider locale={locale} dict={dict} products={products}>
         <div className="flex min-h-screen flex-col">
           <Nav locale={locale} dict={dict} />
           <main>{children}</main>

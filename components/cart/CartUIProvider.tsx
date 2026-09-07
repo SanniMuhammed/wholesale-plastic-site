@@ -12,6 +12,7 @@ import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { AddedToast, type ToastPayload } from "@/components/cart/AddedToast";
+import type { Product } from "@/lib/products";
 
 interface CartUIContextValue {
   isDrawerOpen: boolean;
@@ -37,10 +38,12 @@ export function CartUIProvider({
   children,
   locale,
   dict,
+  products,
 }: {
   children: ReactNode;
   locale: Locale;
   dict: Dictionary;
+  products: Product[];
 }) {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [toast, setToast] = useState<ToastPayload | null>(null);
@@ -127,7 +130,13 @@ export function CartUIProvider({
       {children}
       <div ref={flightLayerRef} aria-hidden className="pointer-events-none fixed inset-0 z-[70]" />
       <AddedToast toast={toast} label={dict.common.addedToOrder} />
-      <CartDrawer locale={locale} dict={dict} open={isDrawerOpen} onClose={closeDrawer} />
+      <CartDrawer
+        locale={locale}
+        dict={dict}
+        products={products}
+        open={isDrawerOpen}
+        onClose={closeDrawer}
+      />
     </CartUIContext.Provider>
   );
 }

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { X, PackageOpen } from "lucide-react";
 import { useOrder } from "@/components/OrderProvider";
-import { getProductBySlug } from "@/lib/products";
+import type { Product } from "@/lib/products";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { orderInquiryLink } from "@/lib/whatsapp";
@@ -16,11 +16,13 @@ export function CartDrawer({
   dict,
   open,
   onClose,
+  products,
 }: {
   locale: Locale;
   dict: Dictionary;
   open: boolean;
   onClose: () => void;
+  products: Product[];
 }) {
   const { items, updateQuantity, removeItem } = useOrder();
   const base = `/${locale}`;
@@ -39,11 +41,18 @@ export function CartDrawer({
     };
   }, [open, onClose]);
 
+  const productBySlug = new Map(products.map((product) => [product.slug, product]));
+
   const resolved = items
     .map((i) => {
-      const product = getProductBySlug(i.slug);
+      const product = productBySlug.get(i.slug);
       if (!product) return null;
-      return { slug: i.slug, quantity: i.quantity, name: product.name[locale], capacity: product.capacity };
+      return {
+        slug: i.slug,
+        quantity: i.quantity,
+        name: product.name[locale],
+        capacity: product.capacity,
+      };
     })
     .filter(
       (i): i is { slug: string; quantity: number; name: string; capacity: string | undefined } =>

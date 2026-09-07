@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { PackageOpen } from "lucide-react";
 import { useOrder } from "@/components/OrderProvider";
-import { getProductBySlug } from "@/lib/products";
+import type { Product } from "@/lib/products";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { orderInquiryLink } from "@/lib/whatsapp";
@@ -33,7 +33,15 @@ type FallbackStatus = "idle" | "sending" | "success" | "error";
 // state -- keep in sync with the grid-rows transition duration below.
 const REMOVE_ANIMATION_MS = 260;
 
-export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function OrderSummaryClient({
+  locale,
+  dict,
+  products,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+  products: Product[];
+}) {
   const { items, updateQuantity, removeItem, clear } = useOrder();
   const [details, setDetails] = useState<DetailsState>(EMPTY_DETAILS);
   const [fallback, setFallback] = useState<FallbackState>(EMPTY_FALLBACK);
@@ -43,9 +51,11 @@ export function OrderSummaryClient({ locale, dict }: { locale: Locale; dict: Dic
   const base = `/${locale}`;
   const sp = dict.orderSummaryPage;
 
+  const productBySlug = new Map(products.map((product) => [product.slug, product]));
+
   const resolvedItems = items
     .map((i) => {
-      const product = getProductBySlug(i.slug);
+      const product = productBySlug.get(i.slug);
       if (!product) return null;
       return {
         slug: i.slug,

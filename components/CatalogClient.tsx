@@ -5,8 +5,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
 import {
   CATEGORIES,
-  getAllProducts,
-  searchProducts,
   type CategorySlug,
   type Product,
 } from "@/lib/products";
@@ -19,7 +17,15 @@ function isCategorySlug(value: string | null): value is CategorySlug {
   return !!value && CATEGORIES.some((c) => c.slug === value);
 }
 
-export function CatalogClient({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function CatalogClient({
+  locale,
+  dict,
+  products,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+  products: Product[];
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -41,19 +47,42 @@ export function CatalogClient({ locale, dict }: { locale: Locale; dict: Dictiona
   }, [category, query, pathname]);
 
   const results = useMemo<Product[]>(() => {
-    let list = query.trim() ? searchProducts(query) : getAllProducts();
+    let list = products;
+
+    if (query.trim()) {
+      const q = query.trim().toLowerCase();
+
+      list = products.filter((p) => {
+        const category = CATEGORIES.find((c) => c.slug === p.category);
+
+        const haystack = [
+          p.name.en,
+          p.name.fr,
+          p.shortDescription.en,
+          p.shortDescription.fr,
+          p.description.en,
+          p.description.fr,
+          category?.name.en ?? "",
+          category?.name.fr ?? "",
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        return haystack.includes(q);
+      });
+    }
     if (category) list = list.filter((p) => p.category === category);
     return list;
-  }, [query, category]);
+  }, [products, query, category]);
 
   // A product's catalog number is its fixed position in the full list, not
   // its position in the current (filtered) results -- so "Nº 07" always
   // means the same product, whichever filter you're looking through.
   const catalogIndex = useMemo(() => {
     const map = new Map<string, number>();
-    getAllProducts().forEach((p, i) => map.set(p.slug, i + 1));
+    products.forEach((p, i) => map.set(p.slug, i + 1));
     return map;
-  }, []);
+  }, [products]);
 
   const hasFilters = Boolean(category || query);
 
