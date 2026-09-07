@@ -22,23 +22,29 @@ export default async function HomepageContentPage() {
     listCategories(),
   ]);
 
+  const finalCta = sections.filter((section) => section.key === "final_cta");
+  const otherSections = sections.filter((section) => section.key !== "final_cta");
+
   return (
     <div>
       <PageHeader
         title="Homepage sections"
         description="Edit homepage text, manage the hero photo, and manage the Explore category photos here."
       />
-      <HomepageSectionManager sections={sections} labels={SECTION_LABELS} />
 
-      <section className="mt-6">
-        <div className="mb-3">
-          <h2 className="text-base font-semibold text-ink">Explore categories</h2>
-          <p className="mt-1 text-sm text-muted">
+      <HomepageSectionManager sections={otherSections} labels={SECTION_LABELS} />
+
+      <section className="my-3 rounded-lg border border-border bg-surface">
+        <div className="border-b border-border p-4">
+          <h2 className="text-sm font-medium text-ink">Explore categories</h2>
+          <p className="mt-1 text-xs text-muted">
             Upload, replace, or remove the photos used by the homepage Explore grid.
           </p>
         </div>
         <CategoryManager initialCategories={categories} />
       </section>
+
+      <HomepageSectionManager sections={finalCta} labels={SECTION_LABELS} />
     </div>
   );
 }
