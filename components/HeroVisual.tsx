@@ -2,22 +2,25 @@ import type { Dictionary } from "@/lib/getDictionary";
 import { CategoryIllustration } from "@/components/illustrations/CategoryIllustration";
 
 const PIECES: {
-  category: "buckets" | "basins" | "bowls";
+  category: "basins" | "buckets" | "bowls";
   tint: string;
   ink: string;
   wrapperClass: string;
+  fallbackImage?: string;
 }[] = [
   {
     category: "basins",
     tint: "bg-clay-light",
     ink: "text-clay",
     wrapperClass: "h-40 w-40 sm:h-56 sm:w-56",
+    fallbackImage: "/product-images/40l-large-basin.jpg",
   },
   {
     category: "buckets",
     tint: "bg-brand-light",
     ink: "text-brand",
     wrapperClass: "h-28 w-28 sm:h-36 sm:w-36 -ml-8 -mt-16 sm:-ml-12 sm:-mt-24",
+    fallbackImage: "/product-images/15l-bucket-with-lid.jpg",
   },
   {
     category: "bowls",
@@ -54,7 +57,7 @@ export function HeroVisual({
     <div className="relative mx-auto flex aspect-square w-full max-w-[420px] items-center justify-center overflow-visible">
       <div className="relative flex items-center justify-center">
         {PIECES.map((piece, i) => {
-          const photoUrl = categoryImages?.[piece.category];
+          const photoUrl = categoryImages?.[piece.category] ?? piece.fallbackImage;
           return (
             <div
               key={piece.category}
