@@ -120,11 +120,13 @@
       "restock": { "title": "Réapprovisionner", "description": "Pour les détaillants qui renouvellent leur stock." },
       "distribute": { "title": "Distribuer", "description": "Pour les grossistes et distributeurs établis qui achètent en grandes quantités." }
     },
-    "cta": "Voir ma commande"
+    "cta": "Composez votre commande"
   },
   "deliveryTeaser": {
     "title": "Du Nigeria à votre pays",
     "subtitle": "Nous coordonnons l'approvisionnement et la livraison pour que vous n'ayez pas à gérer la logistique nigériane vous-même.",
+    "originLabel": "Nigeria",
+    "destinationLabel": "Votre pays",
     "cta": "Voir comment fonctionne la livraison"
   },
   "finalCta": {

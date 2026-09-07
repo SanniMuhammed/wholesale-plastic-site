@@ -120,11 +120,13 @@
       "restock": { "title": "Restock", "description": "For retailers replenishing inventory." },
       "distribute": { "title": "Distribute", "description": "For wholesalers and established distributors buying in larger quantities." }
     },
-    "cta": "Review Order"
+    "cta": "Build Your Order"
   },
   "deliveryTeaser": {
     "title": "From Nigeria to Your Country",
     "subtitle": "We coordinate supply and delivery so you don't have to manage Nigerian logistics yourself.",
+    "originLabel": "Nigeria",
+    "destinationLabel": "Your Country",
     "cta": "See How Delivery Works"
   },
   "finalCta": {
