@@ -12,14 +12,15 @@ export function HeroVisual({ dict, categoryImages, heroImage, mobileHeroImage }:
     const desktop = heroImage ?? mobileHeroImage;
     const mobile = mobileHeroImage ?? heroImage;
     return (
-      <div className="relative mx-auto h-[520px] w-full max-w-none overflow-hidden rounded-lg border border-border shadow-lifted md:h-[620px] lg:h-[680px]">
+      <div className="absolute inset-0 overflow-hidden rounded-none border-0 shadow-none">
         <picture>
           <source media="(max-width: 1023px)" srcSet={mobile ?? desktop ?? ""} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={desktop ?? ""} alt="" className="h-full w-full object-cover" />
         </picture>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
-        <span className="eyebrow absolute bottom-4 left-4 rounded border border-white/40 bg-black/25 px-2 py-1 text-[10px] text-white backdrop-blur-sm">{dict.categories.buckets}, {dict.categories.basins} &amp; {dict.categories.bowls}</span>
+        <div className="absolute inset-0 bg-gradient-to-r from-surface/95 via-surface/65 to-surface/10" />
+        <div className="absolute inset-0 bg-black/5" />
+        <span className="eyebrow absolute bottom-4 right-4 rounded border border-white/40 bg-black/25 px-2 py-1 text-[10px] text-white backdrop-blur-sm">{dict.categories.buckets}, {dict.categories.basins} &amp; {dict.categories.bowls}</span>
         <span className="sr-only">Wholesale plastic products</span>
       </div>
     );
