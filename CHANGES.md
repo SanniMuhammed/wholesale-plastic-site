@@ -148,3 +148,85 @@ That's real verification, but it is not the same guarantee as a clean
 `npm run build`. **Please run the build yourself before deploying** —
 if anything doesn't compile, it's most likely to be a `Dictionary` type
 mismatch, and I'd genuinely like to know if you hit one.
+
+---
+
+# Round 2 — QA fixes from live screenshots
+
+Four issues, found by reviewing real screenshots of the deployed redesign.
+
+## 1. `HeroVisual` dead-space bug
+`components/HeroVisual.tsx` — the outer wrapper was `aspect-square w-full`
+with no upper bound, so on any single-column layout (all of mobile, and
+tablet widths before the `lg:` grid kicks in) its width tracked the full
+content column — up to ~1000px+ on a wide phone — and `aspect-square`
+forced the height to match, even though the actual composition (three
+overlapping circles, max ~224px each) never got anywhere near that size.
+Result: a mostly-empty square with the illustration floating in the
+middle. Fixed by adding `max-w-[420px] mx-auto` so the square scales with
+its content instead of with the column.
+
+## 2. Homepage said the same thing four times
+Four sections — `TravelSection`, `StartBusinessSection`, `DeliveryTeaser`,
+`FinalCta` — each independently made the "you don't need to travel to /
+be in Nigeria, we handle sourcing and delivery" case, and two adjacent
+numbered sequences (`TravelSection`'s 4-stop You → Team → Products →
+Business flow, immediately followed by `HowItWorksSection`'s 5-step
+Choose → Build → WhatsApp → Confirm → Receive) covered overlapping
+ground back to back.
+- `TravelSection` — removed the 4-stop numbered flow grid entirely;
+  the section is now just the title + problem/solution paragraph. The
+  numbered walkthrough is left to `HowItWorksSection`, which does it
+  properly (as an actual step-by-step process, not a supply-chain
+  diagram).
+- `StartBusinessSection` — removed the opening paragraph that re-made
+  the same "you don't need to travel to Nigeria" case `TravelSection`
+  had just made a few sections above; it now goes straight from the
+  title into the Start / Restock / Distribute cards.
+- `dict.travel.flow` and `dict.startBusiness.body` were left in both
+  `en.json` and `fr.json` (unused, harmless) rather than deleted, so
+  the copy isn't lost if either section wants it back later.
+- `DeliveryTeaser` and `FinalCta` were left as-is — they sit at
+  different points in the page and serve different jobs (a delivery-
+  specific link mid-page, a final conversion CTA at the very bottom),
+  so cutting them wasn't part of this round.
+
+## 3. Featured-products numbering could disagree with the catalog
+`components/FeaturedProducts.tsx` numbered each card by its position
+within the featured row (`index={i + 1}`), while `CatalogClient.tsx`
+numbers by fixed position in the full catalog (`catalogIndex` built from
+`getAllProducts()`). Same product, two different "Nº" depending on which
+page you were looking at. `FeaturedProducts` now builds the same kind of
+`slug -> index` map from `getAllProducts()` and passes that, so a
+product's number is identical everywhere it's shown.
+
+## 4. Desktop nav was cramped between `md` and `lg`
+`components/Nav.tsx` switched from the mobile hamburger to the full
+desktop nav (5 links + divider + language switcher + WhatsApp icon +
+the labelled "Review Order" cart button) at `md:` (768px) — not enough
+room for all of that, so anything between ~768px and ~1024px looked
+tight. Every `md:flex` / `md:hidden` pair governing that switch (desktop
+links, the right-side control cluster, the hamburger button, and the
+mobile dropdown panel) is now `lg:` instead, so the roomier mobile/
+tablet layout holds until 1024px, where there's actually space for the
+full bar.
+
+## Files changed this round
+```
+components/FeaturedProducts.tsx
+components/HeroVisual.tsx
+components/Nav.tsx
+components/StartBusinessSection.tsx
+components/TravelSection.tsx
+```
+
+## Verification
+Same constraint as Round 1 — no network, no `node_modules`, so
+`npm run build` still couldn't be run directly. Ran the same
+syntax-only TypeScript parse (`tsc --noEmit`, JSX mode, ignoring
+module-resolution errors since no dependencies are installed) across
+all five edited files and confirmed no structural/JSX errors. Cross-
+checked `ProductCard`'s `index?: number` prop against
+`catalogIndex.get()`'s `number | undefined` return type by hand — same
+pattern already in use in `CatalogClient`, so it's a known-good shape.
+**Please still run `npm run build` yourself before deploying.**

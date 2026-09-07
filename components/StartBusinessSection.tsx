@@ -8,14 +8,17 @@ export function StartBusinessSection({ locale, dict }: { locale: Locale; dict: D
 
   return (
     <section className="mx-auto max-w-content px-4 py-16 sm:px-6">
+      {/* The "you don't need to travel to Nigeria" pitch already runs in
+          TravelSection just above this on the homepage, so this section
+          opens straight into the title and the Start/Restock/Distribute
+          cards instead of making the same case a second time. */}
       <div className="max-w-2xl">
         <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
           {dict.startBusiness.title}
         </h2>
-        <p className="mt-4 text-muted">{dict.startBusiness.body}</p>
       </div>
 
-      <div className="mt-10 grid gap-8 border-t-2 border-border pt-6 sm:grid-cols-3 sm:gap-6">
+      <div className="mt-8 grid gap-8 border-t-2 border-border pt-6 sm:grid-cols-3 sm:gap-6">
         {segments.map((segment, i) => (
           <div key={segment.title}>
             <span className="font-mono text-xs font-bold text-brand">{String(i + 1).padStart(2, "0")}</span>

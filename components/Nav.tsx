@@ -65,7 +65,7 @@ export function Nav({ locale, dict }: NavProps) {
           Company<span className="text-brand">.</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-8 lg:flex">
           {desktopLinks.map((link) => (
             <Link
               key={link.href}
@@ -77,14 +77,14 @@ export function Nav({ locale, dict }: NavProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 md:flex">
+        <div className="hidden items-center gap-4 lg:flex">
           <LanguageSwitcher locale={locale} />
           <span className="h-4 w-px bg-border" aria-hidden />
           <WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="icon" />
           <CartTrigger dict={dict} />
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           {/* Always visible, independent of the menu below -- this used to
               live only inside the collapsible menu, wrapped in a div that
               closed the menu on click via onClickCapture. That raced with
@@ -106,7 +106,7 @@ export function Nav({ locale, dict }: NavProps) {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-surface md:hidden">
+        <div className="border-t border-border bg-surface lg:hidden">
           <nav className="flex flex-col divide-y divide-border px-4">
             {mobileLinks.map((link) => (
               <Link

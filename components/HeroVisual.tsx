@@ -33,7 +33,7 @@ const PIECES: {
 
 export function HeroVisual({ dict }: { dict: Dictionary }) {
   return (
-    <div className="relative flex aspect-square w-full items-center justify-center overflow-visible">
+    <div className="relative mx-auto flex aspect-square w-full max-w-[420px] items-center justify-center overflow-visible">
       <div className="relative flex items-center justify-center">
         {PIECES.map((piece, i) => (
           <div

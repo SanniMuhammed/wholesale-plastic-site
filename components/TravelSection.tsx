@@ -1,30 +1,20 @@
 import type { Dictionary } from "@/lib/getDictionary";
 
 export function TravelSection({ dict }: { dict: Dictionary }) {
-  const flow = [dict.travel.flow.you, dict.travel.flow.team, dict.travel.flow.products, dict.travel.flow.business];
-
+  // The four-stop "You -> Our Team in Nigeria -> Products -> Your Business"
+  // sequence used to render here as its own numbered grid, immediately
+  // above the How It Works section's five-step process. The two read as
+  // one idea told twice, so this section now just makes the problem/
+  // solution case in prose and leaves the numbered walkthrough to How It
+  // Works.
   return (
     <section className="mx-auto max-w-content px-4 py-16 sm:px-6 sm:py-20">
-      <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-        <div>
-          <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
-            {dict.travel.title}
-          </h2>
-          <p className="mt-4 text-muted">{dict.travel.problem}</p>
-          <p className="mt-4 font-medium text-ink-soft">{dict.travel.solution}</p>
-        </div>
-
-        {/* The sourcing chain as a numbered sequence rather than boxes
-            joined by arrow icons -- the rule itself implies direction, so
-            no icon has to do that job. */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-8 self-end border-t-2 border-border pt-6 sm:grid-cols-4">
-          {flow.map((step, i) => (
-            <div key={step}>
-              <span className="font-mono text-xs font-bold text-brand">{String(i + 1).padStart(2, "0")}</span>
-              <p className="mt-2 text-sm font-medium leading-snug text-ink">{step}</p>
-            </div>
-          ))}
-        </div>
+      <div className="max-w-2xl">
+        <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
+          {dict.travel.title}
+        </h2>
+        <p className="mt-4 text-muted">{dict.travel.problem}</p>
+        <p className="mt-4 font-medium text-ink-soft">{dict.travel.solution}</p>
       </div>
     </section>
   );
