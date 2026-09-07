@@ -25,8 +25,8 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wholesale Plastic Products",
-  description: "Wholesale plastic products from Nigeria to West Africa.",
+  title: "Sherinab Venture — Wholesale Plastic Products from Nigeria",
+  description: "Sherinab Venture supplies wholesale plastic products from Nigeria to businesses across West Africa.",
 };
 
 // Explicit, rather than relying on Next's implicit default -- without this,
