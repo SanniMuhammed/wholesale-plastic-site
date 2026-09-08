@@ -12,19 +12,19 @@ const config: Config = {
         background: "#F7F5EF",
         surface: "#FFFFFF",
         ink: {
-          DEFAULT: "#1B1B17",
-          soft: "#3A3A33",
+          DEFAULT: "#171A18",
+          soft: "#3D433F",
         },
-        muted: "#6B6A61",
-        border: "#E3DFD3",
+        muted: "#6C726D",
+        border: "#E2E5DE",
         brand: {
-          DEFAULT: "#1C4632",
-          dark: "#0F2E20",
-          light: "#EAF0EB",
+          DEFAULT: "#087443",
+          dark: "#075C36",
+          light: "#E8F4EE",
         },
         accent: {
-          DEFAULT: "#BE7332",
-          light: "#F3E4D2",
+          DEFAULT: "#D9A441",
+          light: "#F5EBD3",
         },
         clay: {
           DEFAULT: "#A8492E",
