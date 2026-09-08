@@ -1,8 +1,6 @@
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
-import { PathIllustration, type BusinessPath } from "@/components/illustrations/PathIllustration";
-import { cx } from "@/lib/utils";
 
 const BUSINESS_TYPES = [
   { en: { title: "For Resellers", description: "Stock fast-moving plastic products for your shop or market stall." }, fr: { title: "Pour les revendeurs", description: "Approvisionnez votre boutique ou votre étal en produits plastiques demandés." }, category: "household" },
@@ -11,17 +9,11 @@ const BUSINESS_TYPES = [
   { en: { title: "Starting a Business", description: "Start, restock, or grow with wholesale plastic products wherever your business is based." }, fr: { title: "Démarrer un commerce", description: "Démarrez, réapprovisionnez ou développez votre activité avec des produits plastiques en gros, où que vous soyez." }, category: "buckets" },
 ];
 
-const PATHS: { key: BusinessPath; tint: string; ink: string }[] = [
-  { key: "start", tint: "bg-clay-light", ink: "text-clay" },
-  { key: "restock", tint: "bg-ochre-light", ink: "text-ochre" },
-  { key: "distribute", tint: "bg-brand-light", ink: "text-brand" },
-];
-
-export function ShopByBusiness({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function ShopByBusiness({ locale }: { locale: Locale; dict: Dictionary }) {
   const isFrench = locale === "fr";
   const copy = isFrench
-    ? { eyebrow: "ACHETEZ POUR VOTRE ACTIVITÉ", title: "Des produits adaptés à votre commerce", subtitle: "Que vous revendiez, restauriez ou démarriez votre activité, trouvez rapidement ce qui correspond à vos besoins.", cta: "Voir tous les produits", next: "VOTRE PARCOURS", nextTitle: "Commencez, réapprovisionnez ou développez votre distribution" }
-    : { eyebrow: "SHOP FOR YOUR BUSINESS", title: "Products built around your business", subtitle: "Whether you resell, run a restaurant or are starting out, get to the products that fit your needs faster.", cta: "View All Products", next: "YOUR BUSINESS JOURNEY", nextTitle: "Start, restock, or grow your distribution" };
+    ? { eyebrow: "ACHETEZ POUR VOTRE ACTIVITÉ", title: "Des produits adaptés à votre commerce", subtitle: "Que vous revendiez, restauriez ou démarriez votre activité, trouvez rapidement ce qui correspond à vos besoins.", cta: "Voir tous les produits" }
+    : { eyebrow: "SHOP FOR YOUR BUSINESS", title: "Products built around your business", subtitle: "Whether you resell, run a restaurant or are starting out, get to the products that fit your needs faster.", cta: "View All Products" };
 
   return (
     <section className="border-y border-border bg-surface">
@@ -33,10 +25,6 @@ export function ShopByBusiness({ locale, dict }: { locale: Locale; dict: Diction
         </div>
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {BUSINESS_TYPES.map((item, index) => { const text = isFrench ? item.fr : item.en; return <Link key={text.title} href={`/${locale}/products?category=${item.category}`} className="group rounded-lg border border-border bg-surface p-5 transition-all hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-lifted"><div className="flex items-start justify-between gap-4"><span className="font-mono text-xs font-bold text-brand/60">{String(index + 1).padStart(2, "0")}</span><span className="text-lg text-ink-soft transition-transform group-hover:translate-x-1" aria-hidden>→</span></div><h3 className="mt-8 font-display text-lg font-semibold text-ink">{text.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{text.description}</p></Link>; })}
-        </div>
-        <div className="mt-12 border-t border-border pt-9 sm:mt-14 sm:pt-10">
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-6"><div><p className="eyebrow text-muted">{copy.next}</p><h3 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">{copy.nextTitle}</h3></div><Link href={`/${locale}/order-summary`} className="text-sm font-semibold text-brand underline decoration-brand/30 underline-offset-4 hover:decoration-brand">{dict.startBusiness.cta} →</Link></div>
-          <div className="mt-6 grid gap-2 sm:grid-cols-3 sm:gap-3">{PATHS.map(({ key, tint, ink }, i) => { const segment = dict.startBusiness.segments[key]; return <div key={key} className={cx("flex items-center gap-4 px-4 py-4 sm:px-5", tint)}><span className={cx("font-mono text-xs font-bold", ink)}>{String(i + 1).padStart(2, "0")}</span><PathIllustration path={key} className={cx("h-8 w-8 shrink-0", ink)} /><div className="min-w-0"><h4 className="font-display text-base font-semibold text-ink">{segment.title}</h4><p className="mt-0.5 text-xs leading-5 text-ink-soft sm:text-sm">{segment.description}</p></div></div>; })}</div>
         </div>
       </div>
     </section>
