@@ -75,30 +75,29 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
 
   return (
     <div>
-      {!hasFilters && (
-        <div className="mb-10">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="eyebrow">{dict.nav.categories}</p>
-              <h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">{dict.categoriesSection.title}</h2>
-            </div>
-            <span className="hidden font-mono text-xs text-muted sm:block">{String(products.length).padStart(2, "0")} {dict.common.items}</span>
+      <div className="mb-10">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="eyebrow">{dict.nav.categories}</p>
+            <h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">{dict.categoriesSection.title}</h2>
           </div>
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            {CATEGORIES.map((c) => {
-              const count = categoryCounts.get(c.slug) ?? 0;
-              return (
-                <button key={c.slug} type="button" onClick={() => setCategory(c.slug)} aria-label={`${c.name[locale]} — ${count} ${dict.common.items}`} className={cx("group relative flex min-h-32 flex-col justify-between overflow-hidden rounded-lg border border-border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-lifted", CATEGORY_TINTS[c.slug])}>
-                  <span className="font-mono text-[10px] font-bold text-ink-soft/60">{String(count).padStart(2, "0")}</span>
-                  <CategoryIllustration category={c.slug} className={cx("absolute -right-4 top-3 h-20 w-20 opacity-20 transition-transform duration-300 group-hover:scale-110", CATEGORY_INK[c.slug])} aria-hidden />
-                  <span className="relative max-w-[9rem] pr-3 text-sm font-semibold leading-tight text-ink">{c.name[locale]}</span>
-                  <ArrowRight size={14} className="absolute bottom-4 right-4 text-ink-soft transition-transform group-hover:translate-x-1" aria-hidden />
-                </button>
-              );
-            })}
-          </div>
+          <span className="hidden font-mono text-xs text-muted sm:block">{String(products.length).padStart(2, "0")} {dict.common.items}</span>
         </div>
-      )}
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {CATEGORIES.map((c) => {
+            const count = categoryCounts.get(c.slug) ?? 0;
+            const active = category === c.slug;
+            return (
+              <button key={c.slug} type="button" onClick={() => setCategory(active ? null : c.slug)} aria-pressed={active} aria-label={`${c.name[locale]} — ${count} ${dict.common.items}`} className={cx("group relative flex min-h-32 flex-col justify-between overflow-hidden rounded-lg border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-lifted", CATEGORY_TINTS[c.slug], active ? "border-ink ring-2 ring-ink/10" : "border-border")}>
+                <span className="font-mono text-[10px] font-bold text-ink-soft/60">{String(count).padStart(2, "0")}</span>
+                <CategoryIllustration category={c.slug} className={cx("absolute -right-4 top-3 h-20 w-20 opacity-20 transition-transform duration-300 group-hover:scale-110", CATEGORY_INK[c.slug])} aria-hidden />
+                <span className="relative max-w-[9rem] pr-3 text-sm font-semibold leading-tight text-ink">{c.name[locale]}</span>
+                <ArrowRight size={14} className="absolute bottom-4 right-4 text-ink-soft transition-transform group-hover:translate-x-1" aria-hidden />
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       <div className="sticky top-16 z-30 -mx-4 border-y border-border bg-background/95 px-4 py-4 backdrop-blur sm:top-[4.5rem] sm:-mx-6 sm:px-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -108,10 +107,6 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
             <input id="catalog-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={dict.common.searchPlaceholder} autoComplete="off" className="w-full rounded border border-border bg-surface py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-muted focus:border-ink focus:outline-none" />
           </div>
           {hasFilters && <button type="button" onClick={() => { setCategory(null); setQuery(""); }} className="inline-flex items-center gap-1.5 self-start text-sm font-medium text-muted hover:text-ink sm:self-auto"><X size={14} aria-hidden />{dict.common.clearFilters}</button>}
-        </div>
-        <div className="mt-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-none">
-          <button type="button" onClick={() => setCategory(null)} aria-pressed={category === null} className={cx("shrink-0 rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95", category === null ? "border-ink bg-ink text-surface" : "border-border bg-surface text-ink-soft hover:border-ink")}>{dict.common.all}</button>
-          {CATEGORIES.map((c) => <button key={c.slug} type="button" onClick={() => setCategory(c.slug)} aria-pressed={category === c.slug} className={cx("shrink-0 rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95", category === c.slug ? "border-ink bg-ink text-surface" : "border-border bg-surface text-ink-soft hover:border-ink")}>{c.name[locale]}</button>)}
         </div>
       </div>
 
