@@ -87,10 +87,7 @@ export default async function ProductDetailPage({
               <p className="text-sm font-medium text-ink-soft">{dict.common.availableColors}</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {product.colors.map((color) => (
-                  <span
-                    key={color}
-                    className="rounded-full border border-border px-3 py-1.5 font-mono text-xs text-ink-soft"
-                  >
+                  <span key={color} className="rounded-full border border-border px-3 py-1.5 font-mono text-xs text-ink-soft">
                     {dict.colors[color]}
                   </span>
                 ))}
@@ -138,24 +135,18 @@ export default async function ProductDetailPage({
                 {locale === "fr" ? "Produits similaires" : "You may also need"}
               </h2>
             </div>
-            <Link href={`${base}/products?category=${product.category}`} className="hidden text-sm font-medium text-brand hover:text-brand-dark sm:inline-flex">
+            <Link href={`${base}/products/category/${product.category}`} className="hidden text-sm font-medium text-brand hover:text-brand-dark sm:inline-flex">
               {dict.common.exploreProducts} →
             </Link>
           </div>
 
           <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
             {relatedProducts.map((related, index) => (
-              <ProductCard
-                key={related.slug}
-                product={related}
-                locale={locale}
-                dict={dict}
-                index={index + 1}
-              />
+              <ProductCard key={related.slug} product={related} locale={locale} dict={dict} index={index + 1} />
             ))}
           </div>
 
-          <Link href={`${base}/products?category=${product.category}`} className="mt-5 inline-flex text-sm font-medium text-brand sm:hidden">
+          <Link href={`${base}/products/category/${product.category}`} className="mt-5 inline-flex text-sm font-medium text-brand sm:hidden">
             {dict.common.exploreProducts} →
           </Link>
         </section>
