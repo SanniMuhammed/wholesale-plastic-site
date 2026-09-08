@@ -25,7 +25,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             <h3 className="eyebrow">{dict.footer.productsHeading}</h3>
             <ul className="mt-4 space-y-2.5 text-sm text-ink-soft">
               {footerCategories.map((c) => (
-                <li key={c.slug}><Link href={`${base}/products/category/${c.slug}`} className="transition-colors hover:text-brand">{c.name[locale]}</Link></li>
+                <li key={c.slug}><Link href={`${base}/products?category=${c.slug}`} className="transition-colors hover:text-brand">{c.name[locale]}</Link></li>
               ))}
               <li><Link href={`${base}/products`} className="font-medium text-ink transition-colors hover:text-brand">{dict.footer.allProducts}</Link></li>
             </ul>
