@@ -18,7 +18,9 @@ const PAGE_H = 842;
 const MARGIN = 42;
 const GREEN = "0.09 0.38 0.21";
 const LIGHT_GREEN = "0.91 0.96 0.93";
+const INK = "0.12 0.14 0.13";
 const MUTED = "0.40 0.43 0.41";
+const WHITE = "1 1 1";
 
 const WIN_ANSI: Record<string, number> = {
   "€": 0x80, "‚": 0x82, "ƒ": 0x83, "„": 0x84, "…": 0x85, "†": 0x86, "‡": 0x87,
@@ -82,8 +84,8 @@ function buildPdf(data: PdfPayload): Uint8Array {
   const date = new Intl.DateTimeFormat(isFr ? "fr-FR" : "en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(new Date());
   const cmds: string[] = [];
 
-  cmds.push(`${GREEN} rg`, `0 0 ${PAGE_W} ${PAGE_H} re f`);
-  cmds.push(`${LIGHT_GREEN} rg 0 732 ${PAGE_W} 110 re f`, `${GREEN} rg 0 732 8 110 re f`);
+  cmds.push(`${WHITE} rg`, `0 0 ${PAGE_W} ${PAGE_H} re f`);
+  cmds.push(`${GREEN} rg 0 732 ${PAGE_W} 110 re f`, `${GREEN} rg 0 732 8 110 re f`, `${WHITE} rg`);
   line(cmds, MARGIN, 796, "SHERINAB", 12, "F2");
   line(cmds, MARGIN, 779, "VENTURE.", 10, "F2");
   line(cmds, 390, 797, labels.order, 10, "F2");
@@ -95,7 +97,7 @@ function buildPdf(data: PdfPayload): Uint8Array {
   const cardH = 92;
   const leftX = MARGIN;
   const rightX = MARGIN + cardW + 14;
-  cmds.push(`${LIGHT_GREEN} rg ${leftX} ${y - cardH} ${cardW} ${cardH} re f`, `${LIGHT_GREEN} rg ${rightX} ${y - cardH} ${cardW} ${cardH} re f`);
+  cmds.push(`${LIGHT_GREEN} rg ${leftX} ${y - cardH} ${cardW} ${cardH} re f`, `${LIGHT_GREEN} rg ${rightX} ${y - cardH} ${cardW} ${cardH} re f`, `${INK} rg`);
   line(cmds, leftX + 12, y - 20, labels.customer.toUpperCase(), 7, "F2");
   let leftY = y - 39;
   if (data.customerName) leftY = multiLine(cmds, leftX + 12, leftY, data.customerName, 10, 30);
@@ -107,13 +109,13 @@ function buildPdf(data: PdfPayload): Uint8Array {
 
   y -= cardH + 32;
   line(cmds, MARGIN, y, labels.order, 9, "F2");
-  cmds.push(`${GREEN} rg ${MARGIN} ${y - 9} ${PAGE_W - MARGIN * 2} 1 re f`);
+  cmds.push(`${GREEN} rg ${MARGIN} ${y - 9} ${PAGE_W - MARGIN * 2} 1 re f`, `${INK} rg`);
   y -= 29;
   line(cmds, MARGIN + 8, y, labels.item.toUpperCase(), 7, "F2");
   line(cmds, 395, y, labels.capacity.toUpperCase(), 7, "F2");
   line(cmds, 505, y, labels.qty.toUpperCase(), 7, "F2");
   y -= 13;
-  cmds.push(`${GREEN} rg ${MARGIN} ${y} ${PAGE_W - MARGIN * 2} 0.6 re f`);
+  cmds.push(`${GREEN} rg ${MARGIN} ${y} ${PAGE_W - MARGIN * 2} 0.6 re f`, `${INK} rg`);
   y -= 18;
 
   for (const item of data.items) {
@@ -124,7 +126,7 @@ function buildPdf(data: PdfPayload): Uint8Array {
     if (item.capacity) line(cmds, 395, y, item.capacity, 8);
     line(cmds, 505, y, item.quantity.toLocaleString(), 9, "F2");
     y -= rowH;
-    cmds.push(`${MUTED} rg ${MARGIN} ${y + 4} ${PAGE_W - MARGIN * 2} 0.35 re f`);
+    cmds.push(`${MUTED} rg ${MARGIN} ${y + 4} ${PAGE_W - MARGIN * 2} 0.35 re f`, `${INK} rg`);
     y -= 4;
   }
 
@@ -134,7 +136,7 @@ function buildPdf(data: PdfPayload): Uint8Array {
     multiLine(cmds, MARGIN, y - 14, data.note, 8, 92, 11);
   }
 
-  cmds.push(`${LIGHT_GREEN} rg ${MARGIN} 66 ${PAGE_W - MARGIN * 2} 46 re f`);
+  cmds.push(`${LIGHT_GREEN} rg ${MARGIN} 66 ${PAGE_W - MARGIN * 2} 46 re f`, `${INK} rg`);
   line(cmds, MARGIN + 12, 93, labels.footer, 7.5);
   line(cmds, MARGIN + 12, 79, labels.thank, 7.5, "F2");
   cmds.push(`${MUTED} rg`);
@@ -159,11 +161,7 @@ function buildPdf(data: PdfPayload): Uint8Array {
     offset += chunk.length;
   });
   const xrefOffset = offset;
-  const xref = [
-    "xref", `0 ${objects.length + 1}`, "0000000000 65535 f ",
-    ...offsets.map((item) => `${String(item).padStart(10, "0")} 00000 n `),
-    "trailer", `<< /Size ${objects.length + 1} /Root 1 0 R >>`, "startxref", String(xrefOffset), "%%EOF",
-  ].join("\n");
+  const xref = ["xref", `0 ${objects.length + 1}`, "0000000000 65535 f ", ...offsets.map((item) => `${String(item).padStart(10, "0")} 00000 n `), "trailer", `<< /Size ${objects.length + 1} /Root 1 0 R >>`, "startxref", String(xrefOffset), "%%EOF"].join("\n");
   chunks.push(Buffer.from(xref, "latin1"));
   return new Uint8Array(Buffer.concat(chunks));
 }
@@ -171,21 +169,10 @@ function buildPdf(data: PdfPayload): Uint8Array {
 export async function POST(request: Request) {
   try {
     const data = (await request.json()) as PdfPayload;
-    if (!data.reference || !Array.isArray(data.items) || data.items.length === 0 || data.items.length > 100) {
-      return NextResponse.json({ error: "Invalid order" }, { status: 400 });
-    }
-    if (data.items.some((item) => !item || typeof item.name !== "string" || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 1_000_000)) {
-      return NextResponse.json({ error: "Invalid order items" }, { status: 400 });
-    }
+    if (!data.reference || !Array.isArray(data.items) || data.items.length === 0 || data.items.length > 100) return NextResponse.json({ error: "Invalid order" }, { status: 400 });
+    if (data.items.some((item) => !item || typeof item.name !== "string" || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 1_000_000)) return NextResponse.json({ error: "Invalid order items" }, { status: 400 });
     const pdf = buildPdf(data);
-    return new NextResponse(pdf, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${data.reference}.pdf"`,
-        "Cache-Control": "no-store",
-      },
-    });
+    return new NextResponse(pdf, { status: 200, headers: { "Content-Type": "application/pdf", "Content-Disposition": `attachment; filename="${data.reference}.pdf"`, "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "Unable to create PDF" }, { status: 400 });
   }
