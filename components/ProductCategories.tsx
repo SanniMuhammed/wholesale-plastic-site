@@ -33,12 +33,8 @@ const PUBLIC_CATEGORY_IMAGES: Record<CategorySlug, string> = {
   other: "/product-images/plastic-stool.jpg",
 };
 
-const FEATURED_COUNT = 2;
-
 export function ProductCategories({ locale, dict, categoryImages }: { locale: Locale; dict: Dictionary; categoryImages?: Record<string, string> }) {
   const base = `/${locale}`;
-  const featured = CATEGORIES.slice(0, FEATURED_COUNT);
-  const rest = CATEGORIES.slice(FEATURED_COUNT);
 
   return (
     <section id="categories" className="mx-auto max-w-content scroll-mt-20 px-4 py-16 sm:px-6">
@@ -51,35 +47,43 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
         <span className="hidden shrink-0 rounded-full bg-brand-light px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-brand sm:inline-flex">Wholesale catalog</span>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {featured.map((category, i) => {
+      <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
+        {CATEGORIES.map((category, i) => {
           const photoUrl = categoryImages?.[category.slug] || PUBLIC_CATEGORY_IMAGES[category.slug];
           return (
-            <Link key={category.slug} href={`${base}/products?category=${category.slug}`} className={cx("group relative flex h-40 items-end overflow-hidden rounded-lg border border-border p-5 transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted", !photoUrl && CATEGORY_TINTS[category.slug])}>
+            <Link
+              key={category.slug}
+              href={`${base}/products?category=${category.slug}`}
+              className={cx(
+                "group relative flex aspect-[4/3] items-end overflow-hidden rounded-lg border border-border p-5 transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted sm:aspect-[3/2]",
+                !photoUrl && CATEGORY_TINTS[category.slug],
+              )}
+            >
               {photoUrl && (
                 <>
-                  <Image src={photoUrl} alt={category.name[locale]} fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <Image
+                    src={photoUrl}
+                    alt={category.name[locale]}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 50vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
                 </>
               )}
-              <span className={cx("absolute left-5 top-4 font-mono text-xs font-bold", photoUrl ? "text-white/80" : "text-brand/70")}>{String(i + 1).padStart(2, "0")}</span>
-              {!photoUrl && <CategoryIllustration category={category.slug} className={cx("absolute -right-4 -top-4 h-32 w-32 opacity-25 transition-transform group-hover:scale-105 sm:h-40 sm:w-40", CATEGORY_INK[category.slug])} aria-hidden />}
-              <span className={cx("relative font-display text-xl font-semibold", photoUrl ? "text-white" : "text-ink")}>{category.name[locale]}</span>
-            </Link>
-          );
-        })}
-      </div>
-
-      <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {rest.map((category, i) => {
-          const photoUrl = categoryImages?.[category.slug] || PUBLIC_CATEGORY_IMAGES[category.slug];
-          return (
-            <Link key={category.slug} href={`${base}/products?category=${category.slug}`} className={cx("group relative flex aspect-square flex-col items-center justify-center gap-2 overflow-hidden rounded-lg border border-border p-4 text-center transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted", !photoUrl && CATEGORY_TINTS[category.slug])}>
-              {photoUrl && <Image src={photoUrl} alt={category.name[locale]} fill sizes="(min-width: 640px) 25vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />}
-              {photoUrl && <div className="absolute inset-0 bg-black/25 transition-colors group-hover:bg-black/35" />}
-              <span className={cx("absolute left-3 top-3 z-10 font-mono text-[10px] font-bold", photoUrl ? "text-white/85" : "text-brand/60")}>{String(i + FEATURED_COUNT + 1).padStart(2, "0")}</span>
-              {!photoUrl && <CategoryIllustration category={category.slug} className={cx("relative z-10 h-9 w-9", CATEGORY_INK[category.slug])} />}
-              <span className={cx("relative z-10 font-medium", photoUrl ? "text-sm text-white drop-shadow-sm" : "text-sm text-ink")}>{category.name[locale]}</span>
+              <span className={cx("absolute left-5 top-4 z-10 font-mono text-xs font-bold", photoUrl ? "text-white/80" : "text-brand/70")}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              {!photoUrl && (
+                <CategoryIllustration
+                  category={category.slug}
+                  className={cx("absolute -right-4 -top-4 h-32 w-32 opacity-25 transition-transform group-hover:scale-105 sm:h-40 sm:w-40", CATEGORY_INK[category.slug])}
+                  aria-hidden
+                />
+              )}
+              <span className={cx("relative z-10 font-display text-lg font-semibold sm:text-xl", photoUrl ? "text-white" : "text-ink")}>
+                {category.name[locale]}
+              </span>
             </Link>
           );
         })}
