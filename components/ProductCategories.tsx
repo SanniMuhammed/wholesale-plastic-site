@@ -49,7 +49,7 @@ export function ProductCategories({
           return (
             <Link
               key={category.slug}
-              href={`${base}/products/category/${category.slug}`}
+              href={`${base}/products?category=${category.slug}`}
               className={cx("group relative flex h-40 items-end overflow-hidden rounded-lg border border-border p-5 transition-all hover:-translate-y-0.5 hover:shadow-lifted sm:h-48", !photoUrl && CATEGORY_TINTS[category.slug])}
             >
               {photoUrl && (
@@ -73,7 +73,7 @@ export function ProductCategories({
           return (
             <Link
               key={category.slug}
-              href={`${base}/products/category/${category.slug}`}
+              href={`${base}/products?category=${category.slug}`}
               className={cx("group relative flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-border p-4 text-center transition-all hover:-translate-y-0.5 hover:shadow-lifted", CATEGORY_TINTS[category.slug])}
             >
               <span className="absolute left-3 top-3 font-mono text-[10px] font-bold text-ink-soft/60">{String(i + FEATURED_COUNT + 1).padStart(2, "0")}</span>
