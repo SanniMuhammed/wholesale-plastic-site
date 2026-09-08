@@ -58,7 +58,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <ProductOrderPanel product={product} locale={locale} dict={dict} hasConfirmedPrice={hasConfirmedPrice} />
         </div>
       </div>
-      <ProductReviews reviews={reviews} locale={locale} />
+      <ProductReviews reviews={reviews} productId={product.cmsId} locale={locale} />
       {relatedProducts.length > 0 && <section className="mt-16 border-t border-border pt-12 sm:mt-24 sm:pt-16"><div className="flex items-end justify-between gap-6"><div><p className="eyebrow">{category?.name[locale]}</p><h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-ink">{locale === "fr" ? "Produits similaires" : "You may also need"}</h2></div><Link href={catalogHref} className="hidden text-sm font-medium text-brand hover:text-brand-dark sm:inline-flex">{dict.common.exploreProducts} →</Link></div><div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">{relatedProducts.map((related) => <ProductCard key={related.slug} product={related} locale={locale} dict={dict} />)}</div><Link href={catalogHref} className="mt-5 inline-flex text-sm font-medium text-brand sm:hidden">{dict.common.exploreProducts} →</Link></section>}
     </div>
   );
