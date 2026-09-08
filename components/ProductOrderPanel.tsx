@@ -18,7 +18,7 @@ function getPackSize(packaging: string): number | null {
   return match ? Number(match[1]) : null;
 }
 
-export function ProductOrderPanel({ product, locale, dict }: { product: Product; locale: Locale; dict: Dictionary }) {
+export function ProductOrderPanel({ product, locale, dict, hasConfirmedPrice = false }: { product: Product; locale: Locale; dict: Dictionary; hasConfirmedPrice?: boolean }) {
   const { addItem } = useOrder();
   const { flyToCart, notifyAdded } = useCartUI();
   const [quantity, setQuantity] = useState(1);
@@ -33,7 +33,6 @@ export function ProductOrderPanel({ product, locale, dict }: { product: Product;
   const quickQuantities = packSize ? [packSize, packSize * 2, packSize * 5, packSize * 10] : [10, 25, 50, 100];
   const destinationCountry = region === "nigeria" ? "Nigeria" : country;
   const destinationCity = region === "nigeria" ? formatNigeriaDestination(state, city) : city;
-  const hasConfirmedPrice = (product.pricingMode === "fixed" || product.pricingMode === "starting_from") && product.price != null;
 
   function setSafeQuantity(value: number) { setQuantity(Math.max(1, Math.floor(value) || 1)); }
   function handleRegionChange(value: DeliveryRegion | "") { setRegion(value); setState(""); setCountry(value === "nigeria" ? "Nigeria" : ""); setCity(""); }
