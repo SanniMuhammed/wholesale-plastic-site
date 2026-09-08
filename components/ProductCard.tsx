@@ -20,7 +20,7 @@ export function ProductCard({
   const href = `${base}/products/${product.slug}`;
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-lg border border-border bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lifted">
+    <article className="group flex flex-col overflow-hidden rounded-lg border border-border bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted">
       <Link href={href} className="block overflow-hidden rounded-t-lg">
         <ProductImage
           product={product}
@@ -52,12 +52,14 @@ export function ProductCard({
           <span>{product.packaging[locale]}</span>
         </div>
 
-        <p className="text-xs font-medium text-brand">{dict.common.wholesalePricing}</p>
+        <p className="inline-flex w-fit rounded-full bg-brand-light px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-brand">
+          {dict.common.wholesalePricing}
+        </p>
 
         <div className="mt-3 flex flex-col gap-2">
           <Link
             href={href}
-            className="inline-flex w-full items-center justify-center rounded border border-border px-3 py-2 text-sm font-medium text-ink transition-colors hover:border-ink"
+            className="inline-flex w-full items-center justify-center rounded border border-border px-3 py-2 text-sm font-medium text-ink transition-colors hover:border-brand hover:text-brand"
           >
             {dict.common.viewProduct}
           </Link>
