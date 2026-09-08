@@ -22,14 +22,20 @@ export function OrderProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<OrderItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
-  // Load any previously saved order once the component mounts in the browser.
+  // localStorage is browser-only, so the initial server render must remain empty.
+  // Hydrating the persisted order once is intentional; the lint rule otherwise
+  // treats this external-store synchronization as a cascading render.
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setItems(JSON.parse(raw));
+      if (raw) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setItems(JSON.parse(raw));
+      }
     } catch {
       // Malformed or unavailable storage -- start with an empty order.
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHydrated(true);
   }, []);
 
