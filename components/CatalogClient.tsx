@@ -72,6 +72,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
 
   const hasFilters = Boolean(category || query);
   const activeCategory = category ? CATEGORIES.find((c) => c.slug === category) : null;
+  const clearAll = () => { setCategory(null); setQuery(""); };
 
   return (
     <div>
@@ -81,7 +82,10 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
             <p className="eyebrow">{dict.nav.categories}</p>
             <h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">{dict.categoriesSection.title}</h2>
           </div>
-          <span className="hidden font-mono text-xs text-muted sm:block">{String(products.length).padStart(2, "0")} {dict.common.items}</span>
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-xs text-muted">{String(products.length).padStart(2, "0")} {dict.common.items}</span>
+            {hasFilters && <button type="button" onClick={clearAll} className="inline-flex items-center gap-1.5 rounded border border-ink bg-ink px-3 py-1.5 text-xs font-medium text-surface transition-colors hover:opacity-90"><X size={13} aria-hidden />{dict.common.all}</button>}
+          </div>
         </div>
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {CATEGORIES.map((c) => {
@@ -106,7 +110,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
             <label htmlFor="catalog-search" className="sr-only">{dict.common.searchPlaceholder}</label>
             <input id="catalog-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={dict.common.searchPlaceholder} autoComplete="off" className="w-full rounded border border-border bg-surface py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-muted focus:border-ink focus:outline-none" />
           </div>
-          {hasFilters && <button type="button" onClick={() => { setCategory(null); setQuery(""); }} className="inline-flex items-center gap-1.5 self-start text-sm font-medium text-muted hover:text-ink sm:self-auto"><X size={14} aria-hidden />{dict.common.clearFilters}</button>}
+          {hasFilters && <button type="button" onClick={clearAll} className="inline-flex items-center gap-1.5 self-start text-sm font-medium text-muted hover:text-ink sm:self-auto"><X size={14} aria-hidden />{dict.common.clearFilters}</button>}
         </div>
       </div>
 
@@ -122,7 +126,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
         <div className="mt-6 rounded-lg border border-dashed border-border bg-surface p-8 text-center">
           <p className="font-medium text-ink">{dict.common.noResults}</p>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted">{dict.categoriesSection.subtitle}</p>
-          <button type="button" onClick={() => { setCategory(null); setQuery(""); }} className="mt-5 inline-flex items-center gap-2 rounded bg-ink px-4 py-2 text-sm font-medium text-surface">{dict.common.clearFilters}<ArrowRight size={14} aria-hidden /></button>
+          <button type="button" onClick={clearAll} className="mt-5 inline-flex items-center gap-2 rounded bg-ink px-4 py-2 text-sm font-medium text-surface">{dict.common.clearFilters}<ArrowRight size={14} aria-hidden /></button>
         </div>
       ) : (
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
