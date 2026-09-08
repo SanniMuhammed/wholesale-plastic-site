@@ -20,6 +20,13 @@ const nextConfig = {
         hostname: supabaseHostname,
         pathname: "/storage/v1/object/public/**",
       },
+      { protocol: "https", hostname: "cdn11.bigcommerce.com", pathname: "/**" },
+      { protocol: "https", hostname: "heroplast.com", pathname: "/**" },
+      { protocol: "https", hostname: "i.ebayimg.com", pathname: "/**" },
+      { protocol: "https", hostname: "www.isplatech.co.kr", pathname: "/**" },
+      { protocol: "https", hostname: "assets.laicms.com", pathname: "/**" },
+      { protocol: "https", hostname: "s.alicdn.com", pathname: "/**" },
+      { protocol: "https", hostname: "bakehouse.pk", pathname: "/**" },
     ],
   },
   async headers() {
