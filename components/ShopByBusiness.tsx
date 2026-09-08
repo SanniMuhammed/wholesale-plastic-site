@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
-import type { Dictionary } from "@/lib/getDictionary";
 
 const BUSINESS_TYPES = [
   { en: { title: "For Resellers", description: "Stock fast-moving plastic products for your shop or market stall." }, fr: { title: "Pour les revendeurs", description: "Approvisionnez votre boutique ou votre étal en produits plastiques demandés." }, category: "household" },
@@ -9,7 +8,7 @@ const BUSINESS_TYPES = [
   { en: { title: "Starting a Business", description: "Start, restock, or grow with wholesale plastic products wherever your business is based." }, fr: { title: "Démarrer un commerce", description: "Démarrez, réapprovisionnez ou développez votre activité avec des produits plastiques en gros, où que vous soyez." }, category: "buckets" },
 ];
 
-export function ShopByBusiness({ locale }: { locale: Locale; dict: Dictionary }) {
+export function ShopByBusiness({ locale }: { locale: Locale }) {
   const isFrench = locale === "fr";
   const copy = isFrench
     ? { eyebrow: "ACHETEZ POUR VOTRE ACTIVITÉ", title: "Des produits adaptés à votre commerce", subtitle: "Que vous revendiez, restauriez ou démarriez votre activité, trouvez rapidement ce qui correspond à vos besoins.", cta: "Voir tous les produits" }
