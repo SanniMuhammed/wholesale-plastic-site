@@ -14,7 +14,7 @@ export function HeroVisual({ dict, categoryImages, heroImage, mobileHeroImage }:
     return (
       <div className="absolute inset-0 overflow-hidden rounded-none border-0 shadow-none">
         <picture>
-          <source media="(max-width: 1023px)" srcSet={mobile ?? desktop ?? ""} />
+          <source media="(max-width: 767px)" srcSet={mobile ?? desktop ?? ""} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={desktop ?? ""} alt="" className="h-full w-full object-cover" />
         </picture>
