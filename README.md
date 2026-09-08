@@ -80,7 +80,7 @@ app/
     products/[slug]/     product detail
     how-it-works/, wholesale/, delivery/, about/, order-summary/, contact/
   api/quote/             fallback (no-WhatsApp) submission endpoint (stub — see above)
-middleware.ts            redirects "/" to /en or /fr by Accept-Language
+middleware.ts            redirects "/" to /en or /fr based on Accept-Language
 lib/
   i18n/                  en.json / fr.json dictionaries + locale config
   products.ts            product & category data model + sample catalog
@@ -103,3 +103,4 @@ components/              UI, organized roughly by the section it renders
   out until there's enough real, country-specific content to justify them.
 
 <!-- Deployment verification trigger: 2026-09-08 -->
+<!-- Deployment retry trigger: 2026-09-08 -->
