@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Search, X, ArrowRight } from "lucide-react";
-import { CATEGORIES, type CategorySlug, type Product } from "@/lib/products";
+import { CATEGORIES, type CategorySlug } from "@/lib/products";
+import type { CatalogProduct } from "@/lib/catalog/products";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { ProductCard } from "@/components/ProductCard";
@@ -32,7 +33,7 @@ function isCategorySlug(value: string | null): value is CategorySlug {
   return !!value && CATEGORIES.some((c) => c.slug === value);
 }
 
-export function CatalogClient({ locale, dict, products }: { locale: Locale; dict: Dictionary; products: Product[] }) {
+export function CatalogClient({ locale, dict, products }: { locale: Locale; dict: Dictionary; products: CatalogProduct[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -56,7 +57,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
     return counts;
   }, [products]);
 
-  const results = useMemo<Product[]>(() => {
+  const results = useMemo<CatalogProduct[]>(() => {
     let list = products;
     if (query.trim()) {
       const q = query.trim().toLowerCase();
