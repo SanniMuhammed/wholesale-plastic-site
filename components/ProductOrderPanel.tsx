@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check, Minus, Plus } from "lucide-react";
 import { useOrder } from "@/components/OrderProvider";
 import { useCartUI } from "@/components/cart/CartUIProvider";
 import { useInView } from "@/lib/hooks/useInView";
@@ -11,6 +11,11 @@ import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { productInquiryLink } from "@/lib/whatsapp";
 import { cx } from "@/lib/utils";
+
+function getPackSize(packaging: string): number | null {
+  const match = packaging.match(/(?:of|de)\s+(\d+)/i);
+  return match ? Number(match[1]) : null;
+}
 
 export function ProductOrderPanel({
   product,
@@ -24,17 +29,21 @@ export function ProductOrderPanel({
   const { addItem } = useOrder();
   const { flyToCart, notifyAdded } = useCartUI();
   const [quantity, setQuantity] = useState(1);
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
   const [added, setAdded] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const base = `/${locale}`;
-
-  // Sentinel sits right after the main actions row. Once it scrolls out of
-  // view the primary Add to Order button is no longer reachable, so the
-  // sticky mobile bar below takes over -- functional, not decorative.
   const { ref: sentinelRef, inView: mainActionsVisible } = useInView<HTMLDivElement>({
     once: false,
     threshold: 0,
   });
+
+  const packSize = useMemo(() => getPackSize(product.packaging[locale]), [product.packaging, locale]);
+  const quickQuantities = packSize ? [packSize, packSize * 2, packSize * 5, packSize * 10] : [10, 25, 50, 100];
+
+  function setSafeQuantity(value: number) {
+    setQuantity(Math.max(1, Math.floor(value) || 1));
+  }
 
   function handleAdd() {
     addItem(product.slug, quantity);
@@ -47,58 +56,147 @@ export function ProductOrderPanel({
   const whatsappHref = productInquiryLink(dict, {
     product: product.name[locale],
     quantity,
+    city,
+    country,
   });
 
   return (
-    <div className="mt-6 flex flex-col gap-4">
-      <div className="flex items-center gap-3">
-        <label className="text-sm font-medium text-ink-soft" htmlFor="qty">
-          {dict.common.quantity}
-        </label>
-        <input
-          id="qty"
-          type="number"
-          min={1}
-          value={quantity}
-          onChange={(e) => setQuantity(Math.max(1, Number(e.target.value) || 1))}
-          className="w-24 rounded border border-border px-3 py-2 font-mono text-sm"
-        />
-      </div>
-      <div className="flex flex-wrap gap-3">
-        <button
-          ref={buttonRef}
-          type="button"
-          onClick={handleAdd}
-          className={cx(
-            "inline-flex items-center justify-center gap-1.5 rounded border border-ink px-5 py-3 text-sm font-medium text-ink transition-all duration-150 hover:bg-ink hover:text-surface active:scale-95",
-            added && "border-brand bg-brand text-surface hover:bg-brand-dark"
-          )}
-        >
-          {added && <Check size={15} strokeWidth={2.5} />}
-          {added ? dict.common.addedToOrder : dict.common.addToOrder}
-        </button>
-        <Link
-          href={`${base}/order-summary`}
-          className="inline-flex items-center justify-center rounded bg-brand px-5 py-3 text-sm font-medium text-surface transition-colors hover:bg-brand-dark"
-        >
-          {dict.common.reviewOrder}
-        </Link>
-        <a
-          href={whatsappHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center rounded border border-border px-5 py-3 text-sm font-medium text-ink transition-colors hover:border-ink"
-        >
-          {dict.common.whatsappUs}
-        </a>
-      </div>
+    <div className="mt-8 flex flex-col gap-5">
+      <div className="rounded-xl border border-border bg-surface-raised p-4 sm:p-5">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="eyebrow text-brand">{dict.common.wholesalePricing}</p>
+            <h2 className="mt-1 font-display text-lg font-semibold text-ink">{dict.common.requestPrice}</h2>
+          </div>
+          <span className="rounded-full bg-brand-light px-2.5 py-1 font-mono text-[10px] font-medium text-brand">
+            {dict.common.wholesaleOrdersOnly}
+          </span>
+        </div>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          {locale === "fr"
+            ? "Le prix dépend de la quantité et de votre destination. Demandez un devis pour obtenir le prix exact."
+            : "Your wholesale price depends on quantity and destination. Request a quote for the exact price."}
+        </p>
 
-      <div ref={sentinelRef} aria-hidden className="h-px w-full" />
+        <div className="mt-5">
+          <div className="flex items-center justify-between gap-3">
+            <label className="text-sm font-medium text-ink-soft" htmlFor="product-qty">
+              {dict.common.quantity}
+            </label>
+            {packSize && (
+              <span className="font-mono text-[10px] text-muted">
+                {locale === "fr" ? `Carton de ${packSize}` : `Carton of ${packSize}`}
+              </span>
+            )}
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <button
+              type="button"
+              aria-label={locale === "fr" ? "Diminuer la quantité" : "Decrease quantity"}
+              onClick={() => setSafeQuantity(quantity - 1)}
+              className="inline-flex h-11 w-11 items-center justify-center rounded border border-border text-ink transition-colors hover:border-ink"
+            >
+              <Minus size={16} />
+            </button>
+            <input
+              id="product-qty"
+              type="number"
+              min={1}
+              inputMode="numeric"
+              value={quantity}
+              onChange={(e) => setSafeQuantity(Number(e.target.value))}
+              className="h-11 min-w-0 flex-1 rounded border border-border bg-surface px-3 text-center font-mono text-base font-medium text-ink outline-none focus:border-brand"
+            />
+            <button
+              type="button"
+              aria-label={locale === "fr" ? "Augmenter la quantité" : "Increase quantity"}
+              onClick={() => setSafeQuantity(quantity + 1)}
+              className="inline-flex h-11 w-11 items-center justify-center rounded border border-border text-ink transition-colors hover:border-ink"
+            >
+              <Plus size={16} />
+            </button>
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {quickQuantities.map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setSafeQuantity(value)}
+                className={cx(
+                  "rounded-full border px-3 py-1.5 font-mono text-xs transition-colors",
+                  quantity === value
+                    ? "border-brand bg-brand text-surface"
+                    : "border-border text-ink-soft hover:border-ink"
+                )}
+              >
+                {value.toLocaleString()}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="text-xs font-medium text-ink-soft">
+            {dict.common.country}
+            <input
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              placeholder={locale === "fr" ? "Ex. Togo" : "e.g. Togo"}
+              className="mt-1.5 h-10 w-full rounded border border-border bg-surface px-3 text-sm text-ink outline-none placeholder:text-muted focus:border-brand"
+            />
+          </label>
+          <label className="text-xs font-medium text-ink-soft">
+            {dict.common.city}
+            <input
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder={locale === "fr" ? "Ex. Lomé" : "e.g. Lome"}
+              className="mt-1.5 h-10 w-full rounded border border-border bg-surface px-3 text-sm text-ink outline-none placeholder:text-muted focus:border-brand"
+            />
+          </label>
+        </div>
+
+        <div ref={sentinelRef} aria-hidden className="h-px w-full" />
+
+        <div className="mt-5 grid gap-2 sm:grid-cols-2">
+          <button
+            ref={buttonRef}
+            type="button"
+            onClick={handleAdd}
+            className={cx(
+              "inline-flex min-h-11 items-center justify-center gap-1.5 rounded bg-brand px-4 py-3 text-sm font-medium text-surface transition-all hover:bg-brand-dark active:scale-[0.98]",
+              added && "bg-brand-dark"
+            )}
+          >
+            {added && <Check size={15} strokeWidth={2.5} />}
+            {added ? dict.common.addedToOrder : dict.common.addToOrder}
+          </button>
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center justify-center rounded border border-ink px-4 py-3 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface"
+          >
+            {dict.common.requestPrice}
+          </a>
+        </div>
+
+        <Link
+          href={`/${locale}/order-summary`}
+          className="mt-3 inline-flex w-full items-center justify-center py-1 text-xs font-medium text-muted transition-colors hover:text-ink"
+        >
+          {dict.common.reviewOrder} →
+        </Link>
+      </div>
 
       {!mainActionsVisible && (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 p-3 backdrop-blur print:hidden sm:hidden">
           <div className="mx-auto flex max-w-content items-center gap-3">
-            <p className="min-w-0 flex-1 truncate text-sm font-medium text-ink">{product.name[locale]}</p>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium text-ink">{product.name[locale]}</p>
+              <p className="font-mono text-[10px] text-muted">× {quantity.toLocaleString()}</p>
+            </div>
             <button
               type="button"
               onClick={handleAdd}
