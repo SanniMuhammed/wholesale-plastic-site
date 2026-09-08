@@ -62,7 +62,7 @@ export function ProductOrderPanel({
 
   return (
     <div className="mt-8 flex flex-col gap-5">
-      <div className="rounded-xl border border-border bg-surface-raised p-4 sm:p-5">
+      <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="eyebrow text-brand">{dict.common.wholesalePricing}</p>
