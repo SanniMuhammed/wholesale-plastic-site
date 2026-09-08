@@ -16,49 +16,57 @@ interface NavProps { locale: Locale; dict: Dictionary; }
 function SherinabLogo() {
   return (
     <span className="group/logo inline-flex shrink-0 items-center gap-2.5" aria-hidden>
-      <svg
-        viewBox="0 0 44 44"
-        className="h-9 w-9 shrink-0 overflow-visible sm:h-10 sm:w-10"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M11 8.5h22a2.5 2.5 0 0 1 2.5 2.5v18.2a3.3 3.3 0 0 1-3.3 3.3H11.8a3.3 3.3 0 0 1-3.3-3.3V11A2.5 2.5 0 0 1 11 8.5Z"
-          className="fill-brand transition-transform duration-300 group-hover/logo:-translate-y-0.5"
-        />
-        <path
-          d="M12.5 8.5V6.8A3.8 3.8 0 0 1 16.3 3h11.4a3.8 3.8 0 0 1 3.8 3.8v1.7"
-          className="stroke-brand-dark"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M13 16.5h18M13 22h18M13 27.5h10"
-          className="stroke-background"
-          strokeWidth="2.1"
-          strokeLinecap="round"
-          opacity=".92"
-        />
-        <path
-          d="M28.5 27.5h2.5"
-          className="stroke-accent"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M8.5 34.5h27"
-          className="stroke-accent"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
+      <span className="relative flex h-10 w-10 shrink-0 items-center justify-center sm:h-11 sm:w-11">
+        <svg
+          viewBox="0 0 48 48"
+          className="absolute inset-0 h-full w-full overflow-visible"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M24 2.75 42.25 13v22L24 45.25 5.75 35V13L24 2.75Z"
+            className="fill-brand transition-transform duration-300 group-hover/logo:rotate-1"
+          />
+          <path
+            d="M24 2.75 42.25 13 24 23.2 5.75 13 24 2.75Z"
+            className="fill-brand-dark"
+            opacity=".9"
+          />
+          <path
+            d="M24 23.2v22.05"
+            className="stroke-background"
+            strokeWidth="1.4"
+            opacity=".32"
+          />
+          <path
+            d="M15.2 17.15c2.1-2.05 5.05-3.15 8.55-3.15 4.2 0 7.05 1.6 7.05 4.15 0 2.45-2.35 3.35-6.65 4.15-4.15.8-7.3 1.9-7.3 5.35 0 3.55 3.4 5.7 8.35 5.7 3.7 0 6.55-1.05 8.05-2.95"
+            className="stroke-background transition-transform duration-300 group-hover/logo:translate-x-0.5"
+            strokeWidth="3.2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M29.8 31.3h4.2"
+            className="stroke-accent"
+            strokeWidth="2.6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M9.7 36.2 24 44.25l14.3-8.05"
+            className="stroke-accent"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            opacity=".95"
+          />
+        </svg>
+        <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-accent ring-2 ring-surface transition-transform duration-300 group-hover/logo:scale-125" />
+      </span>
 
       <span className="flex flex-col leading-none">
-        <span className="font-display text-[18px] font-extrabold tracking-[-0.045em] text-ink transition-colors duration-200 group-hover/logo:text-brand sm:text-[20px]">
+        <span className="font-display text-[18px] font-black uppercase tracking-[-0.055em] text-ink transition-colors duration-200 group-hover/logo:text-brand sm:text-[20px]">
           Sherinab
         </span>
-        <span className="mt-1 flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-[0.24em] text-muted sm:text-[9px]">
-          <span className="h-px w-3 bg-accent" />
+        <span className="mt-1.5 flex items-center gap-1.5 text-[8px] font-extrabold uppercase tracking-[0.27em] text-muted sm:text-[9px]">
+          <span className="h-[2px] w-4 rounded-full bg-accent" />
           Venture
         </span>
       </span>
