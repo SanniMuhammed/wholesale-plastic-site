@@ -3,9 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 
 interface UseInViewOptions extends IntersectionObserverInit {
-  /** Stop observing after the first time it becomes true (default). Pass
-   * `false` for elements that need continuous tracking, like a sentinel
-   * used to toggle a sticky bar as it scrolls in and out. */
   once?: boolean;
 }
 
@@ -19,6 +16,9 @@ export function useInView<T extends HTMLElement>(options?: UseInViewOptions) {
     if (!el) return;
 
     if (typeof IntersectionObserver === "undefined") {
+      // Older browsers without IntersectionObserver should show the content.
+      // This is intentionally an effect fallback because the API is browser-only.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInView(true);
       return;
     }
