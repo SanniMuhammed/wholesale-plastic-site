@@ -32,11 +32,11 @@ export interface Product {
 }
 export type ProductInput = Omit<Product, "id" | "created_at" | "updated_at" | "category" | "images" | "colors" | "reviews">;
 export interface Faq { id: string; question_en: string; question_fr: string; answer_en: string; answer_fr: string; sort_order: number; is_published: boolean; }
-export interface CompanySettings { company_name: string; email: string; phone: string; whatsapp_number: string; address: string; countries_served: string[]; social_links: Record<string, string>; }
+export interface CompanySettings { company_name: string; email: string; phone: string; whatsapp_number: string; address: string; countries_served: string[]; social_links: Record<string, string>; business_hours_en: string; business_hours_fr: string; }
 export interface DeliveryContent { body_en: string; body_fr: string; }
 export interface WholesaleContent { body_en: string; body_fr: string; }
 export type HomepageSectionKey = "hero" | "trust_bar" | "how_it_works" | "start_business" | "travel" | "delivery_teaser" | "final_cta";
-export interface HomepageSection { id: string; key: HomepageSectionKey; title_en: string; title_fr: string; body_en: string; body_fr: string; is_visible: boolean; sort_order: number; hero_image_path: string | null; hero_mobile_image_path: string | null; }
+export interface HomepageSection { id: string; key: HomepageSectionKey; title_en: string; title_fr: string; body_en: string; body_fr: string; is_visible: boolean; sort_order: number; updated_at: string; hero_image_path: string | null; hero_mobile_image_path: string | null; }
 export type OrderChannel = "whatsapp" | "fallback_form";
 export type OrderStatus = "new" | "contacted" | "quoted" | "confirmed" | "completed" | "cancelled";
 export interface OrderItem { id: string; order_id: string; product_slug: string; product_name: string; capacity: string | null; quantity: number; }
