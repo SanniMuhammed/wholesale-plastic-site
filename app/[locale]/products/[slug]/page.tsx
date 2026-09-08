@@ -11,13 +11,60 @@ import { ProductOrderPanel } from "@/components/ProductOrderPanel";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductReviews } from "@/components/ProductReviews";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://wholesale-plastic-site-two.vercel.app";
+
+const COMPLEMENTARY_CATEGORIES: Record<string, string[]> = {
+  buckets: ["basins", "containers", "household"],
+  basins: ["buckets", "bowls", "containers"],
+  bowls: ["basins", "containers", "household"],
+  containers: ["household", "bowls", "buckets"],
+  household: ["containers", "buckets", "basins"],
+  other: ["household", "containers", "buckets"],
+};
+
+function relatedScore(current: Awaited<ReturnType<typeof getProductBySlug>>, candidate: Awaited<ReturnType<typeof getProductBySlug>>) {
+  if (!current || !candidate) return -Infinity;
+  let score = candidate.featured ? 0.25 : 0;
+  if (candidate.category === current.category) score += 4;
+  const complementary = COMPLEMENTARY_CATEGORIES[current.category] ?? [];
+  const complementIndex = complementary.indexOf(candidate.category);
+  if (complementIndex >= 0) score += 3 - complementIndex * 0.5;
+
+  const currentWords = new Set(`${current.useCase.en} ${current.useCase.fr} ${current.shortDescription.en} ${current.shortDescription.fr}`.toLowerCase().split(/[^a-z0-9àâçéèêëîïôùûüÿœæ]+/i).filter((word) => word.length > 3));
+  const candidateWords = `${candidate.useCase.en} ${candidate.useCase.fr} ${candidate.shortDescription.en} ${candidate.shortDescription.fr}`.toLowerCase().split(/[^a-z0-9àâçéèêëîïôùûüÿœæ]+/i).filter((word) => word.length > 3);
+  score += Math.min(candidateWords.filter((word) => currentWords.has(word)).length, 3) * 0.5;
+  score += candidate.colors.filter((color) => current.colors.includes(color)).length * 0.15;
+  return score;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale: rawLocale, slug } = await params;
   if (!isLocale(rawLocale)) return {};
   const locale = rawLocale as Locale;
   const product = await getProductBySlug(slug);
   if (!product) return {};
-  return { title: product.name[locale], description: product.shortDescription[locale] };
+  const title = `${product.name[locale]} | Sherinab Venture`;
+  const description = product.shortDescription[locale];
+  const image = product.images[0] || product.image;
+  return {
+    title,
+    description,
+    alternates: { canonical: `${SITE_URL}/${locale}/products/${product.slug}` },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      siteName: "Sherinab Venture",
+      url: `${SITE_URL}/${locale}/products/${product.slug}`,
+      images: image ? [{ url: image, alt: product.name[locale] }] : [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Sherinab Venture" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image] : ["/opengraph-image.png"],
+    },
+  };
 }
 
 function PriceBlock({ product, locale }: { product: Awaited<ReturnType<typeof getProductBySlug>>; locale: Locale }) {
@@ -40,7 +87,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const base = `/${locale}`;
   const [allProducts, reviews] = await Promise.all([getAllProducts(), listProductReviews(product.cmsId)]);
   const plateNumber = allProducts.findIndex((p) => p.slug === product.slug) + 1;
-  const relatedProducts = allProducts.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
+  const relatedProducts = allProducts
+    .filter((p) => p.slug !== product.slug)
+    .sort((a, b) => relatedScore(product, b) - relatedScore(product, a))
+    .slice(0, 4);
   const catalogHref = `${base}/products?category=${product.category}`;
   const hasConfirmedPrice = (product.pricingMode === "fixed" || product.pricingMode === "starting_from") && product.price != null;
   return (
