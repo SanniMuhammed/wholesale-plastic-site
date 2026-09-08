@@ -38,13 +38,12 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
 
   return (
     <section id="categories" className="mx-auto max-w-content scroll-mt-20 px-4 py-16 sm:px-6">
-      <div className="flex items-end justify-between gap-6 border-b border-border pb-5">
+      <div className="border-b border-border pb-5">
         <div>
           <p className="eyebrow text-brand">01 / {dict.categoriesSection.title}</p>
           <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">{dict.categoriesSection.title}</h2>
           <p className="mt-2 max-w-xl text-muted">{dict.categoriesSection.subtitle}</p>
         </div>
-        <span className="hidden shrink-0 rounded-full bg-brand-light px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-brand sm:inline-flex">Wholesale catalog</span>
       </div>
 
       <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
@@ -61,13 +60,7 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
             >
               {photoUrl && (
                 <>
-                  <Image
-                    src={photoUrl}
-                    alt={category.name[locale]}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 50vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                  <Image src={photoUrl} alt={category.name[locale]} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
                 </>
               )}
@@ -75,11 +68,7 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
                 {String(i + 1).padStart(2, "0")}
               </span>
               {!photoUrl && (
-                <CategoryIllustration
-                  category={category.slug}
-                  className={cx("absolute -right-4 -top-4 h-32 w-32 opacity-25 transition-transform group-hover:scale-105 sm:h-40 sm:w-40", CATEGORY_INK[category.slug])}
-                  aria-hidden
-                />
+                <CategoryIllustration category={category.slug} className={cx("absolute -right-4 -top-4 h-32 w-32 opacity-25 transition-transform group-hover:scale-105 sm:h-40 sm:w-40", CATEGORY_INK[category.slug])} aria-hidden />
               )}
               <span className={cx("relative z-10 font-display text-lg font-semibold sm:text-xl", photoUrl ? "text-white" : "text-ink")}>
                 {category.name[locale]}
