@@ -116,8 +116,6 @@ export function CatalogClient({
 
   return (
     <div>
-      {/* Visual category discovery: a lighter version of the deep catalog
-          navigation used by industrial/wholesale catalogs. */}
       {!hasFilters && (
         <div className="mb-10">
           <div className="flex items-end justify-between gap-4">
@@ -140,6 +138,7 @@ export function CatalogClient({
                   key={c.slug}
                   type="button"
                   onClick={() => setCategory(c.slug)}
+                  aria-label={`${c.name[locale]} — ${count} ${dict.common.items}`}
                   className={cx(
                     "group relative flex min-h-32 flex-col justify-between overflow-hidden rounded-lg border border-border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-lifted",
                     CATEGORY_TINTS[c.slug]
@@ -178,12 +177,18 @@ export function CatalogClient({
               size={16}
               strokeWidth={1.75}
               className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted"
+              aria-hidden
             />
+            <label htmlFor="catalog-search" className="sr-only">
+              {dict.common.searchPlaceholder}
+            </label>
             <input
-              type="text"
+              id="catalog-search"
+              type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={dict.common.searchPlaceholder}
+              autoComplete="off"
               className="w-full rounded border border-border bg-surface py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-muted focus:border-ink focus:outline-none"
             />
           </div>
@@ -197,7 +202,7 @@ export function CatalogClient({
               }}
               className="inline-flex items-center gap-1.5 self-start text-sm font-medium text-muted hover:text-ink sm:self-auto"
             >
-              <X size={14} />
+              <X size={14} aria-hidden />
               {dict.common.clearFilters}
             </button>
           )}
@@ -207,6 +212,7 @@ export function CatalogClient({
           <button
             type="button"
             onClick={() => setCategory(null)}
+            aria-pressed={category === null}
             className={cx(
               "shrink-0 rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
               category === null ? "border-ink bg-ink text-surface" : "border-border bg-surface text-ink-soft hover:border-ink"
@@ -219,6 +225,7 @@ export function CatalogClient({
               key={c.slug}
               type="button"
               onClick={() => setCategory(c.slug)}
+              aria-pressed={category === c.slug}
               className={cx(
                 "shrink-0 rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
                 category === c.slug ? "border-ink bg-ink text-surface" : "border-border bg-surface text-ink-soft hover:border-ink"
@@ -263,7 +270,7 @@ export function CatalogClient({
             className="mt-5 inline-flex items-center gap-2 rounded bg-ink px-4 py-2 text-sm font-medium text-surface"
           >
             {dict.common.clearFilters}
-            <ArrowRight size={14} />
+            <ArrowRight size={14} aria-hidden />
           </button>
         </div>
       ) : (
