@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Minus, PackageOpen, Plus, X } from "lucide-react";
+import { FileDown, Loader2, Minus, PackageOpen, Plus, Send, X } from "lucide-react";
 import { useOrder } from "@/components/OrderProvider";
 import type { Product } from "@/lib/products";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { ProductImage } from "@/components/ProductImage";
+import { buildWhatsAppLink, buildOrderMessage } from "@/lib/whatsapp";
 import { cx } from "@/lib/utils";
 
 export function CartDrawer({ locale, dict, open, onClose, products }: { locale: Locale; dict: Dictionary; open: boolean; onClose: () => void; products: Product[] }) {
   const { items, updateQuantity, removeItem } = useOrder();
+  const [sending, setSending] = useState(false);
   const base = `/${locale}`;
 
   useEffect(() => {
@@ -30,6 +32,42 @@ export function CartDrawer({ locale, dict, open, onClose, products }: { locale: 
     return { slug: item.slug, quantity: item.quantity, product, name: product.name[locale], capacity: product.capacity };
   }).filter((item): item is { slug: string; quantity: number; product: Product; name: string; capacity: string | undefined } => item !== null);
   const totalQuantity = resolved.reduce((sum, item) => sum + item.quantity, 0);
+
+  async function handleWhatsApp() {
+    if (!resolved.length || sending) return;
+    setSending(true);
+    const message = buildOrderMessage(dict, {
+      items: resolved.map((item) => ({ name: item.name, quantity: item.quantity })),
+    });
+    try {
+      const response = await fetch("/api/order-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          locale,
+          reference: `SV-${new Date().toISOString().slice(0, 10).replaceAll("-", "")}`,
+          items: resolved.map((item) => ({ name: item.name, quantity: item.quantity, capacity: item.capacity })),
+        }),
+      });
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = "Sherinab-Venture-order.pdf";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+    } catch {
+      // WhatsApp hand-off should still happen even if PDF preparation fails.
+    } finally {
+      window.open(buildWhatsAppLink(message), "_blank", "noopener,noreferrer");
+      setSending(false);
+      onClose();
+    }
+  }
 
   return (
     <>
@@ -76,7 +114,8 @@ export function CartDrawer({ locale, dict, open, onClose, products }: { locale: 
         <div className="shrink-0 border-t border-border bg-surface px-4 pb-5 pt-4 sm:px-6 sm:pb-6">
           {resolved.length > 0 && <div className="mb-4 rounded-xl bg-brand-light p-4"><div className="flex items-center justify-between"><span className="text-xs font-medium uppercase tracking-wider text-brand">{locale === "fr" ? "Quantité totale" : "Total quantity"}</span><span className="font-mono text-sm font-semibold text-ink">{totalQuantity.toLocaleString()}</span></div><p className="mt-2 text-xs leading-5 text-muted">{locale === "fr" ? "Vérifiez votre commande, ajoutez votre destination et envoyez le PDF complet sur WhatsApp." : "Review your order, add your destination, then send the complete PDF to WhatsApp."}</p></div>}
           <div className="flex flex-col gap-2.5">
-            {resolved.length > 0 && <Link href={`${base}/order-summary`} onClick={onClose} className="inline-flex min-h-12 items-center justify-center rounded-lg bg-brand px-5 text-sm font-semibold text-surface shadow-sm transition-all hover:bg-brand-dark active:scale-[0.99]">{dict.cartDrawer.viewFullOrder} →</Link>}
+            {resolved.length > 0 && <button type="button" onClick={handleWhatsApp} disabled={sending} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-brand px-5 text-sm font-semibold text-surface shadow-sm transition-all hover:bg-brand-dark active:scale-[0.99] disabled:cursor-wait disabled:opacity-60">{sending ? <Loader2 size={17} className="animate-spin" /> : <Send size={17} />}{sending ? (locale === "fr" ? "Préparation…" : "Preparing…") : dict.orderSummaryPage.continueOnWhatsapp}</button>}
+            {resolved.length > 0 && <Link href={`${base}/order-summary`} onClick={onClose} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-5 text-sm font-semibold text-ink transition-colors hover:border-ink hover:bg-ink hover:text-surface"><FileDown size={16} />{dict.cartDrawer.viewFullOrder} →</Link>}
             <button type="button" onClick={onClose} className="py-1.5 text-center text-sm font-medium text-muted hover:text-ink">{dict.cartDrawer.keepBrowsing}</button>
           </div>
         </div>
