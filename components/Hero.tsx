@@ -11,7 +11,7 @@ export function Hero({ locale, dict, categoryImages, heroImage, mobileHeroImage 
     <section
       className={`relative mx-auto max-w-content overflow-hidden px-4 sm:px-6 ${
         hasHeroImage
-          ? "min-h-[540px] py-10 sm:min-h-[590px] sm:py-14 md:min-h-[620px] md:py-16 lg:min-h-[660px] lg:py-20"
+          ? "min-h-[540px] py-10 sm:min-h-[570px] sm:py-12 md:min-h-[600px] md:py-14 lg:min-h-[640px] lg:py-16"
           : "pb-16 pt-12 sm:pb-24 sm:pt-16 lg:pt-20"
       }`}
     >
@@ -26,22 +26,22 @@ export function Hero({ locale, dict, categoryImages, heroImage, mobileHeroImage 
 
       <div
         className={`relative z-10 flex items-center ${
-          hasHeroImage ? "min-h-[460px] sm:min-h-[500px] md:min-h-[530px] lg:min-h-[570px]" : ""
+          hasHeroImage ? "min-h-[460px] sm:min-h-[490px] md:min-h-[510px] lg:min-h-[540px]" : ""
         }`}
       >
-        <div className={`${hasHeroImage ? "w-full md:w-[66%] lg:w-[62%] xl:w-[60%]" : "w-full md:max-w-2xl"}`}>
+        <div className={`${hasHeroImage ? "w-full md:w-[68%] lg:w-[64%] xl:w-[62%]" : "w-full md:max-w-2xl"}`}>
           <div className="animate-settle-up">
             <p className="eyebrow inline-flex max-w-full -rotate-1 items-center rounded border border-border/80 bg-surface/80 px-3 py-1.5 backdrop-blur-md">
               {dict.hero.supporting}
             </p>
 
             <h1
-              className="mt-5 max-w-[18ch] font-display text-[clamp(2.65rem,7.6vw,4.75rem)] font-semibold leading-[0.94] tracking-[-0.035em] text-ink [text-wrap:balance] sm:mt-6 sm:text-6xl lg:text-[4.75rem]"
+              className="mt-5 max-w-[22ch] font-display text-[clamp(2.65rem,7.6vw,4.75rem)] font-semibold leading-[0.94] tracking-[-0.04em] text-ink [text-wrap:balance] sm:mt-6 sm:text-6xl lg:text-[4.75rem]"
             >
               {dict.hero.title}
             </h1>
 
-            <p className="mt-6 max-w-[36rem] rounded-md bg-surface/72 px-3 py-2 text-[0.98rem] leading-6 text-ink-soft shadow-sm backdrop-blur-md sm:text-base">
+            <p className="mt-6 max-w-[30rem] rounded-md border border-white/40 bg-surface/78 px-3 py-2 text-[0.96rem] leading-[1.45] text-ink-soft shadow-sm backdrop-blur-md sm:text-base">
               {dict.hero.subtitle}
             </p>
 
