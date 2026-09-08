@@ -5,6 +5,7 @@ import { ProductReviewForm } from "@/components/ProductReviewForm";
 export function ProductReviews({ reviews, productId, locale }: { reviews: ProductReview[]; productId: string; locale: Locale }) {
   const title = locale === "fr" ? "Avis clients" : "Customer reviews";
   const subtitle = locale === "fr" ? "Ce que les clients disent de ce produit." : "What customers say about this product.";
+  const sampleLabel = locale === "fr" ? "Avis de démonstration" : "Sample review";
 
   return (
     <section className="mt-16 border-t border-border pt-12 sm:mt-20 sm:pt-16" aria-labelledby="product-reviews-title">
@@ -20,10 +21,14 @@ export function ProductReviews({ reviews, productId, locale }: { reviews: Produc
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {reviews.map((review) => {
             const text = locale === "fr" ? review.review_fr || review.review_en : review.review_en || review.review_fr;
+            const isSample = review.customer_name.startsWith("Sample Customer");
             return (
               <article key={review.id} className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
-                <div className="flex items-center gap-1 text-brand" aria-label={`${review.rating} out of 5 stars`}>
-                  {Array.from({ length: 5 }, (_, i) => <span key={i} aria-hidden>{i < review.rating ? "★" : "☆"}</span>)}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-1 text-brand" aria-label={`${review.rating} out of 5 stars`}>
+                    {Array.from({ length: 5 }, (_, i) => <span key={i} aria-hidden>{i < review.rating ? "★" : "☆"}</span>)}
+                  </div>
+                  {isSample && <span className="rounded-full border border-brand/20 bg-brand-light px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-brand">{sampleLabel}</span>}
                 </div>
 
                 {review.customer_photo_path && (
