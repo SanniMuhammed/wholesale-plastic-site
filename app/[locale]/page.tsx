@@ -8,6 +8,8 @@ import { Hero } from "@/components/Hero";
 import { TrustBar } from "@/components/TrustBar";
 import { ProductCategories } from "@/components/ProductCategories";
 import { FeaturedProducts } from "@/components/FeaturedProducts";
+import { ShopByBusiness } from "@/components/ShopByBusiness";
+import { WholesaleQuoteCta } from "@/components/WholesaleQuoteCta";
 import { TravelSection } from "@/components/TravelSection";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { StartBusinessSection } from "@/components/StartBusinessSection";
@@ -37,6 +39,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <TrustBar dict={dict} />
       <ProductCategories locale={locale} dict={dict} categoryImages={categoryImages} />
       <FeaturedProducts locale={locale} dict={dict} />
+      <ShopByBusiness locale={locale} />
+      <WholesaleQuoteCta locale={locale} dict={dict} />
       <TravelSection dict={dict} />
       <HowItWorksSection dict={dict} />
       <StartBusinessSection locale={locale} dict={dict} />
