@@ -39,9 +39,17 @@ export function ProductCategories({
   const rest = CATEGORIES.slice(FEATURED_COUNT);
 
   return (
-    <section id="categories" className="mx-auto max-w-content px-4 py-16 sm:px-6 scroll-mt-20">
-      <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{dict.categoriesSection.title}</h2>
-      <p className="mt-2 max-w-xl text-muted">{dict.categoriesSection.subtitle}</p>
+    <section id="categories" className="mx-auto max-w-content scroll-mt-20 px-4 py-16 sm:px-6">
+      <div className="flex items-end justify-between gap-6 border-b border-border pb-5">
+        <div>
+          <p className="eyebrow text-brand">01 / {dict.categoriesSection.title}</p>
+          <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">{dict.categoriesSection.title}</h2>
+          <p className="mt-2 max-w-xl text-muted">{dict.categoriesSection.subtitle}</p>
+        </div>
+        <span className="hidden shrink-0 rounded-full bg-brand-light px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-brand sm:inline-flex">
+          Wholesale catalog
+        </span>
+      </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {featured.map((category, i) => {
@@ -50,7 +58,7 @@ export function ProductCategories({
             <Link
               key={category.slug}
               href={`${base}/products?category=${category.slug}`}
-              className={cx("group relative flex h-40 items-end overflow-hidden rounded-lg border border-border p-5 transition-all hover:-translate-y-0.5 hover:shadow-lifted sm:h-48", !photoUrl && CATEGORY_TINTS[category.slug])}
+              className={cx("group relative flex h-40 items-end overflow-hidden rounded-lg border border-border p-5 transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted sm:h-48", !photoUrl && CATEGORY_TINTS[category.slug])}
             >
               {photoUrl && (
                 <>
@@ -59,7 +67,7 @@ export function ProductCategories({
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 </>
               )}
-              <span className={cx("absolute left-5 top-4 font-mono text-xs font-bold", photoUrl ? "text-white/80" : "text-ink-soft/60")}>{String(i + 1).padStart(2, "0")}</span>
+              <span className={cx("absolute left-5 top-4 font-mono text-xs font-bold", photoUrl ? "text-white/80" : "text-brand/70")}>{String(i + 1).padStart(2, "0")}</span>
               {!photoUrl && <CategoryIllustration category={category.slug} className={cx("absolute -right-4 -top-4 h-32 w-32 opacity-25 transition-transform group-hover:scale-105 sm:h-40 sm:w-40", CATEGORY_INK[category.slug])} aria-hidden />}
               <span className={cx("relative font-display text-xl font-semibold", photoUrl ? "text-white" : "text-ink")}>{category.name[locale]}</span>
             </Link>
@@ -74,12 +82,12 @@ export function ProductCategories({
             <Link
               key={category.slug}
               href={`${base}/products?category=${category.slug}`}
-              className={cx("group relative flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-border p-4 text-center transition-all hover:-translate-y-0.5 hover:shadow-lifted", CATEGORY_TINTS[category.slug])}
+              className={cx("group relative flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-border p-4 text-center transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted", CATEGORY_TINTS[category.slug])}
             >
-              <span className="absolute left-3 top-3 font-mono text-[10px] font-bold text-ink-soft/60">{String(i + FEATURED_COUNT + 1).padStart(2, "0")}</span>
+              <span className="absolute left-3 top-3 font-mono text-[10px] font-bold text-brand/60">{String(i + FEATURED_COUNT + 1).padStart(2, "0")}</span>
               {photoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={photoUrl} alt="" className="h-14 w-14 rounded-full object-cover" />
+                <img src={photoUrl} alt="" className="h-14 w-14 rounded-full object-cover ring-2 ring-white/70" />
               ) : (
                 <CategoryIllustration category={category.slug} className={cx("h-9 w-9", CATEGORY_INK[category.slug])} />
               )}
