@@ -4,44 +4,16 @@ import { Inter, Fraunces, Space_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-
-// Editorial display serif for headlines, section titles and the wordmark --
-// used via the `display` font-family token, so it cascades to every
-// existing `font-display` class without touching each component.
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-});
-
-// A "manifest" monospace, reserved for data-like content: capacities, SKU
-// specs, quantities and the printable order receipt -- the typographic
-// nod to a trade/shipping document rather than decorative labelling.
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-mono",
-  display: "swap",
-});
+const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap" });
+const spaceMono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Sherinab Venture — Wholesale Plastic Products from Nigeria",
-  description: "Sherinab Venture supplies wholesale plastic products from Nigeria to businesses across West Africa.",
+  title: "Sherinab Venture — Wholesale Plastic Products in Nigeria & Beyond",
+  description: "Sherinab Venture supplies wholesale plastic products to businesses anywhere in Nigeria and to customers beyond Nigeria.",
 };
 
-// Explicit, rather than relying on Next's implicit default -- without this,
-// some mobile browsers have been seen falling back to a ~980px desktop-width
-// layout viewport, which flips every `md:` breakpoint on for phone-width
-// screens (desktop nav, cramped cart drawer, etc.).
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
+export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
-// This is the one root layout Next.js allows to render <html>/<body>.
-// Locale-specific content (nav, footer, per-page metadata) lives in
-// app/[locale]/layout.tsx and below; see components/HtmlLangSync.tsx for
-// how `lang` gets synced once the locale is known.
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${fraunces.variable} ${spaceMono.variable}`}>
