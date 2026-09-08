@@ -10,6 +10,22 @@ import type {
   ColorKey,
 } from "@/lib/products";
 
+const PUBLIC_PRODUCT_IMAGES: Record<string, string> = {
+  "25l-heavy-duty-bucket": "/product-images/25l-heavy-duty-bucket.jpg",
+  "15l-bucket-with-lid": "/product-images/15l-bucket-with-lid.jpg",
+  "10l-mini-bucket": "/product-images/10l-mini-bucket.jpg",
+  "40l-large-basin": "/product-images/40l-large-basin.jpg",
+  "20l-round-basin": "/product-images/20l-round-basin.jpg",
+  "5l-bowl-set": "https://heroplast.com/cdn/shop/files/1-10.jpg?v=1745269009&width=3840",
+  "2l-mixing-bowl": "https://i.ebayimg.com/images/g/alcAAOSwh8xcyVGv/s-l1200.jpg",
+  "50l-storage-container": "https://i.ebayimg.com/images/g/P2YAAOSwIMtmIS0-/s-l1200.jpg",
+  "20l-container-with-handle": "https://www.isplatech.co.kr/data/goods/1/2022/02/132_temp_16456850624286view.jpg",
+  "plastic-laundry-basket": "https://assets.laicms.com/5wbsz6tha7/5ygz23.webp",
+  "dish-rack": "/product-images/dish-rack.jpg",
+  "plastic-stool": "/product-images/plastic-stool.jpg",
+  "stackable-crate": "https://s.alicdn.com/@sc04/kf/H1912f2ed12a94a2995e1d2fdc07a5126H/Heavy-Duty-EuroBox-Mesh-Style-Crate-HDPE-Plastic-Solid-Stackable-Basket-for-Industrial-and-Household-Storage.jpg",
+};
+
 function toCategorySlug(product: CmsProduct): CategorySlug {
   const slug = product.category?.slug;
 
@@ -97,7 +113,7 @@ function adaptProduct(product: CmsProduct): Product {
 
     image: mainImage
       ? buildProductImageUrl(mainImage.storage_path)
-      : undefined,
+      : PUBLIC_PRODUCT_IMAGES[product.slug],
 
     featured: product.is_featured,
   };
