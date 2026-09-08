@@ -32,7 +32,7 @@ const CartUIContext = createContext<CartUIContextValue | undefined>(undefined);
 const FLIGHT_MS = 650;
 const TOAST_MS = 2600;
 // The one moment that gets a color of its own.
-const FLIGHT_COLOR = "#1C4632"; // brand.DEFAULT
+const FLIGHT_COLOR = "#087443"; // brand.DEFAULT
 
 export function CartUIProvider({
   children,
