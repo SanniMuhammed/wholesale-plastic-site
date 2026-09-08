@@ -3,7 +3,7 @@ import { CategoryIllustration } from "@/components/illustrations/CategoryIllustr
 
 const PIECES: { category: "basins" | "buckets" | "bowls"; tint: string; ink: string; wrapperClass: string; fallbackImage?: string }[] = [
   { category: "basins", tint: "bg-clay-light", ink: "text-clay", wrapperClass: "h-40 w-40 sm:h-56 sm:w-56", fallbackImage: "/product-images/40l-large-basin.jpg" },
-  { category: "buckets", tint: "bg-brand-light", ink: "text-brand", wrapperClass: "h-28 w-28 sm:h-36 sm:w-36 -ml-8 -mt-16 sm:-ml-12 sm:-mt-24", fallbackImage: "/product-images/15l-bucket-with-lid.jpg" },
+  { category: "buckets", tint: "bg-brand-light", ink: "text-brand", wrapperClass: "h-28 w-28 sm:h-36 sm:w-36 -ml-8 -mt-24 sm:-ml-12 sm:-mt-24", fallbackImage: "/product-images/15l-bucket-with-lid.jpg" },
   { category: "bowls", tint: "bg-ochre-light", ink: "text-ochre", wrapperClass: "h-20 w-20 sm:h-28 sm:w-28 ml-24 -mt-6 sm:ml-32 sm:-mt-10" },
 ];
 
@@ -20,7 +20,7 @@ export function HeroVisual({ dict, categoryImages, heroImage, mobileHeroImage }:
           <img
             src={desktop ?? ""}
             alt=""
-            className="h-full w-full object-cover object-[62%_center] transition-transform duration-700 motion-safe:animate-[hero-photo-in_900ms_ease-out_both] md:object-[64%_center]"
+            className="h-full w-full object-cover object-[62%_center] transition-transform duration-700 md:object-[64%_center]"
           />
         </picture>
 
