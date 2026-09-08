@@ -27,9 +27,17 @@ export async function FeaturedProducts({
   return (
     <section className="bg-brand-light/40">
       <div className="mx-auto max-w-content px-4 py-16 sm:px-6">
-        <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
-          {dict.featured.title}
-        </h2>
+        <div className="flex items-end justify-between gap-4 border-b border-brand/15 pb-5">
+          <div>
+            <p className="eyebrow text-brand">02 / Featured</p>
+            <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
+              {dict.featured.title}
+            </h2>
+          </div>
+          <span className="hidden font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-muted sm:block">
+            Wholesale selection
+          </span>
+        </div>
 
         <div className="mt-8 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (
