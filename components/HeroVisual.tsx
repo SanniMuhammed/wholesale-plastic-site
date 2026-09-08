@@ -11,17 +11,24 @@ export function HeroVisual({ dict, categoryImages, heroImage, mobileHeroImage }:
   if (heroImage || mobileHeroImage) {
     const desktop = heroImage ?? mobileHeroImage;
     const mobile = mobileHeroImage ?? heroImage;
+
     return (
-      <div className="absolute inset-0 overflow-hidden rounded-none border-0 shadow-none">
-        <picture>
+      <div className="absolute inset-0 overflow-hidden rounded-none border-0 shadow-none" aria-hidden="true">
+        <picture className="block h-full w-full">
           <source media="(max-width: 767px)" srcSet={mobile ?? desktop ?? ""} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={desktop ?? ""} alt="" className="h-full w-full object-cover" />
+          <img
+            src={desktop ?? ""}
+            alt=""
+            className="h-full w-full object-cover object-[62%_center] transition-transform duration-700 motion-safe:animate-[hero-photo-in_900ms_ease-out_both] md:object-[64%_center]"
+          />
         </picture>
-        <div className="absolute inset-0 bg-gradient-to-r from-surface/95 via-surface/65 to-surface/10" />
-        <div className="absolute inset-0 bg-black/5" />
-        <span className="eyebrow absolute bottom-4 right-4 rounded border border-white/40 bg-black/25 px-2 py-1 text-[10px] text-white backdrop-blur-sm">{dict.categories.buckets}, {dict.categories.basins} &amp; {dict.categories.bowls}</span>
-        <span className="sr-only">Wholesale plastic products</span>
+
+        {/* A soft editorial veil preserves the photograph while creating a quiet reading zone for the headline. */}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,245,239,0.96)_0%,rgba(247,245,239,0.82)_32%,rgba(247,245,239,0.42)_55%,rgba(247,245,239,0.08)_78%,rgba(247,245,239,0)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(27,27,23,0.03)_0%,rgba(27,27,23,0)_55%,rgba(27,27,23,0.12)_100%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/10 to-transparent" />
+        <span className="sr-only">Wholesale plastic products in Nigeria</span>
       </div>
     );
   }
