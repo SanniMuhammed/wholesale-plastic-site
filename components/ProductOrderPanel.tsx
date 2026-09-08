@@ -18,11 +18,6 @@ function getPackSize(packaging: string): number | null {
   return match ? Number(match[1]) : null;
 }
 
-function formatPrice(product: Product, locale: Locale): string | null {
-  if ((product.pricingMode !== "fixed" && product.pricingMode !== "starting_from") || product.price == null) return null;
-  return `${product.price.toLocaleString(locale === "fr" ? "fr-FR" : "en-NG", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}${product.priceUnit ? ` ${product.priceUnit}` : ""}`;
-}
-
 export function ProductOrderPanel({ product, locale, dict }: { product: Product; locale: Locale; dict: Dictionary }) {
   const { addItem } = useOrder();
   const { flyToCart, notifyAdded } = useCartUI();
@@ -38,12 +33,7 @@ export function ProductOrderPanel({ product, locale, dict }: { product: Product;
   const quickQuantities = packSize ? [packSize, packSize * 2, packSize * 5, packSize * 10] : [10, 25, 50, 100];
   const destinationCountry = region === "nigeria" ? "Nigeria" : country;
   const destinationCity = region === "nigeria" ? formatNigeriaDestination(state, city) : city;
-  const displayedPrice = formatPrice(product, locale);
-  const hasConfirmedPrice = displayedPrice !== null;
-  const pricingLabel = product.pricingMode === "starting_from" ? (locale === "fr" ? "À partir de" : "Starting from") : locale === "fr" ? "Prix de gros" : "Wholesale price";
-  const pricingDescription = hasConfirmedPrice
-    ? (locale === "fr" ? "Prix affiché à titre indicatif. Le prix final peut dépendre de la quantité et de la destination." : "This is the current listed price. Final pricing may vary by quantity and destination.")
-    : (locale === "fr" ? "Le prix dépend de la quantité et de la destination. Demandez un devis pour obtenir le prix exact." : "Your wholesale price depends on quantity and destination. Request a quote for the exact price.");
+  const hasConfirmedPrice = (product.pricingMode === "fixed" || product.pricingMode === "starting_from") && product.price != null;
 
   function setSafeQuantity(value: number) { setQuantity(Math.max(1, Math.floor(value) || 1)); }
   function handleRegionChange(value: DeliveryRegion | "") { setRegion(value); setState(""); setCountry(value === "nigeria" ? "Nigeria" : ""); setCity(""); }
@@ -54,11 +44,10 @@ export function ProductOrderPanel({ product, locale, dict }: { product: Product;
   return (
     <div className="mt-8 flex flex-col gap-5">
       <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div><p className="eyebrow text-brand">{pricingLabel}</p><h2 className="mt-1 font-display text-lg font-semibold text-ink">{hasConfirmedPrice ? displayedPrice : dict.common.requestPrice}</h2></div>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="font-display text-lg font-semibold text-ink">{locale === "fr" ? "Détails de la commande" : "Order details"}</h2>
           <span className="rounded-full bg-brand-light px-2.5 py-1 font-mono text-[10px] font-medium text-brand">{dict.common.wholesaleOrdersOnly}</span>
         </div>
-        <p className="mt-2 text-sm leading-relaxed text-muted">{pricingDescription}</p>
 
         <div className="mt-5">
           <div className="flex items-center justify-between gap-3"><label className="text-sm font-medium text-ink-soft" htmlFor="product-qty">{dict.common.quantity}</label>{packSize && <span className="font-mono text-[10px] text-muted">{locale === "fr" ? `Carton de ${packSize}` : `Carton of ${packSize}`}</span>}</div>
