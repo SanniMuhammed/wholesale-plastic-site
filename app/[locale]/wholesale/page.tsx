@@ -56,7 +56,7 @@ export default async function WholesalePage({ params }: { params: Promise<{ loca
               {CATEGORIES.map((c, i) => (
                 <li key={c.slug} className="flex items-baseline gap-3 py-2.5 text-sm text-ink-soft">
                   <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</span>
-                  <Link href={`${base}/products?category=${c.slug}`} className="transition-colors hover:text-brand">
+                  <Link href={`${base}/products/category/${c.slug}`} className="transition-colors hover:text-brand">
                     {c.name[locale]}
                   </Link>
                 </li>
