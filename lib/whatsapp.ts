@@ -40,8 +40,8 @@ export interface OrderInquiryParams {
   note?: string;
 }
 
-/** Builds the customer-ready wholesale quotation/request message. */
-export function orderInquiryLink(dict: Dictionary, params: OrderInquiryParams): string {
+/** Builds the human-readable order message shared with WhatsApp and the PDF flow. */
+export function buildOrderMessage(dict: Dictionary, params: OrderInquiryParams): string {
   const isFrench = dict.locale === "fr";
   const labels = isFrench
     ? { name: "Nom", business: "Entreprise", destination: "Destination", country: "Pays", city: "Ville", delivery: "Livraison", order: "Commande", qty: "Qté", note: "Note" }
@@ -59,9 +59,14 @@ export function orderInquiryLink(dict: Dictionary, params: OrderInquiryParams): 
 
   if (params.items.length > 0) {
     lines.push("", `${labels.order}:`);
-    for (const item of params.items) lines.push(`- ${item.name} (${labels.qty}: ${item.quantity})`);
+    for (const item of params.items) lines.push(`- ${item.name} (${labels.qty}: ${item.quantity.toLocaleString()})`);
   }
   if (params.note) lines.push("", `${labels.note}: ${params.note}`);
 
-  return buildWhatsAppLink(lines.join("\n"));
+  return lines.join("\n");
+}
+
+/** Builds the WhatsApp deep link for an order. */
+export function orderInquiryLink(dict: Dictionary, params: OrderInquiryParams): string {
+  return buildWhatsAppLink(buildOrderMessage(dict, params));
 }
