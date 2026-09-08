@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Search, X } from "lucide-react";
+import { Search, X, ArrowRight } from "lucide-react";
 import {
   CATEGORIES,
   type CategorySlug,
@@ -11,7 +11,26 @@ import {
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { ProductCard } from "@/components/ProductCard";
+import { CategoryIllustration } from "@/components/illustrations/CategoryIllustration";
 import { cx } from "@/lib/utils";
+
+const CATEGORY_TINTS: Record<CategorySlug, string> = {
+  buckets: "bg-brand-light",
+  basins: "bg-clay-light",
+  bowls: "bg-ochre-light",
+  containers: "bg-accent-light",
+  household: "bg-brand-light",
+  other: "bg-clay-light",
+};
+
+const CATEGORY_INK: Record<CategorySlug, string> = {
+  buckets: "text-brand",
+  basins: "text-clay",
+  bowls: "text-ochre",
+  containers: "text-accent",
+  household: "text-brand",
+  other: "text-clay",
+};
 
 function isCategorySlug(value: string | null): value is CategorySlug {
   return !!value && CATEGORIES.some((c) => c.slug === value);
@@ -36,7 +55,6 @@ export function CatalogClient({
   );
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
 
-  // Keep the URL in sync so filtered views are shareable/bookmarkable.
   useEffect(() => {
     const params = new URLSearchParams();
     if (category) params.set("category", category);
@@ -46,6 +64,13 @@ export function CatalogClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, query, pathname]);
 
+  const categoryCounts = useMemo(() => {
+    const counts = new Map<CategorySlug, number>();
+    CATEGORIES.forEach((c) => counts.set(c.slug, 0));
+    products.forEach((p) => counts.set(p.category, (counts.get(p.category) ?? 0) + 1));
+    return counts;
+  }, [products]);
+
   const results = useMemo<Product[]>(() => {
     let list = products;
 
@@ -54,7 +79,6 @@ export function CatalogClient({
 
       list = products.filter((p) => {
         const category = CATEGORIES.find((c) => c.slug === p.category);
-
         const haystack = [
           p.name.en,
           p.name.fr,
@@ -62,6 +86,11 @@ export function CatalogClient({
           p.shortDescription.fr,
           p.description.en,
           p.description.fr,
+          p.capacity ?? "",
+          p.material.en,
+          p.material.fr,
+          p.useCase.en,
+          p.useCase.fr,
           category?.name.en ?? "",
           category?.name.fr ?? "",
         ]
@@ -71,13 +100,11 @@ export function CatalogClient({
         return haystack.includes(q);
       });
     }
+
     if (category) list = list.filter((p) => p.category === category);
     return list;
   }, [products, query, category]);
 
-  // A product's catalog number is its fixed position in the full list, not
-  // its position in the current (filtered) results -- so "Nº 07" always
-  // means the same product, whichever filter you're looking through.
   const catalogIndex = useMemo(() => {
     const map = new Map<string, number>();
     products.forEach((p, i) => map.set(p.slug, i + 1));
@@ -85,12 +112,68 @@ export function CatalogClient({
   }, [products]);
 
   const hasFilters = Boolean(category || query);
+  const activeCategory = category ? CATEGORIES.find((c) => c.slug === category) : null;
 
   return (
     <div>
-      <div className="sticky top-16 z-30 -mx-4 border-b border-border bg-background/95 px-4 py-4 backdrop-blur sm:top-[4.5rem] sm:-mx-6 sm:px-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div className="relative flex-1 sm:max-w-sm">
+      {/* Visual category discovery: a lighter version of the deep catalog
+          navigation used by industrial/wholesale catalogs. */}
+      {!hasFilters && (
+        <div className="mb-10">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow">{dict.nav.categories}</p>
+              <h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">
+                {dict.categoriesSection.title}
+              </h2>
+            </div>
+            <span className="hidden font-mono text-xs text-muted sm:block">
+              {String(products.length).padStart(2, "0")} {dict.common.items}
+            </span>
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {CATEGORIES.map((c) => {
+              const count = categoryCounts.get(c.slug) ?? 0;
+              return (
+                <button
+                  key={c.slug}
+                  type="button"
+                  onClick={() => setCategory(c.slug)}
+                  className={cx(
+                    "group relative flex min-h-32 flex-col justify-between overflow-hidden rounded-lg border border-border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-lifted",
+                    CATEGORY_TINTS[c.slug]
+                  )}
+                >
+                  <span className="font-mono text-[10px] font-bold text-ink-soft/60">
+                    {String(count).padStart(2, "0")}
+                  </span>
+                  <CategoryIllustration
+                    category={c.slug}
+                    className={cx(
+                      "absolute -right-4 top-3 h-20 w-20 opacity-20 transition-transform duration-300 group-hover:scale-110",
+                      CATEGORY_INK[c.slug]
+                    )}
+                    aria-hidden
+                  />
+                  <span className="relative max-w-[9rem] pr-3 text-sm font-semibold leading-tight text-ink">
+                    {c.name[locale]}
+                  </span>
+                  <ArrowRight
+                    size={14}
+                    className="absolute bottom-4 right-4 text-ink-soft transition-transform group-hover:translate-x-1"
+                    aria-hidden
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div className="sticky top-16 z-30 -mx-4 border-y border-border bg-background/95 px-4 py-4 backdrop-blur sm:top-[4.5rem] sm:-mx-6 sm:px-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="relative flex-1 sm:max-w-lg">
             <Search
               size={16}
               strokeWidth={1.75}
@@ -112,7 +195,7 @@ export function CatalogClient({
                 setCategory(null);
                 setQuery("");
               }}
-              className="inline-flex items-center gap-1 text-sm font-medium text-muted hover:text-ink"
+              className="inline-flex items-center gap-1.5 self-start text-sm font-medium text-muted hover:text-ink sm:self-auto"
             >
               <X size={14} />
               {dict.common.clearFilters}
@@ -120,13 +203,13 @@ export function CatalogClient({
           )}
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-none">
           <button
             type="button"
             onClick={() => setCategory(null)}
             className={cx(
-              "rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
-              category === null ? "border-ink bg-ink text-surface" : "border-border text-ink-soft hover:border-ink"
+              "shrink-0 rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
+              category === null ? "border-ink bg-ink text-surface" : "border-border bg-surface text-ink-soft hover:border-ink"
             )}
           >
             {dict.common.all}
@@ -137,8 +220,8 @@ export function CatalogClient({
               type="button"
               onClick={() => setCategory(c.slug)}
               className={cx(
-                "rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
-                category === c.slug ? "border-ink bg-ink text-surface" : "border-border text-ink-soft hover:border-ink"
+                "shrink-0 rounded border px-3 py-1.5 text-sm font-medium transition-all active:scale-95",
+                category === c.slug ? "border-ink bg-ink text-surface" : "border-border bg-surface text-ink-soft hover:border-ink"
               )}
             >
               {c.name[locale]}
@@ -147,12 +230,44 @@ export function CatalogClient({
         </div>
       </div>
 
-      <p className="mt-6 font-mono text-sm text-muted">{String(results.length).padStart(2, "0")}</p>
+      <div className="mt-6 flex flex-wrap items-baseline justify-between gap-2">
+        <div>
+          <p className="font-display text-lg font-semibold text-ink">
+            {activeCategory ? activeCategory.name[locale] : dict.nav.products}
+          </p>
+          {activeCategory && (
+            <p className="mt-0.5 text-sm text-muted">
+              {String(results.length).padStart(2, "0")} {dict.common.items}
+            </p>
+          )}
+        </div>
+        {!activeCategory && (
+          <p className="font-mono text-sm text-muted">
+            {String(results.length).padStart(2, "0")} {dict.common.items}
+          </p>
+        )}
+      </div>
 
       {results.length === 0 ? (
-        <p className="mt-4 text-muted">{dict.common.noResults}</p>
+        <div className="mt-6 rounded-lg border border-dashed border-border bg-surface p-8 text-center">
+          <p className="font-medium text-ink">{dict.common.noResults}</p>
+          <p className="mx-auto mt-2 max-w-md text-sm text-muted">
+            {dict.categoriesSection.subtitle}
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setCategory(null);
+              setQuery("");
+            }}
+            className="mt-5 inline-flex items-center gap-2 rounded bg-ink px-4 py-2 text-sm font-medium text-surface"
+          >
+            {dict.common.clearFilters}
+            <ArrowRight size={14} />
+          </button>
+        </div>
       ) : (
-        <div className="mt-4 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
           {results.map((product) => (
             <ProductCard
               key={product.slug}
