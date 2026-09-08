@@ -44,6 +44,7 @@ export default async function ProductDetailPage({
   const relatedProducts = allProducts
     .filter((p) => p.category === product.category && p.slug !== product.slug)
     .slice(0, 4);
+  const catalogHref = `${base}/products?category=${product.category}`;
 
   return (
     <div className="mx-auto max-w-content px-4 py-8 sm:px-6 sm:py-12">
@@ -135,7 +136,7 @@ export default async function ProductDetailPage({
                 {locale === "fr" ? "Produits similaires" : "You may also need"}
               </h2>
             </div>
-            <Link href={`${base}/products/category/${product.category}`} className="hidden text-sm font-medium text-brand hover:text-brand-dark sm:inline-flex">
+            <Link href={catalogHref} className="hidden text-sm font-medium text-brand hover:text-brand-dark sm:inline-flex">
               {dict.common.exploreProducts} →
             </Link>
           </div>
@@ -146,7 +147,7 @@ export default async function ProductDetailPage({
             ))}
           </div>
 
-          <Link href={`${base}/products/category/${product.category}`} className="mt-5 inline-flex text-sm font-medium text-brand sm:hidden">
+          <Link href={catalogHref} className="mt-5 inline-flex text-sm font-medium text-brand sm:hidden">
             {dict.common.exploreProducts} →
           </Link>
         </section>
