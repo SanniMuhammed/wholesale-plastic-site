@@ -6,15 +6,19 @@ export function ProductReviews({ reviews, productId, locale }: { reviews: Produc
   const title = locale === "fr" ? "Avis clients" : "Customer reviews";
   const subtitle = locale === "fr" ? "Ce que les clients disent de ce produit." : "What customers say about this product.";
   const sampleLabel = locale === "fr" ? "Avis de démonstration" : "Sample review";
+  const writeLabel = locale === "fr" ? "Écrire un avis" : "Write a review";
 
   return (
     <section className="mt-16 border-t border-border pt-12 sm:mt-20 sm:pt-16" aria-labelledby="product-reviews-title">
-      <div className="flex items-end justify-between gap-6">
+      <div className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
         <div>
           {reviews.length > 0 && <p className="eyebrow text-brand">{reviews.length} {locale === "fr" ? "avis" : "reviews"}</p>}
           <h2 id="product-reviews-title" className="mt-2 font-display text-3xl font-semibold tracking-tight text-ink">{title}</h2>
           <p className="mt-2 text-sm text-muted">{subtitle}</p>
         </div>
+        <a href="#write-review" className="inline-flex min-h-10 items-center justify-center rounded-xl border border-brand px-4 py-2 text-sm font-semibold text-brand transition hover:bg-brand-light">
+          {writeLabel} ↓
+        </a>
       </div>
 
       {reviews.length > 0 && (
@@ -54,7 +58,9 @@ export function ProductReviews({ reviews, productId, locale }: { reviews: Produc
         </div>
       )}
 
-      <ProductReviewForm productId={productId} locale={locale} />
+      <div id="write-review" className="scroll-mt-24">
+        <ProductReviewForm productId={productId} locale={locale} />
+      </div>
     </section>
   );
 }
