@@ -16,12 +16,22 @@ export function ProductCard({
 }) {
   const base = `/${locale}`;
   const href = `${base}/products/${product.slug}`;
-  const hasPrice = (product.pricingMode === "fixed" || product.pricingMode === "starting_from") && product.price != null;
-  const priceLabel = product.pricingMode === "starting_from"
-    ? (locale === "fr" ? "À partir de" : "Starting from")
-    : (locale === "fr" ? "Prix" : "Price");
+  const hasPrice =
+    (product.pricingMode === "fixed" || product.pricingMode === "starting_from") &&
+    product.price != null;
+  const priceLabel =
+    product.pricingMode === "starting_from"
+      ? locale === "fr"
+        ? "À partir de"
+        : "Starting from"
+      : locale === "fr"
+        ? "Prix"
+        : "Price";
   const price = hasPrice
-    ? `₦${product.price!.toLocaleString(locale === "fr" ? "fr-FR" : "en-NG", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`
+    ? `₦${product.price!.toLocaleString(locale === "fr" ? "fr-FR" : "en-NG", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })}`
     : null;
 
   return (
@@ -30,12 +40,14 @@ export function ProductCard({
         <ProductImage
           product={product}
           locale={locale}
-          className="rounded-none rounded-t-lg transition-transform duration-300 ease-out group-hover:scale-[1.02]"
+          className="rounded-none rounded-t-lg"
         />
       </Link>
 
       <div className="flex flex-1 flex-col p-4">
-        <p className="eyebrow min-h-[1.1rem] text-brand/70">{dict.categories[product.category]}</p>
+        <p className="eyebrow min-h-[1.1rem] text-brand/70">
+          {dict.categories[product.category]}
+        </p>
 
         <Link
           href={href}
@@ -44,38 +56,39 @@ export function ProductCard({
           {product.name[locale]}
         </Link>
 
-        <p className="mt-2 line-clamp-2 min-h-[2.5rem] text-xs leading-relaxed text-muted">
-          {product.shortDescription[locale]}
-        </p>
-
-        <div className="mt-3 flex min-h-[2.25rem] flex-wrap content-start items-start gap-x-3 gap-y-1 font-mono text-[10px] leading-4 text-muted">
-          {product.capacity && <span>{product.capacity}</span>}
-          <span>{product.packaging[locale]}</span>
-        </div>
-
-        <div className="mt-3 min-h-[3rem] border-t border-border/70 pt-3">
-          {price ? (
-            <>
-              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">{priceLabel}</p>
-              <p className="mt-0.5 font-display text-lg font-semibold leading-tight text-ink">
-                {price}
-                {product.priceUnit && <span className="ml-1 text-[10px] font-sans font-medium text-muted">{product.priceUnit}</span>}
+        <div className="mt-auto border-t border-border/70 pt-3">
+          <div className="min-h-[3.25rem]">
+            {price ? (
+              <>
+                <p className="text-[10px] font-medium uppercase tracking-wider text-muted">
+                  {priceLabel}
+                </p>
+                <p className="mt-0.5 font-display text-lg font-semibold leading-tight text-ink">
+                  {price}
+                  {product.priceUnit && (
+                    <span className="ml-1 text-[10px] font-sans font-medium text-muted">
+                      {product.priceUnit}
+                    </span>
+                  )}
+                </p>
+              </>
+            ) : (
+              <p className="pt-1 font-medium leading-4 text-ink">
+                {locale === "fr"
+                  ? "Prix de gros sur demande"
+                  : "Wholesale price on request"}
               </p>
-            </>
-          ) : (
-            <p className="pt-1 font-medium leading-4 text-ink">
-              {locale === "fr" ? "Prix de gros sur demande" : "Wholesale price on request"}
-            </p>
-          )}
-        </div>
+            )}
+          </div>
 
-        <div className="mt-auto pt-3">
-          <AddToOrderButton
-            slug={product.slug}
-            productName={product.name[locale]}
-            dict={dict}
-            fullWidth
-          />
+          <div className="pt-3">
+            <AddToOrderButton
+              slug={product.slug}
+              productName={product.name[locale]}
+              dict={dict}
+              fullWidth
+            />
+          </div>
         </div>
       </div>
     </article>
