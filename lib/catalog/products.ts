@@ -1,9 +1,14 @@
-import {
-  listProducts as listCmsProducts,
-} from "@/lib/cms/products";
+import { listProducts as listCmsProducts } from "@/lib/cms/products";
 import { buildProductImageUrl } from "@/lib/cms/productImages";
 import type { Product as CmsProduct } from "@/lib/cms/types";
 import type { Product, CategorySlug, ColorKey } from "@/lib/products";
+
+export type CatalogProduct = Product & {
+  pricingMode?: "fixed" | "starting_from" | "quote";
+  price?: number;
+  priceUnit?: string;
+  images: string[];
+};
 
 const PUBLIC_PRODUCT_IMAGES: Record<string, string> = {
   "25l-heavy-duty-bucket": "/product-images/25l-heavy-duty-bucket.jpg",
@@ -23,35 +28,29 @@ const PUBLIC_PRODUCT_IMAGES: Record<string, string> = {
 
 function toCategorySlug(product: CmsProduct): CategorySlug {
   switch (product.category?.slug) {
-    case "buckets": case "basins": case "bowls": case "containers": case "household": case "other":
-      return product.category.slug;
+    case "buckets": case "basins": case "bowls": case "containers": case "household": case "other": return product.category.slug;
     default: return "other";
   }
 }
-
 function toColorKey(slug: string): ColorKey | null {
   switch (slug) {
-    case "red": case "blue": case "green": case "yellow": case "white": case "black": case "orange": case "gray": case "assorted":
-      return slug;
+    case "red": case "blue": case "green": case "yellow": case "white": case "black": case "orange": case "gray": case "assorted": return slug;
     default: return null;
   }
 }
 
-function adaptProduct(product: CmsProduct): Product {
+function adaptProduct(product: CmsProduct): CatalogProduct {
   const category = toCategorySlug(product);
   const colors = (product.colors ?? []).map((color) => toColorKey(color.slug)).filter((color): color is ColorKey => color !== null);
   const images = (product.images ?? []).map((image) => buildProductImageUrl(image.storage_path));
   const mainImage = product.images?.find((image) => image.is_main) ?? product.images?.[0];
   const fallbackImage = PUBLIC_PRODUCT_IMAGES[product.slug];
-
   return {
-    slug: product.slug,
-    category,
+    slug: product.slug, category,
     name: { en: product.name_en, fr: product.name_fr },
     shortDescription: { en: product.short_description_en, fr: product.short_description_fr },
     description: { en: product.description_en, fr: product.description_fr },
-    capacity: product.capacity ?? undefined,
-    colors,
+    capacity: product.capacity ?? undefined, colors,
     material: { en: product.material_en, fr: product.material_fr },
     packaging: { en: product.packaging_en, fr: product.packaging_fr },
     useCase: { en: product.use_case_en, fr: product.use_case_fr },
@@ -65,30 +64,18 @@ function adaptProduct(product: CmsProduct): Product {
   };
 }
 
-export async function getAllProducts(): Promise<Product[]> {
+export async function getAllProducts(): Promise<CatalogProduct[]> {
   const products = await listCmsProducts({ status: "published" });
   return products.map(adaptProduct);
 }
-
-export async function getProductBySlug(slug: string): Promise<Product | undefined> {
+export async function getProductBySlug(slug: string): Promise<CatalogProduct | undefined> {
   const products = await listCmsProducts({ status: "published" });
   const product = products.find((item) => item.slug === slug);
   return product ? adaptProduct(product) : undefined;
 }
-
-export async function getFeaturedProducts(): Promise<Product[]> {
-  return (await getAllProducts()).filter((product) => product.featured);
-}
-
-export async function getProductsByCategory(category: CategorySlug): Promise<Product[]> {
-  return (await getAllProducts()).filter((product) => product.category === category);
-}
-
+export async function getFeaturedProducts(): Promise<CatalogProduct[]> { return (await getAllProducts()).filter((product) => product.featured); }
+export async function getProductsByCategory(category: CategorySlug): Promise<CatalogProduct[]> { return (await getAllProducts()).filter((product) => product.category === category); }
 export function searchProducts(products: Product[], query: string): Product[] {
-  const q = query.trim().toLowerCase();
-  if (!q) return products;
-  return products.filter((product) => [
-    product.name.en, product.name.fr, product.shortDescription.en, product.shortDescription.fr,
-    product.description.en, product.description.fr, product.category, ...product.colors,
-  ].join(" ").toLowerCase().includes(q));
+  const q = query.trim().toLowerCase(); if (!q) return products;
+  return products.filter((product) => [product.name.en, product.name.fr, product.shortDescription.en, product.shortDescription.fr, product.description.en, product.description.fr, product.category, ...product.colors].join(" ").toLowerCase().includes(q));
 }
