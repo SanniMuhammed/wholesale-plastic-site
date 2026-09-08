@@ -28,14 +28,12 @@ export function Nav({ locale, dict }: NavProps) {
 
   const desktopLinks = [
     { href: `${base}/products`, label: dict.nav.products },
-    { href: `${base}/how-it-works`, label: dict.nav.howItWorks },
     { href: `${base}/about`, label: dict.nav.about },
     { href: `${base}/contact`, label: dict.nav.contact },
   ];
 
   const mobileLinks = [
     { href: `${base}/products`, label: dict.nav.products },
-    { href: `${base}/how-it-works`, label: dict.nav.howItWorks },
     { href: `${base}/about`, label: dict.nav.about },
     { href: `${base}/contact`, label: dict.nav.contact },
   ];
