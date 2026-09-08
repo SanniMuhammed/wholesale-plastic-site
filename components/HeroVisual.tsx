@@ -24,10 +24,10 @@ export function HeroVisual({ dict, categoryImages, heroImage, mobileHeroImage }:
           />
         </picture>
 
-        {/* A soft editorial veil preserves the photograph while creating a quiet reading zone for the headline. */}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,245,239,0.96)_0%,rgba(247,245,239,0.82)_32%,rgba(247,245,239,0.42)_55%,rgba(247,245,239,0.08)_78%,rgba(247,245,239,0)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(27,27,23,0.03)_0%,rgba(27,27,23,0)_55%,rgba(27,27,23,0.12)_100%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/10 to-transparent" />
+        {/* Keep the product photography vivid while creating a controlled reading zone on the left. */}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,245,239,0.93)_0%,rgba(247,245,239,0.78)_28%,rgba(247,245,239,0.38)_52%,rgba(247,245,239,0.08)_74%,rgba(247,245,239,0)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(27,27,23,0.02)_0%,rgba(27,27,23,0)_58%,rgba(27,27,23,0.16)_100%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/10 to-transparent" />
         <span className="sr-only">Wholesale plastic products in Nigeria</span>
       </div>
     );
