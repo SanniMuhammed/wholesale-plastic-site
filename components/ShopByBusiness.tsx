@@ -60,7 +60,7 @@ export function ShopByBusiness({ locale }: { locale: Locale }) {
             return (
               <Link
                 key={text.title}
-                href={`/${locale}/products/category/${item.category}`}
+                href={`/${locale}/products?category=${item.category}`}
                 className="group rounded-lg border border-border bg-surface p-5 transition-all hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-lifted"
               >
                 <div className="flex items-start justify-between gap-4">
