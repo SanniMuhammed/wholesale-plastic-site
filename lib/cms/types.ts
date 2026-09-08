@@ -20,6 +20,7 @@ export interface Color {
 
 export type AvailabilityStatus = "in_stock" | "limited" | "out_of_stock";
 export type ProductStatus = "draft" | "published";
+export type PricingMode = "fixed" | "starting_from" | "quote";
 
 export interface ProductImage {
   id: string;
@@ -27,6 +28,22 @@ export interface ProductImage {
   storage_path: string;
   sort_order: number;
   is_main: boolean;
+}
+
+export interface ProductReview {
+  id: string;
+  product_id: string;
+  customer_name: string;
+  business_name: string | null;
+  location: string | null;
+  rating: number;
+  review_en: string;
+  review_fr: string;
+  customer_photo_path: string | null;
+  is_published: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Product {
@@ -48,6 +65,9 @@ export interface Product {
   use_case_fr: string;
   wholesale_only: boolean;
   availability_status: AvailabilityStatus;
+  pricing_mode: PricingMode;
+  price: number | null;
+  price_unit: string | null;
   is_featured: boolean;
   status: ProductStatus;
   sort_order: number;
@@ -57,9 +77,10 @@ export interface Product {
   category?: Category | null;
   images?: ProductImage[];
   colors?: Color[];
+  reviews?: ProductReview[];
 }
 
-export type ProductInput = Omit<Product, "id" | "created_at" | "updated_at" | "category" | "images" | "colors">;
+export type ProductInput = Omit<Product, "id" | "created_at" | "updated_at" | "category" | "images" | "colors" | "reviews">;
 
 export interface Faq {
   id: string;
