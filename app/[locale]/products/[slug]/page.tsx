@@ -42,6 +42,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const plateNumber = allProducts.findIndex((p) => p.slug === product.slug) + 1;
   const relatedProducts = allProducts.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
   const catalogHref = `${base}/products?category=${product.category}`;
+  const hasConfirmedPrice = (product.pricingMode === "fixed" || product.pricingMode === "starting_from") && product.price != null;
   return (
     <div className="mx-auto max-w-content px-4 py-8 sm:px-6 sm:py-12">
       <Link href={`${base}/products`} className="inline-flex text-sm text-muted transition-colors hover:text-ink">← {dict.common.backToProducts}</Link>
@@ -54,7 +55,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           {product.colors.length > 0 && <div className="mt-7"><p className="text-sm font-medium text-ink-soft">{dict.common.availableColors}</p><div className="mt-2 flex flex-wrap gap-2">{product.colors.map((color) => <span key={color} className="rounded-full border border-border px-3 py-1.5 font-mono text-xs text-ink-soft">{dict.colors[color]}</span>)}</div></div>}
           <div className="mt-8"><div className="flex items-end justify-between gap-4"><h2 className="font-display text-xl font-semibold text-ink">{dict.common.productDetails}</h2><span className="font-mono text-[10px] uppercase tracking-wider text-muted">Wholesale spec</span></div><dl className="mt-3 overflow-hidden rounded-xl border border-border"><div className="rule-row px-4"><dt className="text-sm text-muted">{dict.common.capacity}</dt><dd className="font-mono text-sm font-medium text-ink">{product.capacity || "—"}</dd></div><div className="rule-row px-4"><dt className="text-sm text-muted">{dict.common.material}</dt><dd className="max-w-[60%] text-right font-mono text-sm font-medium text-ink">{product.material[locale]}</dd></div><div className="rule-row px-4"><dt className="text-sm text-muted">{dict.common.packaging}</dt><dd className="max-w-[60%] text-right font-mono text-sm font-medium text-ink">{product.packaging[locale]}</dd></div><div className="rule-row px-4"><dt className="text-sm text-muted">{dict.common.useCase}</dt><dd className="max-w-[60%] text-right font-mono text-sm font-medium text-ink">{product.useCase[locale]}</dd></div></dl></div>
           <div className="mt-7"><PriceBlock product={product} locale={locale} /></div>
-          <ProductOrderPanel product={product} locale={locale} dict={dict} />
+          <ProductOrderPanel product={product} locale={locale} dict={dict} hasConfirmedPrice={hasConfirmedPrice} />
         </div>
       </div>
       <ProductReviews reviews={reviews} locale={locale} />
