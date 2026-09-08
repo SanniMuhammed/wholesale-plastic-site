@@ -5,8 +5,7 @@ import { cx } from "@/lib/utils";
 import { CategoryIllustration } from "@/components/illustrations/CategoryIllustration";
 
 // Each category gets one consistent tint -- not an alternating pattern --
-// so color carries meaning (this is what a bucket page looks like) instead
-// of just breaking up a grid visually.
+// so color carries meaning instead of just breaking up a grid visually.
 const CATEGORY_TINTS: Record<CategorySlug, string> = {
   buckets: "bg-brand-light",
   basins: "bg-clay-light",
@@ -45,22 +44,20 @@ interface ProductImageProps {
 }
 
 /**
- * Renders the real product photo when `product.image` is set. Until real
- * photography exists, shows a category-specific line illustration on a
- * consistent category tint, with the product's actual available colors
- * shown as a small swatch strip -- a deliberate illustrated-catalog style
- * rather than a generic "no image" placeholder.
+ * Every product gets the same square image frame. Real photography is shown
+ * without cropping so products with different source-image proportions still
+ * sit in a consistent catalog grid.
  */
 export function ProductImage({ product, locale, className, sizes }: ProductImageProps) {
   if (product.image) {
     return (
-      <div className={cx("relative aspect-square overflow-hidden rounded-lg", className)}>
+      <div className={cx("relative aspect-square overflow-hidden rounded-lg bg-white", className)}>
         <Image
           src={product.image}
           alt={product.name[locale]}
           fill
           sizes={sizes || "(min-width: 768px) 25vw, 50vw"}
-          className="object-cover"
+          className="object-contain p-2 transition-transform duration-300 ease-out group-hover:scale-[1.02]"
         />
       </div>
     );
@@ -76,7 +73,6 @@ export function ProductImage({ product, locale, className, sizes }: ProductImage
         className
       )}
     >
-      {/* Faint oversized watermark echo of the shape for depth, behind the main illustration */}
       <CategoryIllustration
         category={product.category}
         className={cx("absolute h-[140%] w-[140%] opacity-[0.06]", CATEGORY_INK[product.category])}
