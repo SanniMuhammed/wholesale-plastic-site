@@ -8,13 +8,14 @@ function getSiteUrl(): string | undefined {
 
 export default function robots(): MetadataRoute.Robots {
   const siteUrl = getSiteUrl();
+  const base = siteUrl?.replace(/\/$/, "");
 
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin/", "/api/", "/*?q=", "/*?search="],
+      disallow: ["/admin/", "/api/"],
     },
-    ...(siteUrl ? { sitemap: `${siteUrl.replace(/\/$/, "")}/sitemap.xml" } : {}),
+    ...(base ? { sitemap: `${base}/sitemap.xml` } : {}),
   };
 }
