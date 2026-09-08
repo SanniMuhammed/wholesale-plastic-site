@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CATEGORIES, type CategorySlug } from "@/lib/products";
 import type { Locale } from "@/lib/i18n/config";
@@ -25,15 +26,7 @@ const CATEGORY_INK: Record<CategorySlug, string> = {
 
 const FEATURED_COUNT = 2;
 
-export function ProductCategories({
-  locale,
-  dict,
-  categoryImages,
-}: {
-  locale: Locale;
-  dict: Dictionary;
-  categoryImages?: Record<string, string>;
-}) {
+export function ProductCategories({ locale, dict, categoryImages }: { locale: Locale; dict: Dictionary; categoryImages?: Record<string, string> }) {
   const base = `/${locale}`;
   const featured = CATEGORIES.slice(0, FEATURED_COUNT);
   const rest = CATEGORIES.slice(FEATURED_COUNT);
@@ -46,24 +39,17 @@ export function ProductCategories({
           <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">{dict.categoriesSection.title}</h2>
           <p className="mt-2 max-w-xl text-muted">{dict.categoriesSection.subtitle}</p>
         </div>
-        <span className="hidden shrink-0 rounded-full bg-brand-light px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-brand sm:inline-flex">
-          Wholesale catalog
-        </span>
+        <span className="hidden shrink-0 rounded-full bg-brand-light px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-brand sm:inline-flex">Wholesale catalog</span>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {featured.map((category, i) => {
           const photoUrl = categoryImages?.[category.slug];
           return (
-            <Link
-              key={category.slug}
-              href={`${base}/products?category=${category.slug}`}
-              className={cx("group relative flex h-40 items-end overflow-hidden rounded-lg border border-border p-5 transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted sm:h-48", !photoUrl && CATEGORY_TINTS[category.slug])}
-            >
+            <Link key={category.slug} href={`${base}/products?category=${category.slug}`} className={cx("group relative flex h-40 items-end overflow-hidden rounded-lg border border-border p-5 transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted sm:h-48", !photoUrl && CATEGORY_TINTS[category.slug])}>
               {photoUrl && (
                 <>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={photoUrl} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                  <Image src={photoUrl} alt="" fill sizes="(min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 </>
               )}
@@ -79,18 +65,9 @@ export function ProductCategories({
         {rest.map((category, i) => {
           const photoUrl = categoryImages?.[category.slug];
           return (
-            <Link
-              key={category.slug}
-              href={`${base}/products?category=${category.slug}`}
-              className={cx("group relative flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-border p-4 text-center transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted", CATEGORY_TINTS[category.slug])}
-            >
+            <Link key={category.slug} href={`${base}/products?category=${category.slug}`} className={cx("group relative flex aspect-square flex-col items-center justify-center gap-2 rounded-lg border border-border p-4 text-center transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted", CATEGORY_TINTS[category.slug])}>
               <span className="absolute left-3 top-3 font-mono text-[10px] font-bold text-brand/60">{String(i + FEATURED_COUNT + 1).padStart(2, "0")}</span>
-              {photoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={photoUrl} alt="" className="h-14 w-14 rounded-full object-cover ring-2 ring-white/70" />
-              ) : (
-                <CategoryIllustration category={category.slug} className={cx("h-9 w-9", CATEGORY_INK[category.slug])} />
-              )}
+              {photoUrl ? <Image src={photoUrl} alt="" width={56} height={56} sizes="56px" className="h-14 w-14 rounded-full object-cover ring-2 ring-white/70" /> : <CategoryIllustration category={category.slug} className={cx("h-9 w-9", CATEGORY_INK[category.slug])} />}
               <span className="text-sm font-medium text-ink">{category.name[locale]}</span>
             </Link>
           );
