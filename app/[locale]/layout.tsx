@@ -11,6 +11,12 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { getAllProducts } from "@/lib/catalog/products";
 
+function getSiteUrl(): string | undefined {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (!configured) return undefined;
+  return configured.startsWith("http") ? configured : `https://${configured}`;
+}
+
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
@@ -19,9 +25,26 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) return {};
   const dict = getDictionary(rawLocale);
+  const siteUrl = getSiteUrl();
+
   return {
+    metadataBase: siteUrl ? new URL(siteUrl) : undefined,
     title: { default: dict.meta.home.title, template: `%s | ${dict.meta.home.title}` },
     description: dict.meta.home.description,
+    alternates: {
+      canonical: `/${rawLocale}`,
+      languages: {
+        en: "/en",
+        fr: "/fr",
+      },
+    },
+    openGraph: {
+      title: dict.meta.home.title,
+      description: dict.meta.home.description,
+      type: "website",
+      locale: rawLocale === "fr" ? "fr_FR" : "en_NG",
+      alternateLocale: rawLocale === "fr" ? ["en_NG"] : ["fr_FR"],
+    },
   };
 }
 
