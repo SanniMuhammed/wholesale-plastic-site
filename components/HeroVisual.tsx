@@ -15,17 +15,18 @@ export function HeroVisual({ dict, categoryImages, heroImage, mobileHeroImage }:
     return (
       <div className="absolute inset-0 overflow-hidden rounded-none border-0 shadow-none" aria-hidden="true">
         <picture className="block h-full w-full">
-          <source media="(max-width: 767px)" srcSet={mobile ?? desktop ?? ""} />
+          <source media="(max-width: 639px)" srcSet={mobile ?? desktop ?? ""} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={desktop ?? ""}
             alt=""
-            className="h-full w-full object-cover object-[62%_center] transition-transform duration-700 md:object-[64%_center]"
+            className="h-full w-full object-cover object-[68%_center] transition-transform duration-700 min-[640px]:object-[68%_center]"
           />
         </picture>
 
-        {/* Keep the product photography vivid while creating a controlled reading zone on the left. */}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,245,239,0.93)_0%,rgba(247,245,239,0.78)_28%,rgba(247,245,239,0.38)_52%,rgba(247,245,239,0.08)_74%,rgba(247,245,239,0)_100%)]" />
+        {/* A soft editorial reading zone keeps the headline crisp without flattening the product photography. */}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,245,239,0.96)_0%,rgba(247,245,239,0.86)_30%,rgba(247,245,239,0.48)_52%,rgba(247,245,239,0.12)_72%,rgba(247,245,239,0)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_48%,rgba(247,245,239,0.22)_0%,rgba(247,245,239,0)_54%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(27,27,23,0.02)_0%,rgba(27,27,23,0)_58%,rgba(27,27,23,0.16)_100%)]" />
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/10 to-transparent" />
         <span className="sr-only">Wholesale plastic products in Nigeria</span>
