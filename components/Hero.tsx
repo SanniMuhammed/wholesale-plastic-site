@@ -29,19 +29,25 @@ export function Hero({ locale, dict, categoryImages, heroImage, mobileHeroImage 
           hasHeroImage ? "min-h-[460px] sm:min-h-[490px] md:min-h-[510px] lg:min-h-[540px]" : ""
         }`}
       >
-        <div className={`${hasHeroImage ? "w-full md:w-[68%] lg:w-[64%] xl:w-[62%]" : "w-full md:max-w-2xl"}`}>
+        <div
+          className={`${
+            hasHeroImage
+              ? "w-full sm:w-[76%] md:w-[68%] lg:w-[64%] xl:w-[62%]"
+              : "w-full md:max-w-2xl"
+          }`}
+        >
           <div className="animate-settle-up">
             <p className="eyebrow inline-flex max-w-full -rotate-1 items-center rounded border border-border/80 bg-surface/80 px-3 py-1.5 backdrop-blur-md">
               {dict.hero.supporting}
             </p>
 
             <h1
-              className="mt-5 max-w-[22ch] font-display text-[clamp(2.65rem,7.6vw,4.75rem)] font-semibold leading-[0.94] tracking-[-0.04em] text-ink [text-wrap:balance] sm:mt-6 sm:text-6xl lg:text-[4.75rem]"
+              className="mt-5 max-w-[22ch] font-display text-[clamp(2.65rem,7.6vw,4.75rem)] font-semibold leading-[0.94] tracking-[-0.04em] text-ink [text-wrap:balance] sm:mt-6 sm:max-w-[24ch] sm:text-[clamp(3rem,6.8vw,5.25rem)] sm:leading-[0.91] lg:text-[4.75rem]"
             >
               {dict.hero.title}
             </h1>
 
-            <p className="mt-6 max-w-[30rem] rounded-md border border-white/40 bg-surface/78 px-3 py-2 text-[0.96rem] leading-[1.45] text-ink-soft shadow-sm backdrop-blur-md sm:text-base">
+            <p className="mt-6 max-w-[30rem] rounded-md border border-white/40 bg-surface/78 px-3 py-2 text-[0.96rem] leading-[1.45] text-ink-soft shadow-sm backdrop-blur-md sm:max-w-[32rem] sm:text-base">
               {dict.hero.subtitle}
             </p>
 
