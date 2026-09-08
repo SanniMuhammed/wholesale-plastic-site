@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { MessageCircle, Mail, Phone, MapPin, Globe2 } from "lucide-react";
+import { MessageCircle, Mail, Phone, MapPin, Globe2, Clock3 } from "lucide-react";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
 import { getCompanySettings } from "@/lib/cms/settings";
@@ -20,6 +20,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const cp = dict.contactPage;
   const settings = await getCompanySettings();
   const whatsappHref = generalInquiryLink(dict);
+  const businessHours = locale === "fr" ? settings.business_hours_fr || settings.business_hours_en : settings.business_hours_en || settings.business_hours_fr;
 
   return (
     <div className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-16">
@@ -29,13 +30,11 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.7fr)]">
         <div className="divide-y divide-border border-y border-border">
-          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 py-5 transition-colors hover:text-brand">
-            <MessageCircle size={18} strokeWidth={1.75} className="shrink-0 text-brand" />
-            <div><p className="text-xs text-muted">{cp.whatsappLabel}</p><p className="text-sm font-medium text-ink">{settings.whatsapp_number || dict.nav.whatsapp}</p></div>
-          </a>
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 py-5 transition-colors hover:text-brand"><MessageCircle size={18} strokeWidth={1.75} className="shrink-0 text-brand" /><div><p className="text-xs text-muted">{cp.whatsappLabel}</p><p className="text-sm font-medium text-ink">{settings.whatsapp_number || dict.nav.whatsapp}</p></div></a>
           {settings.email && <a href={`mailto:${settings.email}`} className="flex items-center gap-4 py-5 transition-colors hover:text-brand"><Mail size={18} strokeWidth={1.75} className="shrink-0 text-brand" /><div><p className="text-xs text-muted">{cp.emailLabel}</p><p className="text-sm font-medium text-ink">{settings.email}</p></div></a>}
           {settings.phone && <a href={`tel:${settings.phone.replace(/\s+/g, "")}`} className="flex items-center gap-4 py-5 transition-colors hover:text-brand"><Phone size={18} strokeWidth={1.75} className="shrink-0 text-brand" /><div><p className="text-xs text-muted">{cp.phoneLabel}</p><p className="text-sm font-medium text-ink">{settings.phone}</p></div></a>}
           {settings.address && <div className="flex items-center gap-4 py-5"><MapPin size={18} strokeWidth={1.75} className="shrink-0 text-brand" /><div><p className="text-xs text-muted">{cp.addressLabel}</p><p className="text-sm font-medium text-ink">{settings.address}</p></div></div>}
+          {businessHours && <div className="flex items-center gap-4 py-5"><Clock3 size={18} strokeWidth={1.75} className="shrink-0 text-brand" /><div><p className="text-xs text-muted">{locale === "fr" ? "Heures d'ouverture" : "Business hours"}</p><p className="text-sm font-medium text-ink">{businessHours}</p></div></div>}
         </div>
 
         <aside className="rounded-2xl border border-border bg-brand-light/40 p-5 sm:p-6">
