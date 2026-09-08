@@ -172,7 +172,8 @@ export async function POST(request: Request) {
     if (!data.reference || !Array.isArray(data.items) || data.items.length === 0 || data.items.length > 100) return NextResponse.json({ error: "Invalid order" }, { status: 400 });
     if (data.items.some((item) => !item || typeof item.name !== "string" || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 1_000_000)) return NextResponse.json({ error: "Invalid order items" }, { status: 400 });
     const pdf = buildPdf(data);
-    return new NextResponse(pdf, { status: 200, headers: { "Content-Type": "application/pdf", "Content-Disposition": `attachment; filename="${data.reference}.pdf"`, "Cache-Control": "no-store" } });
+    const blob = new Blob([pdf], { type: "application/pdf" });
+    return new NextResponse(blob, { status: 200, headers: { "Content-Type": "application/pdf", "Content-Disposition": `attachment; filename="${data.reference}.pdf"`, "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "Unable to create PDF" }, { status: 400 });
   }
