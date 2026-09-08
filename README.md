@@ -101,3 +101,5 @@ components/              UI, organized roughly by the section it renders
   to edit the catalog directly, that's the natural next addition.
 - Country-specific landing pages (`/locations/...`) were intentionally left
   out until there's enough real, country-specific content to justify them.
+
+<!-- Deployment verification trigger: 2026-09-08 -->
