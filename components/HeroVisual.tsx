@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Dictionary } from "@/lib/getDictionary";
 import { CategoryIllustration } from "@/components/illustrations/CategoryIllustration";
 
@@ -16,15 +17,16 @@ export function HeroVisual({ dict, categoryImages, heroImage, mobileHeroImage }:
       <div className="absolute inset-0 overflow-hidden rounded-none border-0 shadow-none" aria-hidden="true">
         <picture className="block h-full w-full">
           <source media="(max-width: 639px)" srcSet={mobile ?? desktop ?? ""} />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={desktop ?? ""}
             alt=""
-            className="h-full w-full object-cover object-[68%_center] transition-transform duration-700 min-[640px]:object-[68%_center]"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[68%_center] transition-transform duration-700 min-[640px]:object-[68%_center]"
           />
         </picture>
 
-        {/* A soft editorial reading zone keeps the headline crisp without flattening the product photography. */}
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,245,239,0.96)_0%,rgba(247,245,239,0.86)_30%,rgba(247,245,239,0.48)_52%,rgba(247,245,239,0.12)_72%,rgba(247,245,239,0)_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_48%,rgba(247,245,239,0.22)_0%,rgba(247,245,239,0)_54%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(27,27,23,0.02)_0%,rgba(27,27,23,0)_58%,rgba(27,27,23,0.16)_100%)]" />
