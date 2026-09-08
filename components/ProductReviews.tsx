@@ -23,6 +23,18 @@ export function ProductReviews({ reviews, locale }: { reviews: ProductReview[]; 
               <div className="flex items-center gap-1 text-brand" aria-label={`${review.rating} out of 5 stars`}>
                 {Array.from({ length: 5 }, (_, i) => <span key={i} aria-hidden>{i < review.rating ? "★" : "☆"}</span>)}
               </div>
+
+              {review.customer_photo_path && (
+                <div className="mt-4 overflow-hidden rounded-xl border border-border bg-surface">
+                  <img
+                    src={review.customer_photo_path}
+                    alt={locale === "fr" ? `Photo partagée par ${review.customer_name}` : `Photo shared by ${review.customer_name}`}
+                    loading="lazy"
+                    className="h-48 w-full object-cover sm:h-56"
+                  />
+                </div>
+              )}
+
               <blockquote className="mt-4 font-display text-lg leading-relaxed text-ink">“{text}”</blockquote>
               <div className="mt-5 border-t border-border pt-4">
                 <p className="text-sm font-semibold text-ink">{review.customer_name}</p>
