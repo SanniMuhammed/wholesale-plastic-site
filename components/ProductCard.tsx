@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Product } from "@/lib/products";
+import type { CatalogProduct } from "@/lib/catalog/products";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { ProductImage } from "@/components/ProductImage";
@@ -10,43 +10,66 @@ export function ProductCard({
   locale,
   dict,
 }: {
-  product: Product;
+  product: CatalogProduct;
   locale: Locale;
   dict: Dictionary;
 }) {
   const base = `/${locale}`;
   const href = `${base}/products/${product.slug}`;
+  const hasPrice = (product.pricingMode === "fixed" || product.pricingMode === "starting_from") && product.price != null;
+  const priceLabel = product.pricingMode === "starting_from"
+    ? (locale === "fr" ? "À partir de" : "Starting from")
+    : (locale === "fr" ? "Prix" : "Price");
+  const price = hasPrice
+    ? `₦${product.price!.toLocaleString(locale === "fr" ? "fr-FR" : "en-NG", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`
+    : null;
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-lg border border-border bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted">
-      <Link href={href} className="block overflow-hidden rounded-t-lg">
+    <article className="group flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted">
+      <Link href={href} className="block shrink-0 overflow-hidden rounded-t-lg">
         <ProductImage
           product={product}
           locale={locale}
-          className="rounded-none rounded-t-lg transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+          className="rounded-none rounded-t-lg transition-transform duration-300 ease-out group-hover:scale-[1.02]"
         />
       </Link>
 
-      <div className="flex flex-1 flex-col gap-1.5 p-4">
-        <p className="eyebrow text-brand/70">{dict.categories[product.category]}</p>
+      <div className="flex flex-1 flex-col p-4">
+        <p className="eyebrow min-h-[1.1rem] text-brand/70">{dict.categories[product.category]}</p>
 
         <Link
           href={href}
-          className="font-display text-base font-semibold leading-snug text-ink transition-colors group-hover:text-brand"
+          className="mt-1 line-clamp-2 min-h-[2.65rem] font-display text-base font-semibold leading-snug text-ink transition-colors group-hover:text-brand"
         >
           {product.name[locale]}
         </Link>
 
-        <p className="line-clamp-2 text-xs leading-relaxed text-muted">
+        <p className="mt-2 line-clamp-2 min-h-[2.5rem] text-xs leading-relaxed text-muted">
           {product.shortDescription[locale]}
         </p>
 
-        <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] text-muted">
+        <div className="mt-3 flex min-h-[2.25rem] flex-wrap content-start items-start gap-x-3 gap-y-1 font-mono text-[10px] leading-4 text-muted">
           {product.capacity && <span>{product.capacity}</span>}
           <span>{product.packaging[locale]}</span>
         </div>
 
-        <div className="mt-3">
+        <div className="mt-3 min-h-[3rem] border-t border-border/70 pt-3">
+          {price ? (
+            <>
+              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">{priceLabel}</p>
+              <p className="mt-0.5 font-display text-lg font-semibold leading-tight text-ink">
+                {price}
+                {product.priceUnit && <span className="ml-1 text-[10px] font-sans font-medium text-muted">{product.priceUnit}</span>}
+              </p>
+            </>
+          ) : (
+            <p className="pt-1 font-medium leading-4 text-ink">
+              {locale === "fr" ? "Prix de gros sur demande" : "Wholesale price on request"}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-auto pt-3">
           <AddToOrderButton
             slug={product.slug}
             productName={product.name[locale]}
