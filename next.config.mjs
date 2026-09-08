@@ -25,6 +25,7 @@ const nextConfig = {
     return [
       { source: "/:locale/wholesale", destination: "/:locale", permanent: true },
       { source: "/:locale/delivery", destination: "/:locale/how-it-works", permanent: true },
+      { source: "/:locale/products/category/:slug", destination: "/:locale/products?category=:slug", permanent: true },
     ];
   },
 };
