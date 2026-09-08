@@ -2,14 +2,12 @@ import type { Dictionary } from "@/lib/getDictionary";
 import { interpolate } from "@/lib/utils";
 
 export function getWhatsAppNumber(): string {
-  // TODO: set NEXT_PUBLIC_WHATSAPP_NUMBER in .env.local -- see .env.example.
   return process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
 }
 
 export function buildWhatsAppLink(message: string): string {
   const number = getWhatsAppNumber();
   const text = encodeURIComponent(message);
-  // wa.me works with or without a number; omitting it just opens the picker.
   return number ? `https://wa.me/${number}?text=${text}` : `https://wa.me/?text=${text}`;
 }
 
@@ -30,40 +28,40 @@ export function productInquiryLink(
   return buildWhatsAppLink(message);
 }
 
-export interface OrderLineForMessage {
-  name: string;
-  quantity: number;
+export interface OrderLineForMessage { name: string; quantity: number; }
+
+export interface OrderInquiryParams {
+  items: OrderLineForMessage[];
+  customerName?: string;
+  businessName?: string;
+  country?: string;
+  city?: string;
+  deliveryPreference?: string;
+  note?: string;
 }
 
-/**
- * Builds the WhatsApp deep link for the order-summary page. The customer
- * builds and reviews their order on the site, then this pre-fills a
- * WhatsApp message with everything a rep needs to pick up the
- * conversation -- identity, business, order lines, and any free-form note
- * -- with no fields required to unlock it.
- */
-export function orderInquiryLink(
-  dict: Dictionary,
-  params: {
-    items: OrderLineForMessage[];
-    customerName?: string;
-    businessName?: string;
-    note?: string;
-  }
-): string {
+/** Builds the customer-ready wholesale quotation/request message. */
+export function orderInquiryLink(dict: Dictionary, params: OrderInquiryParams): string {
+  const isFrench = dict.locale === "fr";
+  const labels = isFrench
+    ? { name: "Nom", business: "Entreprise", destination: "Destination", country: "Pays", city: "Ville", delivery: "Livraison", order: "Commande", qty: "Qté", note: "Note" }
+    : { name: "Name", business: "Business", destination: "Destination", country: "Country", city: "City", delivery: "Delivery preference", order: "Order", qty: "Qty", note: "Note" };
   const lines: string[] = [dict.whatsapp.general, ""];
 
-  if (params.customerName) lines.push(`${dict.whatsapp.nameLabel}: ${params.customerName}`);
-  if (params.businessName) lines.push(`${dict.whatsapp.businessLabel}: ${params.businessName}`);
+  if (params.customerName) lines.push(`${labels.name}: ${params.customerName}`);
+  if (params.businessName) lines.push(`${labels.business}: ${params.businessName}`);
+  if (params.country || params.city) {
+    lines.push("", `${labels.destination}:`);
+    if (params.country) lines.push(`- ${labels.country}: ${params.country}`);
+    if (params.city) lines.push(`- ${labels.city}: ${params.city}`);
+  }
+  if (params.deliveryPreference) lines.push(`${labels.delivery}: ${params.deliveryPreference}`);
 
   if (params.items.length > 0) {
-    lines.push("", `${dict.whatsapp.orderLabel}:`);
-    for (const item of params.items) {
-      lines.push(`- ${item.name} (${dict.whatsapp.quantityLabel}: ${item.quantity})`);
-    }
+    lines.push("", `${labels.order}:`);
+    for (const item of params.items) lines.push(`- ${item.name} (${labels.qty}: ${item.quantity})`);
   }
-
-  if (params.note) lines.push("", `${dict.whatsapp.noteLabel}: ${params.note}`);
+  if (params.note) lines.push("", `${labels.note}: ${params.note}`);
 
   return buildWhatsAppLink(lines.join("\n"));
 }
