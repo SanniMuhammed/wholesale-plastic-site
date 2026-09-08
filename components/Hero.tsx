@@ -32,12 +32,12 @@ export function Hero({ locale, dict, categoryImages, heroImage, mobileHeroImage 
         <div
           className={`${
             hasHeroImage
-              ? "w-full sm:w-[76%] md:w-[68%] lg:w-[64%] xl:w-[62%]"
+              ? "w-full max-w-[34rem] sm:w-[76%] sm:max-w-[36rem] md:w-[68%] lg:w-[64%] xl:w-[62%]"
               : "w-full md:max-w-2xl"
           }`}
         >
           <div className="animate-settle-up">
-            <p className="eyebrow inline-flex max-w-full -rotate-1 items-center rounded border border-border/80 bg-surface/80 px-3 py-1.5 backdrop-blur-md">
+            <p className="eyebrow inline-flex max-w-full -rotate-1 items-center rounded border border-border/80 bg-surface/88 px-3 py-1.5 shadow-sm backdrop-blur-md">
               {dict.hero.supporting}
             </p>
 
@@ -47,7 +47,7 @@ export function Hero({ locale, dict, categoryImages, heroImage, mobileHeroImage 
               {dict.hero.title}
             </h1>
 
-            <p className="mt-6 max-w-[30rem] rounded-md border border-white/40 bg-surface/78 px-3 py-2 text-[0.96rem] leading-[1.45] text-ink-soft shadow-sm backdrop-blur-md sm:max-w-[32rem] sm:text-base">
+            <p className="mt-6 max-w-[30rem] rounded-md border border-white/55 bg-surface/88 px-3.5 py-2.5 text-[0.97rem] leading-[1.45] text-ink shadow-sm backdrop-blur-md sm:max-w-[31rem] sm:text-base">
               {dict.hero.subtitle}
             </p>
 
@@ -60,7 +60,7 @@ export function Hero({ locale, dict, categoryImages, heroImage, mobileHeroImage 
               </Link>
               <Link
                 href={`${base}/order-summary`}
-                className="inline-flex min-h-11 items-center justify-center rounded-md border border-ink/70 bg-surface/82 px-6 py-3 text-sm font-medium text-ink backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2"
+                className="inline-flex min-h-11 items-center justify-center rounded-md border border-ink/70 bg-surface/88 px-6 py-3 text-sm font-medium text-ink backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2"
               >
                 {dict.hero.secondaryCta}
               </Link>
