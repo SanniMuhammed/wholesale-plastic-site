@@ -17,7 +17,6 @@ export function HowItWorksSection({ dict, id }: { dict: Dictionary; id?: string 
       <div className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
         <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{dict.howItWorksSection.title}</h2>
         <p className="mt-2 max-w-md text-muted">{dict.howItWorksSection.subtitle}</p>
-        <p className="mt-4 max-w-2xl font-medium text-ink-soft">{dict.travel.title}. {dict.travel.solution}</p>
 
         <div ref={ref}>
           <ol className="mt-12 sm:hidden">
