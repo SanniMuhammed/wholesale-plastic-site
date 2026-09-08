@@ -13,13 +13,55 @@ import { cx } from "@/lib/utils";
 
 interface NavProps { locale: Locale; dict: Dictionary; }
 
-function BrandMark() {
+function SherinabLogo() {
   return (
-    <span
-      aria-hidden
-      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-brand text-[18px] font-bold leading-none text-background shadow-[0_2px_8px_rgba(8,116,67,0.18)] sm:h-9 sm:w-9 sm:text-[20px]"
-    >
-      S
+    <span className="group/logo inline-flex shrink-0 items-center gap-2.5" aria-hidden>
+      <svg
+        viewBox="0 0 44 44"
+        className="h-9 w-9 shrink-0 overflow-visible sm:h-10 sm:w-10"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M11 8.5h22a2.5 2.5 0 0 1 2.5 2.5v18.2a3.3 3.3 0 0 1-3.3 3.3H11.8a3.3 3.3 0 0 1-3.3-3.3V11A2.5 2.5 0 0 1 11 8.5Z"
+          className="fill-brand transition-transform duration-300 group-hover/logo:-translate-y-0.5"
+        />
+        <path
+          d="M12.5 8.5V6.8A3.8 3.8 0 0 1 16.3 3h11.4a3.8 3.8 0 0 1 3.8 3.8v1.7"
+          className="stroke-brand-dark"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M13 16.5h18M13 22h18M13 27.5h10"
+          className="stroke-background"
+          strokeWidth="2.1"
+          strokeLinecap="round"
+          opacity=".92"
+        />
+        <path
+          d="M28.5 27.5h2.5"
+          className="stroke-accent"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M8.5 34.5h27"
+          className="stroke-accent"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+
+      <span className="flex flex-col leading-none">
+        <span className="font-display text-[18px] font-extrabold tracking-[-0.045em] text-ink transition-colors duration-200 group-hover/logo:text-brand sm:text-[20px]">
+          Sherinab
+        </span>
+        <span className="mt-1 flex items-center gap-1.5 text-[8px] font-bold uppercase tracking-[0.24em] text-muted sm:text-[9px]">
+          <span className="h-px w-3 bg-accent" />
+          Venture
+        </span>
+      </span>
     </span>
   );
 }
@@ -46,11 +88,8 @@ export function Nav({ locale, dict }: NavProps) {
   return (
     <header className={cx("sticky top-0 z-40 border-b bg-surface/95 backdrop-blur transition-shadow duration-300 print:hidden", scrolled ? "border-border shadow-card" : "border-transparent")}>
       <div className="mx-auto flex h-16 max-w-content items-center justify-between px-3 sm:px-6">
-        <Link href={base} className="group flex shrink-0 items-center gap-2.5" aria-label="Sherinab Venture home">
-          <BrandMark />
-          <span className="font-display text-[17px] font-semibold tracking-tight text-ink transition-colors group-hover:text-brand sm:text-[19px]">
-            Sherinab Venture<span className="text-brand">.</span>
-          </span>
+        <Link href={base} className="group shrink-0" aria-label="Sherinab Venture home">
+          <SherinabLogo />
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
