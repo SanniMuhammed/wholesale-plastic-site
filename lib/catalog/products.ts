@@ -4,6 +4,7 @@ import type { Product as CmsProduct } from "@/lib/cms/types";
 import type { Product, CategorySlug, ColorKey } from "@/lib/products";
 
 export type CatalogProduct = Product & {
+  cmsId: string;
   pricingMode?: "fixed" | "starting_from" | "quote";
   price?: number;
   priceUnit?: string;
@@ -38,7 +39,6 @@ function toColorKey(slug: string): ColorKey | null {
     default: return null;
   }
 }
-
 function adaptProduct(product: CmsProduct): CatalogProduct {
   const category = toCategorySlug(product);
   const colors = (product.colors ?? []).map((color) => toColorKey(color.slug)).filter((color): color is ColorKey => color !== null);
@@ -46,7 +46,7 @@ function adaptProduct(product: CmsProduct): CatalogProduct {
   const mainImage = product.images?.find((image) => image.is_main) ?? product.images?.[0];
   const fallbackImage = PUBLIC_PRODUCT_IMAGES[product.slug];
   return {
-    slug: product.slug, category,
+    cmsId: product.id, slug: product.slug, category,
     name: { en: product.name_en, fr: product.name_fr },
     shortDescription: { en: product.short_description_en, fr: product.short_description_fr },
     description: { en: product.description_en, fr: product.description_fr },
@@ -63,14 +63,9 @@ function adaptProduct(product: CmsProduct): CatalogProduct {
     featured: product.is_featured,
   };
 }
-
-export async function getAllProducts(): Promise<CatalogProduct[]> {
-  const products = await listCmsProducts({ status: "published" });
-  return products.map(adaptProduct);
-}
+export async function getAllProducts(): Promise<CatalogProduct[]> { return (await listCmsProducts({ status: "published" })).map(adaptProduct); }
 export async function getProductBySlug(slug: string): Promise<CatalogProduct | undefined> {
-  const products = await listCmsProducts({ status: "published" });
-  const product = products.find((item) => item.slug === slug);
+  const product = (await listCmsProducts({ status: "published" })).find((item) => item.slug === slug);
   return product ? adaptProduct(product) : undefined;
 }
 export async function getFeaturedProducts(): Promise<CatalogProduct[]> { return (await getAllProducts()).filter((product) => product.featured); }
