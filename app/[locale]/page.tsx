@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
 import { getCategoryCoverImageMap } from "@/lib/cms/categories";
-import { getHomepageHeroImages } from "@/lib/cms/settings";
+import { getHomepageHeroImages, getHomepageFinalCtaImageUrl } from "@/lib/cms/settings";
 import { Hero } from "@/components/Hero";
 import { TrustBar } from "@/components/TrustBar";
 import { ProductCategories } from "@/components/ProductCategories";
@@ -32,7 +32,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
-  const [categoryImages, heroImages] = await Promise.all([getCategoryCoverImageMap(), getHomepageHeroImages()]);
+  const [categoryImages, heroImages, finalCtaImage] = await Promise.all([
+    getCategoryCoverImageMap(),
+    getHomepageHeroImages(),
+    getHomepageFinalCtaImageUrl(),
+  ]);
 
   return (
     <>
@@ -43,7 +47,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <ShopByBusiness locale={locale} dict={dict} />
       <WholesaleQuoteCta locale={locale} dict={dict} />
       <HowItWorksSection dict={dict} />
-      <FinalCta locale={locale} dict={dict} />
+      <FinalCta locale={locale} dict={dict} imageUrl={finalCtaImage} />
     </>
   );
 }
