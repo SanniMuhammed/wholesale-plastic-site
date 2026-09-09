@@ -21,15 +21,15 @@ export function ShopByBusiness({ locale, dict, section, imageUrl, mobileImageUrl
 
   return (
     <section className="border-y border-border bg-surface">
-      <div className="mx-auto max-w-content px-4 py-16 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-content px-4 py-12 sm:px-6 sm:py-16">
         <p className="eyebrow text-brand">{copy.eyebrow}</p>
         <div className="mt-2 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div><h2 className="max-w-2xl font-display text-2xl font-semibold text-ink sm:text-3xl">{title}</h2><p className="mt-2 max-w-2xl text-muted">{subtitle}</p></div>
           <Link href={`/${locale}/products`} className="shrink-0 text-sm font-semibold text-brand underline decoration-brand/30 underline-offset-4 hover:decoration-brand">{copy.cta} →</Link>
         </div>
-        {imageUrl && <picture className="mt-8 block overflow-hidden rounded-xl border border-border bg-background"><>{mobileImageUrl && <source media="(max-width: 640px)" srcSet={mobileImageUrl} />}</><img src={imageUrl} alt="" className="max-h-[360px] w-full object-cover" loading="lazy" /></picture>}
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {BUSINESS_TYPES.map((item, index) => { const text = isFrench ? item.fr : item.en; return <Link key={text.title} href={`/${locale}/products?category=${item.category}`} className="group rounded-lg border border-border bg-surface p-5 transition-all hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-lifted"><div className="flex items-start justify-between gap-4"><span className="font-mono text-xs font-bold text-brand/60">{String(index + 1).padStart(2, "0")}</span><span className="text-lg text-ink-soft transition-transform group-hover:translate-x-1" aria-hidden>→</span></div><h3 className="mt-8 font-display text-lg font-semibold text-ink">{text.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{text.description}</p></Link>; })}
+        {imageUrl && <picture className="mt-6 block overflow-hidden rounded-xl border border-border bg-background sm:mt-8"><>{mobileImageUrl && <source media="(max-width: 640px)" srcSet={mobileImageUrl} />}</><img src={imageUrl} alt="" className="max-h-[360px] w-full object-cover" loading="lazy" /></picture>}
+        <div className="mt-6 grid gap-3 sm:mt-8 sm:grid-cols-2 lg:grid-cols-4">
+          {BUSINESS_TYPES.map((item, index) => { const text = isFrench ? item.fr : item.en; return <Link key={text.title} href={`/${locale}/products?category=${item.category}`} className="group rounded-lg border border-border bg-surface p-4 transition-all hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-lifted sm:p-5"><div className="flex items-start justify-between gap-4"><span className="font-mono text-xs font-bold text-brand/60">{String(index + 1).padStart(2, "0")}</span><span className="text-lg text-ink-soft transition-transform group-hover:translate-x-1" aria-hidden>→</span></div><h3 className="mt-6 font-display text-lg font-semibold text-ink sm:mt-8">{text.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{text.description}</p></Link>; })}
         </div>
       </div>
     </section>
