@@ -34,11 +34,11 @@ export function FinalCta({ locale, dict }: { locale: Locale; dict: Dictionary })
 
         <div className="relative min-h-[260px] overflow-hidden sm:min-h-[320px] lg:min-h-[360px]">
           <img
-            src="/images/sherinab-truck-cta.webp"
+            src="/images/sherinab-truck-cta.webp?v=2"
             alt="Sherinab Venture delivery truck"
             loading="eager"
             decoding="async"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 block h-full w-full object-cover"
           />
         </div>
       </div>
