@@ -115,16 +115,21 @@ export default async function DeliveryPage({ params }: { params: Promise<{ local
           <div className="relative mt-12">
             <div className="absolute left-6 right-6 top-7 hidden h-px bg-brand/30 lg:block" />
             <ol className="relative grid gap-10 lg:grid-cols-5 lg:gap-6">
-              {c.steps.map(([number, title, body, Icon]) => (
-                <li key={number} className="relative">
-                  <div className="flex items-center gap-3 lg:block">
-                    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-brand/25 bg-background text-brand"><Icon size={24} strokeWidth={1.7} aria-hidden="true" /></span>
-                    <span className="font-mono text-xs font-bold tracking-[0.14em] text-brand lg:absolute lg:-top-1 lg:left-0">{number}</span>
-                  </div>
-                  <h3 className="mt-5 max-w-[190px] font-display text-2xl font-semibold leading-tight text-ink">{title}</h3>
-                  <p className="mt-3 max-w-xs text-sm leading-6 text-muted">{body}</p>
-                </li>
-              ))}
+              {c.steps.map(([number, title, body, Icon], index) => {
+                const stepImage = images.steps[index];
+                return (
+                  <li key={number} className="relative">
+                    <div className="flex items-center gap-3 lg:block">
+                      <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-brand/25 bg-background text-brand">
+                        {stepImage ? <Image src={stepImage} alt="" width={56} height={56} className="h-full w-full object-cover" /> : <Icon size={24} strokeWidth={1.7} aria-hidden="true" />}
+                      </span>
+                      <span className="font-mono text-xs font-bold tracking-[0.14em] text-brand lg:absolute lg:-top-1 lg:left-0">{number}</span>
+                    </div>
+                    <h3 className="mt-5 max-w-[190px] font-display text-2xl font-semibold leading-tight text-ink">{title}</h3>
+                    <p className="mt-3 max-w-xs text-sm leading-6 text-muted">{body}</p>
+                  </li>
+                );
+              })}
             </ol>
           </div>
         </div>
