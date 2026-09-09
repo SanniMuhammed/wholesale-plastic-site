@@ -55,6 +55,8 @@ The homepage was consolidated so the main journey is easier to follow:
 
 The CMS is the source of truth for editable homepage content. Public components should not duplicate an editable value with a second hard-coded version.
 
+The homepage trust bar keeps the compact height while using simple inline icons instead of the previous 01/02/03/04 numbering.
+
 ## Navigation
 
 The site navigation was tightened for smaller screens and the mobile cart was given its own touch target.
