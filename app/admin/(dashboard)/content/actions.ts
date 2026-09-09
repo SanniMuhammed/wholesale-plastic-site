@@ -70,17 +70,21 @@ export async function removeHomepageFinalCtaImageAction() {
   return section;
 }
 
+const DELIVERY_IMAGE_SLOTS = ["hero", "nigeria", "truck", "step_1", "step_2", "step_3", "step_4", "step_5"] as const;
+type DeliveryImageSlot = (typeof DELIVERY_IMAGE_SLOTS)[number];
+
 export async function uploadDeliveryImageAction(formData: FormData) {
   const file = formData.get("file") as File | null;
   const slot = formData.get("slot");
   if (!file) throw new Error("No file provided");
-  if (slot !== "hero" && slot !== "nigeria" && slot !== "truck") throw new Error("Invalid delivery image slot");
-  const content = await uploadDeliveryImage(file, slot);
+  if (!DELIVERY_IMAGE_SLOTS.includes(slot as DeliveryImageSlot)) throw new Error("Invalid delivery image slot");
+  const content = await uploadDeliveryImage(file, slot as DeliveryImageSlot);
   revalidatePath("/admin/content/delivery"); revalidatePath("/[locale]/delivery", "page");
   return content;
 }
 
-export async function removeDeliveryImageAction(slot: "hero" | "nigeria" | "truck") {
+export async function removeDeliveryImageAction(slot: DeliveryImageSlot) {
+  if (!DELIVERY_IMAGE_SLOTS.includes(slot)) throw new Error("Invalid delivery image slot");
   const content = await removeDeliveryImage(slot);
   revalidatePath("/admin/content/delivery"); revalidatePath("/[locale]/delivery", "page");
   return content;
