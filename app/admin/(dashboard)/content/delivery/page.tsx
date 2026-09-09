@@ -1,6 +1,7 @@
 import { getDeliveryContent } from "@/lib/cms/settings";
 import { PageHeader } from "@/components/admin/AdminUI";
 import { BodyContentForm } from "@/components/admin/BodyContentForm";
+import { DeliveryImageManager } from "@/components/admin/DeliveryImageManager";
 import { updateDeliveryContentAction } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -11,14 +12,17 @@ export default async function DeliveryContentPage() {
   return (
     <div>
       <PageHeader
-        title="Delivery information"
-        description="No fixed prices or times -- describe what delivery depends on."
+        title="Delivery page"
+        description="Edit delivery copy and manage every photo used by the approved delivery-page layout."
       />
-      <BodyContentForm
-        initialBodyEn={content.body_en}
-        initialBodyFr={content.body_fr}
-        onSave={updateDeliveryContentAction}
-      />
+      <div className="grid gap-8">
+        <DeliveryImageManager initialContent={content} />
+        <BodyContentForm
+          initialBodyEn={content.body_en}
+          initialBodyFr={content.body_fr}
+          onSave={updateDeliveryContentAction}
+        />
+      </div>
     </div>
   );
 }
