@@ -19,7 +19,7 @@ export default async function HowItWorksPage({ params }: { params: Promise<{ loc
 
   return (
     <div>
-      <HowItWorksSection dict={dict} />
+      <HowItWorksSection dict={dict} locale={locale} />
       <div className="mx-auto max-w-content px-4 py-12 text-center sm:px-6">
         <Link
           href={`/${locale}/order-summary`}
