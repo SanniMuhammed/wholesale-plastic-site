@@ -32,15 +32,12 @@ export function FinalCta({ locale, dict }: { locale: Locale; dict: Dictionary })
           </div>
         </div>
 
-        <div className="relative min-h-[260px] overflow-hidden sm:min-h-[320px] lg:min-h-[360px]">
-          <img
-            src="/images/sherinab-truck-cta.webp?v=3"
-            alt="Sherinab Venture delivery truck"
-            loading="eager"
-            decoding="async"
-            className="absolute inset-0 block h-full w-full object-cover"
-          />
-        </div>
+        <div
+          className="min-h-[260px] overflow-hidden bg-cover bg-center bg-no-repeat sm:min-h-[320px] lg:min-h-[360px]"
+          role="img"
+          aria-label="Sherinab Venture delivery truck"
+          style={{ backgroundImage: "url('/images/sherinab-truck-cta.webp?v=4')" }}
+        />
       </div>
     </section>
   );
