@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { MouseEvent } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
@@ -65,7 +66,7 @@ export function Nav({ locale, dict }: NavProps) {
     { href: `${base}/contact`, label: dict.nav.contact },
   ];
 
-  function handleBrandClick(event: React.MouseEvent<HTMLAnchorElement>) {
+  function handleBrandClick(event: MouseEvent<HTMLAnchorElement>) {
     if (window.location.pathname === base) {
       event.preventDefault();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
