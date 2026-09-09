@@ -13,40 +13,58 @@ function imageUrl(path: string) {
   return `${SUPABASE_URL}/storage/v1/object/public/${IMAGE_BUCKET}/${path}`;
 }
 
-type Slot = "hero" | "nigeria" | "truck";
+type Slot = "hero" | "nigeria" | "truck" | "step_1" | "step_2" | "step_3" | "step_4" | "step_5";
 
-const SLOTS: Array<{ slot: Slot; label: string; hint: string; icon: ReactNode }> = [
-  { slot: "hero", label: "Hero image", hint: "Recommended: wide landscape image", icon: <Monitor size={18} /> },
+type SlotDefinition = { slot: Slot; label: string; hint: string; icon: ReactNode };
+
+const PAGE_SLOTS: SlotDefinition[] = [
+  { slot: "hero", label: "Hero image", hint: "Used in the top How Delivery Works section", icon: <Monitor size={18} /> },
   { slot: "nigeria", label: "Nigeria deliveries image", hint: "Used above the Nigeria Deliveries card", icon: <Truck size={18} /> },
   { slot: "truck", label: "Delivery support image", hint: "Used beside the delivery support CTA", icon: <Smartphone size={18} /> },
 ];
 
+const PROCESS_SLOTS: SlotDefinition[] = [
+  { slot: "step_1", label: "Step 01 image", hint: "Tell us your destination", icon: <ImageIcon size={18} /> },
+  { slot: "step_2", label: "Step 02 image", hint: "We confirm your order", icon: <ImageIcon size={18} /> },
+  { slot: "step_3", label: "Step 03 image", hint: "We arrange logistics", icon: <ImageIcon size={18} /> },
+  { slot: "step_4", label: "Step 04 image", hint: "You receive delivery details", icon: <ImageIcon size={18} /> },
+  { slot: "step_5", label: "Step 05 image", hint: "Your order is delivered", icon: <ImageIcon size={18} /> },
+];
+
 export function DeliveryImageManager({ initialContent }: { initialContent: DeliveryContent }) {
   const [content, setContent] = useState(initialContent);
+  const slots = [...PAGE_SLOTS, ...PROCESS_SLOTS];
+
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-5">
       <div>
         <h2 className="text-sm font-medium text-ink">Delivery page images</h2>
-        <p className="mt-1 text-xs leading-5 text-muted">Replace any of the delivery-page photos without changing the approved page layout. Uploads are stored in the CMS and appear on the public delivery page.</p>
+        <p className="mt-1 text-xs leading-5 text-muted">Every photo on the delivery page can be replaced or removed here. Process images are optional; when empty, the approved icon design remains visible.</p>
       </div>
+
       <div className="grid gap-4 md:grid-cols-3">
-        {SLOTS.map(({ slot, label, hint, icon }) => (
-          <DeliveryImageSlot
-            key={slot}
-            slot={slot}
-            label={label}
-            hint={hint}
-            icon={icon}
-            path={content[`${slot}_image_path` as keyof DeliveryContent] as string | null}
-            onChange={(patch) => setContent((current) => ({ ...current, ...patch }))}
-          />
+        {PAGE_SLOTS.map((definition) => (
+          <DeliveryImageSlot key={definition.slot} definition={definition} path={content[`${definition.slot}_image_path` as keyof DeliveryContent] as string | null} onChange={(patch) => setContent((current) => ({ ...current, ...patch }))} />
         ))}
+      </div>
+
+      <div className="rounded-lg border border-border bg-background p-4">
+        <div className="mb-4">
+          <h3 className="text-sm font-medium text-ink">How delivery works — process images</h3>
+          <p className="mt-1 text-xs leading-5 text-muted">Add a photo to any step if you want a visual instead of the default icon. Removing the photo restores the original icon automatically.</p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {PROCESS_SLOTS.map((definition) => (
+            <DeliveryImageSlot key={definition.slot} definition={definition} path={content[`${definition.slot}_image_path` as keyof DeliveryContent] as string | null} onChange={(patch) => setContent((current) => ({ ...current, ...patch }))} />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-function DeliveryImageSlot({ slot, label, hint, icon, path, onChange }: { slot: Slot; label: string; hint: string; icon: ReactNode; path: string | null; onChange: (patch: Partial<DeliveryContent>) => void }) {
+function DeliveryImageSlot({ definition, path, onChange }: { definition: SlotDefinition; path: string | null; onChange: (patch: Partial<DeliveryContent>) => void }) {
+  const { slot, label, hint, icon } = definition;
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,6 +81,11 @@ function DeliveryImageSlot({ slot, label, hint, icon, path, onChange }: { slot: 
         hero_image_path: updated.hero_image_path,
         nigeria_image_path: updated.nigeria_image_path,
         truck_image_path: updated.truck_image_path,
+        step_1_image_path: updated.step_1_image_path,
+        step_2_image_path: updated.step_2_image_path,
+        step_3_image_path: updated.step_3_image_path,
+        step_4_image_path: updated.step_4_image_path,
+        step_5_image_path: updated.step_5_image_path,
       });
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Upload failed — try again");
@@ -81,6 +104,11 @@ function DeliveryImageSlot({ slot, label, hint, icon, path, onChange }: { slot: 
         hero_image_path: updated.hero_image_path,
         nigeria_image_path: updated.nigeria_image_path,
         truck_image_path: updated.truck_image_path,
+        step_1_image_path: updated.step_1_image_path,
+        step_2_image_path: updated.step_2_image_path,
+        step_3_image_path: updated.step_3_image_path,
+        step_4_image_path: updated.step_4_image_path,
+        step_5_image_path: updated.step_5_image_path,
       });
     } catch (removeError) {
       setError(removeError instanceof Error ? removeError.message : "Remove failed — try again");
@@ -91,7 +119,10 @@ function DeliveryImageSlot({ slot, label, hint, icon, path, onChange }: { slot: 
 
   return (
     <div className="rounded-lg border border-border bg-surface p-3">
-      <div className="mb-2 flex items-start gap-2 text-ink">{icon}<div><div className="text-sm font-medium">{label}</div><div className="text-xs text-muted">{hint}</div></div></div>
+      <div className="mb-2 flex items-start gap-2 text-ink">
+        {icon}
+        <div><div className="text-sm font-medium">{label}</div><div className="text-xs text-muted">{hint}</div></div>
+      </div>
       <button type="button" disabled={busy} onClick={() => inputRef.current?.click()} className="group relative block aspect-[16/9] w-full overflow-hidden rounded-md border border-border bg-background text-left disabled:opacity-60">
         {path ? <>
           <img src={imageUrl(path)} alt={`${label} preview`} className="h-full w-full object-cover" />
