@@ -7,7 +7,7 @@ import type { HomepageSection } from "@/lib/cms/types";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const IMAGE_BUCKET = "product-images";
-function imageUrl(path: string) { return `${SUPABASE_URL}/storage/v1/object/public/${IMAGE_BUCKET}/${path}`; }
+function imageUrl(path: string) { return path.startsWith("/") ? path : `${SUPABASE_URL}/storage/v1/object/public/${IMAGE_BUCKET}/${path}`; }
 
 const HERO_MAX_DIMENSIONS = { desktop: 1920, mobile: 1080 } as const;
 
