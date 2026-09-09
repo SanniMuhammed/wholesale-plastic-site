@@ -147,21 +147,25 @@ export function buildDeliveryImageUrl(storagePath: string): string {
   return buildHomepageImageUrl(storagePath);
 }
 
-export async function getDeliveryImages(): Promise<{ hero: string; nigeria: string; truck: string }> {
+export async function getDeliveryImages(): Promise<{ hero: string; nigeria: string; truck: string; steps: Array<string | null> }> {
   try {
     const supabase = await createClient();
-    const { data } = await supabase.from("delivery_content").select("hero_image_path, nigeria_image_path, truck_image_path").eq("id", 1).single();
+    const { data } = await supabase.from("delivery_content").select("hero_image_path, nigeria_image_path, truck_image_path, step_1_image_path, step_2_image_path, step_3_image_path, step_4_image_path, step_5_image_path").eq("id", 1).single();
     return {
       hero: data?.hero_image_path ? buildDeliveryImageUrl(data.hero_image_path) : DELIVERY_FALLBACKS.hero,
       nigeria: data?.nigeria_image_path ? buildDeliveryImageUrl(data.nigeria_image_path) : DELIVERY_FALLBACKS.nigeria,
       truck: data?.truck_image_path ? buildDeliveryImageUrl(data.truck_image_path) : DELIVERY_FALLBACKS.truck,
+      steps: [1, 2, 3, 4, 5].map((n) => {
+        const path = data?.[`step_${n}_image_path`];
+        return path ? buildDeliveryImageUrl(path) : null;
+      }),
     };
   } catch {
-    return DELIVERY_FALLBACKS;
+    return { ...DELIVERY_FALLBACKS, steps: [null, null, null, null, null] };
   }
 }
 
-type DeliveryImageSlot = "hero" | "nigeria" | "truck";
+type DeliveryImageSlot = "hero" | "nigeria" | "truck" | "step_1" | "step_2" | "step_3" | "step_4" | "step_5";
 
 export async function uploadDeliveryImage(file: File, slot: DeliveryImageSlot): Promise<DeliveryContent> {
   const supabase = await createClient();
@@ -171,9 +175,9 @@ export async function uploadDeliveryImage(file: File, slot: DeliveryImageSlot): 
   const storagePath = `delivery/${slot}/${crypto.randomUUID()}.${extension}`;
   const { error: uploadError } = await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).upload(storagePath, file, { contentType: file.type });
   if (uploadError) throw uploadError;
-  const column = `${slot}_image_path` as const;
+  const column = `${slot}_image_path` as keyof DeliveryContent;
   const oldPath = existing[column];
-  if (oldPath && !oldPath.startsWith("/" ) && !oldPath.startsWith("http://") && !oldPath.startsWith("https://")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([oldPath]);
+  if (typeof oldPath === "string" && oldPath && !oldPath.startsWith("/") && !oldPath.startsWith("http://") && !oldPath.startsWith("https://")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([oldPath]);
   return updateDeliveryContent({ [column]: storagePath });
 }
 
@@ -181,8 +185,8 @@ export async function removeDeliveryImage(slot: DeliveryImageSlot): Promise<Deli
   const supabase = await createClient();
   const { data: existing, error: existingError } = await supabase.from("delivery_content").select("*").eq("id", 1).single();
   if (existingError) throw existingError;
-  const column = `${slot}_image_path` as const;
+  const column = `${slot}_image_path` as keyof DeliveryContent;
   const path = existing[column];
-  if (path && !path.startsWith("/") && !path.startsWith("http://") && !path.startsWith("https://")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([path]);
+  if (typeof path === "string" && path && !path.startsWith("/") && !path.startsWith("http://") && !path.startsWith("https://")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([path]);
   return updateDeliveryContent({ [column]: null });
 }
