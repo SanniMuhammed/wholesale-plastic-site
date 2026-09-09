@@ -40,7 +40,7 @@ export function HowItWorksSection({ dict, id }: { dict: Dictionary; id?: string 
         <div className="mt-14 border-t border-border pt-10 sm:mt-16 sm:pt-12">
           <div className="max-w-xl"><p className="eyebrow text-brand">{dict.deliveryTeaser.originLabel} → {dict.deliveryTeaser.destinationLabel}</p><h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">{dict.deliveryTeaser.title}</h3><p className="mt-3 text-muted">{dict.deliveryTeaser.subtitle}</p></div>
           <div className="mt-10 max-w-3xl sm:mt-12"><RouteDiagram active={inView} className="h-auto w-full text-brand" /><div className="mt-3 flex items-start justify-between gap-4"><span className="eyebrow">{dict.deliveryTeaser.originLabel}</span><span className="eyebrow text-right">{dict.deliveryTeaser.destinationLabel}</span></div></div>
-          <Link href="delivery" className="mt-8 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface">{dict.deliveryTeaser.cta} →</Link>
+          <Link href={`/${dict.locale}/delivery`} className="mt-8 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface">{dict.deliveryTeaser.cta} →</Link>
         </div>
       </div>
     </section>
