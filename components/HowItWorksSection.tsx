@@ -2,21 +2,32 @@
 
 import Link from "next/link";
 import type { Dictionary } from "@/lib/getDictionary";
+import type { HomepageSection } from "@/lib/cms/types";
 import { useInView } from "@/lib/hooks/useInView";
 import { cx } from "@/lib/utils";
 import { RouteDiagram } from "@/components/illustrations/RouteDiagram";
 
 const HINGE_INDEX = 2;
 
-export function HowItWorksSection({ dict, id }: { dict: Dictionary; id?: string }) {
+export function HowItWorksSection({ dict, id, section, imageUrl, mobileImageUrl }: { dict: Dictionary; id?: string; section?: HomepageSection; imageUrl?: string | null; mobileImageUrl?: string | null }) {
+  if (section?.is_visible === false) return null;
   const steps = dict.howItWorksSection.steps;
   const { ref, inView } = useInView<HTMLDivElement>();
+  const title = section?.title_en && dict.locale === "en" ? section.title_en : section?.title_fr && dict.locale === "fr" ? section.title_fr : dict.howItWorksSection.title;
+  const subtitle = section?.body_en && dict.locale === "en" ? section.body_en : section?.body_fr && dict.locale === "fr" ? section.body_fr : dict.howItWorksSection.subtitle;
 
   return (
     <section id={id} className="border-y border-border bg-surface scroll-mt-20">
       <div className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
-        <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{dict.howItWorksSection.title}</h2>
-        <p className="mt-2 max-w-md text-muted">{dict.howItWorksSection.subtitle}</p>
+        <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{title}</h2>
+        <p className="mt-2 max-w-md text-muted">{subtitle}</p>
+
+        {imageUrl && (
+          <picture className="mt-8 block overflow-hidden rounded-xl border border-border bg-background">
+            {mobileImageUrl && <source media="(max-width: 640px)" srcSet={mobileImageUrl} />}
+            <img src={imageUrl} alt="" className="h-auto max-h-[420px] w-full object-cover" loading="lazy" />
+          </picture>
+        )}
 
         <div ref={ref}>
           <ol className="mt-12 sm:hidden">
