@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { MouseEvent, FormEvent } from "react";
 import Link from "next/link";
 import { Menu, Search, X } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { generalInquiryLink } from "@/lib/whatsapp";
@@ -45,11 +45,8 @@ function SherinabLogo() {
 export function Nav({ locale, dict }: NavProps) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [search, setSearch] = useState("");
   const base = `/${locale}`;
-  const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const whatsappHref = generalInquiryLink(dict);
 
   useEffect(() => {
@@ -62,10 +59,6 @@ export function Nav({ locale, dict }: NavProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    setSearch(searchParams.get("q") ?? "");
-  }, [pathname, searchParams]);
-
   const links = [
     { href: `${base}/products`, label: dict.nav.products },
     { href: `${base}/about`, label: dict.nav.about },
@@ -74,8 +67,9 @@ export function Nav({ locale, dict }: NavProps) {
 
   function handleSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const value = String(formData.get("q") ?? "").trim();
     const params = new URLSearchParams();
-    const value = search.trim();
     if (value) params.set("q", value);
     router.push(params.toString() ? `${base}/products?${params}` : `${base}/products`);
     setOpen(false);
@@ -99,9 +93,9 @@ export function Nav({ locale, dict }: NavProps) {
           <label htmlFor="navbar-search" className="sr-only">{dict.common.searchPlaceholder}</label>
           <input
             id="navbar-search"
+            name="q"
             type="search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            defaultValue=""
             placeholder={dict.common.searchPlaceholder}
             autoComplete="off"
             className="h-10 w-full rounded-md border border-border bg-background pl-9 pr-3 text-xs text-ink placeholder:text-muted focus:border-brand focus:outline-none sm:text-sm"
