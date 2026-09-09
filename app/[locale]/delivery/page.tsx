@@ -1,85 +1,63 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, Boxes, Check, CircleDollarSign, Globe2, MapPin, MessageSquare, PackageCheck, Truck, Warehouse } from "lucide-react";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 
 const content = {
   en: {
     eyebrow: "DELIVERY",
     title: "How Delivery Works",
-    intro: "We make it easier to move your wholesale order from suppliers in Nigeria to your chosen destination. Here is how our delivery process works.",
-    processEyebrow: "THE PROCESS",
-    processTitle: "From order to delivery",
+    intro: "We help you move your order from our suppliers in Nigeria to your chosen destination. Delivery is arranged after we confirm your products, quantity and location.",
     steps: [
-      ["01", "Tell us your destination", "When you place your order, provide the country and city where you want the goods delivered.", MessageSquare],
-      ["02", "We confirm your order", "We review the products, quantities and destination with you before the order is finalized.", PackageCheck],
-      ["03", "We arrange logistics", "For deliveries within Nigeria, we coordinate the right transport option. For international orders, we help coordinate the logistics and shipment requirements.", Truck],
-      ["04", "You receive delivery details", "We confirm the available delivery option, estimated logistics cost and other relevant details before proceeding.", CircleDollarSign],
-      ["05", "Your order is delivered", "Once confirmed, we dispatch the goods to the agreed destination and keep you informed through the delivery process.", Boxes],
+      ["01", "Tell us your destination", "When you build your order, provide the country and city where you want the goods delivered."],
+      ["02", "We confirm your order", "We review the products, quantities and destination with you before anything is finalized."],
+      ["03", "We arrange the logistics", "For deliveries within Nigeria, we coordinate the appropriate transport option. For international orders, we help coordinate the logistics based on your destination and shipment requirements."],
+      ["04", "You receive the delivery details", "We confirm the available delivery option, estimated logistics cost and other relevant details with you before proceeding."],
+      ["05", "Your order is delivered", "Once the order and delivery arrangements are confirmed, the goods are dispatched to the agreed destination."],
     ],
-    factorsEyebrow: "WHAT AFFECTS DELIVERY?",
     factorsTitle: "What affects delivery?",
     factorsIntro: "Delivery is not one fixed price or one fixed timeline. The final arrangement depends on the details of your order.",
     factors: [
-      ["Destination", "Country, state and city affect the available transport options and logistics cost.", MapPin],
-      ["Order size", "The quantity and volume of your order can affect how it is packaged and transported.", Boxes],
-      ["Product type", "Different products and quantities may require different handling or transport arrangements.", Warehouse],
-      ["Delivery method", "We confirm the practical delivery option for your destination before you commit to the order.", Truck],
+      ["Destination", "Country, state and city affect the available transport options and logistics cost."],
+      ["Order size", "The quantity and volume of your order can affect how it is packaged and transported."],
+      ["Product type", "Different products and quantities may require different handling or transport arrangements."],
+      ["Delivery method", "We confirm the practical delivery option for your destination before you commit to the order."],
     ],
-    nigeriaTitle: "Nigeria Deliveries",
-    nigeriaBody: "For deliveries within Nigeria, we work with suitable transport options to get your products to your preferred location. Delivery arrangements are confirmed for your specific order.",
-    internationalTitle: "International Orders",
-    internationalBody: "For customers outside Nigeria, we coordinate the logistics around your destination and shipment requirements. Tell us where you need the goods and we will discuss the available options with you.",
-    checksNigeria: ["Suitable transport options", "Safe handling", "Timely delivery", "Tracking where available"],
-    checksInternational: ["Shipment coordination", "Customs requirements", "Destination logistics"],
-    ctaEyebrow: "DELIVERY SUPPORT",
-    ctaTitle: "Need Help With Your Delivery?",
-    ctaBody: "Our team is ready to assist you with delivery options, costs and timing. Contact us for a personalized quote.",
-    build: "Build Your Order",
-    contact: "Contact Us",
-    note: "Delivery cost and timing are confirmed for each order. We do not promise a universal delivery price or delivery time because these depend on destination, order size and logistics conditions.",
+    nigeriaTitle: "Deliveries within Nigeria",
+    nigeriaBody: "For customers in Nigeria, we coordinate delivery from our supply point to your chosen location. Share your state and city with your order so we can confirm the most suitable option.",
+    internationalTitle: "Orders outside Nigeria",
+    internationalBody: "If you are sourcing from another country, you do not need to travel to Nigeria just to arrange the order. Tell us your destination and we will discuss the available logistics and delivery requirements with you.",
+    note: "Important: delivery cost and timing are confirmed for each order. We do not promise a universal delivery price or delivery time because these depend on destination, order size and logistics conditions.",
+    cta: "Build Your Order",
+    contact: "Have a destination in mind? Contact us",
   },
   fr: {
     eyebrow: "LIVRAISON",
     title: "Comment fonctionne la livraison",
-    intro: "Nous facilitons l'acheminement de votre commande en gros depuis nos fournisseurs au Nigeria jusqu'à la destination de votre choix. Voici comment fonctionne notre processus de livraison.",
-    processEyebrow: "LE PROCESSUS",
-    processTitle: "De la commande à la livraison",
+    intro: "Nous vous aidons à faire acheminer votre commande depuis nos fournisseurs au Nigeria jusqu'à la destination de votre choix. La livraison est organisée après confirmation des produits, des quantités et de votre destination.",
     steps: [
-      ["01", "Indiquez votre destination", "Lors de votre commande, indiquez le pays et la ville où vous souhaitez recevoir les produits.", MessageSquare],
-      ["02", "Nous confirmons votre commande", "Nous vérifions avec vous les produits, les quantités et la destination avant de finaliser la commande.", PackageCheck],
-      ["03", "Nous organisons la logistique", "Pour les livraisons au Nigeria, nous coordonnons le transport adapté. Pour les commandes internationales, nous aidons à organiser la logistique et les exigences d'expédition.", Truck],
-      ["04", "Vous recevez les détails de livraison", "Nous confirmons l'option disponible, le coût logistique estimé et les autres détails importants avant de poursuivre.", CircleDollarSign],
-      ["05", "Votre commande est livrée", "Une fois confirmée, nous expédions les produits vers la destination convenue et vous tenons informé pendant la livraison.", Boxes],
+      ["01", "Indiquez votre destination", "Lors de la préparation de votre commande, indiquez le pays et la ville où vous souhaitez recevoir les produits."],
+      ["02", "Nous confirmons votre commande", "Nous vérifions avec vous les produits, les quantités et la destination avant toute confirmation."],
+      ["03", "Nous organisons la logistique", "Pour les livraisons au Nigeria, nous coordonnons le transport adapté. Pour les commandes internationales, nous vous aidons à organiser la logistique selon votre destination et les exigences de l'expédition."],
+      ["04", "Vous recevez les détails de livraison", "Nous confirmons avec vous l'option disponible, le coût logistique estimé et les autres détails importants avant de poursuivre."],
+      ["05", "Votre commande est livrée", "Une fois la commande et la livraison confirmées, les produits sont expédiés vers la destination convenue."],
     ],
-    factorsEyebrow: "QU'EST-CE QUI INFLUENCE LA LIVRAISON ?",
     factorsTitle: "Qu'est-ce qui influence la livraison ?",
     factorsIntro: "Il n'existe pas un prix ou un délai unique pour toutes les livraisons. L'organisation finale dépend des détails de votre commande.",
     factors: [
-      ["Destination", "Le pays, l'État et la ville influencent les options de transport disponibles et le coût logistique.", MapPin],
-      ["Taille de la commande", "La quantité et le volume peuvent influencer l'emballage et le transport.", Boxes],
-      ["Type de produit", "Certains produits et certaines quantités peuvent nécessiter une manutention ou un transport particulier.", Warehouse],
-      ["Mode de livraison", "Nous confirmons l'option pratique pour votre destination avant que vous ne vous engagiez dans la commande.", Truck],
+      ["Destination", "Le pays, l'État et la ville influencent les options de transport disponibles et le coût logistique."],
+      ["Taille de la commande", "La quantité et le volume peuvent influencer l'emballage et le transport."],
+      ["Type de produit", "Certains produits et certaines quantités peuvent nécessiter une manutention ou un transport particulier."],
+      ["Mode de livraison", "Nous confirmons l'option pratique pour votre destination avant que vous ne vous engagiez dans la commande."],
     ],
     nigeriaTitle: "Livraisons au Nigeria",
-    nigeriaBody: "Pour les livraisons au Nigeria, nous travaillons avec des options de transport adaptées afin d'acheminer vos produits vers la destination souhaitée. Les modalités sont confirmées pour chaque commande.",
-    internationalTitle: "Commandes internationales",
-    internationalBody: "Pour les clients hors du Nigeria, nous coordonnons la logistique selon votre destination et les exigences d'expédition. Indiquez-nous où vous souhaitez recevoir les produits et nous discuterons des options disponibles.",
-    checksNigeria: ["Options de transport adaptées", "Manutention sûre", "Livraison dans les délais", "Suivi lorsque disponible"],
-    checksInternational: ["Coordination de l'expédition", "Exigences douanières", "Logistique jusqu'à destination"],
-    ctaEyebrow: "ASSISTANCE LIVRAISON",
-    ctaTitle: "Besoin d'aide pour votre livraison ?",
-    ctaBody: "Notre équipe peut vous aider avec les options de livraison, les coûts et les délais. Contactez-nous pour un devis personnalisé.",
-    build: "Préparer ma commande",
-    contact: "Nous contacter",
-    note: "Le coût et le délai de livraison sont confirmés pour chaque commande. Nous ne promettons pas un prix ou un délai universel, car ils dépendent de la destination, de la taille de la commande et des conditions logistiques.",
+    nigeriaBody: "Pour les clients au Nigeria, nous coordonnons la livraison depuis notre point d'approvisionnement jusqu'à votre destination. Indiquez votre État et votre ville afin que nous puissions confirmer l'option la plus adaptée.",
+    internationalTitle: "Commandes hors du Nigeria",
+    internationalBody: "Si vous êtes dans un autre pays, vous n'avez pas besoin de voyager au Nigeria uniquement pour organiser votre commande. Indiquez votre destination et nous discuterons avec vous des options logistiques disponibles.",
+    note: "Important : le coût et le délai de livraison sont confirmés pour chaque commande. Nous ne promettons pas un prix ou un délai universel, car ils dépendent de la destination, de la taille de la commande et des conditions logistiques.",
+    cta: "Préparer ma commande",
+    contact: "Vous avez déjà une destination ? Contactez-nous",
   },
 } as const;
-
-const heroImage = "https://images.unsplash.com/photo-1779517225996-d5b751f80f48?auto=format&fit=crop&fm=jpg&q=82&w=1800";
-const nigeriaImage = "https://images.unsplash.com/photo-1713859272775-2e1cf7d777a1?auto=format&fit=crop&fm=jpg&q=82&w=1400";
-const truckImage = "https://images.unsplash.com/photo-1620455800201-7f00aeef12ed?auto=format&fit=crop&fm=jpg&q=82&w=1400";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
@@ -99,123 +77,70 @@ export default async function DeliveryPage({ params }: { params: Promise<{ local
   const c = content[locale];
 
   return (
-    <main className="overflow-hidden">
-      <section className="relative border-b border-border bg-surface">
-        <div className="mx-auto grid max-w-content lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="relative z-10 flex min-h-[360px] flex-col justify-center px-4 py-14 sm:px-6 sm:py-20 lg:min-h-[430px] lg:py-24">
-            <p className="eyebrow text-brand">{c.eyebrow}</p>
-            <h1 className="mt-2 max-w-2xl font-display text-4xl font-semibold leading-[0.98] tracking-tight text-ink sm:text-6xl lg:text-[4.5rem]">{c.title}</h1>
-            <p className="mt-6 max-w-xl text-base leading-7 text-muted sm:text-lg">{c.intro}</p>
-          </div>
-          <div className="relative min-h-[300px] lg:min-h-[430px]">
-            <Image src={heroImage} alt="Forklift loading goods into a delivery truck" fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/20 to-transparent lg:-left-20" />
-          </div>
+    <main>
+      <section className="border-b border-border bg-surface">
+        <div className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
+          <p className="eyebrow text-brand">{c.eyebrow}</p>
+          <h1 className="mt-2 max-w-3xl font-display text-4xl font-semibold leading-tight text-ink sm:text-6xl">{c.title}</h1>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-muted sm:text-lg">{c.intro}</p>
         </div>
       </section>
 
-      <section className="bg-background">
-        <div className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
-          <p className="eyebrow text-brand">{c.processEyebrow}</p>
-          <h2 className="mt-2 font-display text-3xl font-semibold text-ink sm:text-4xl">{c.processTitle}</h2>
-          <div className="relative mt-12">
-            <div className="absolute left-6 right-6 top-7 hidden h-px bg-brand/30 lg:block" />
-            <ol className="relative grid gap-10 lg:grid-cols-5 lg:gap-6">
-              {c.steps.map(([number, title, body, Icon]) => (
-                <li key={number} className="relative">
-                  <div className="flex items-center gap-3 lg:block">
-                    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-brand/25 bg-background text-brand">
-                      <Icon size={24} strokeWidth={1.7} aria-hidden="true" />
-                    </span>
-                    <span className="font-mono text-xs font-bold tracking-[0.14em] text-brand lg:absolute lg:-top-1 lg:left-0">{number}</span>
-                  </div>
-                  <h3 className="mt-5 max-w-[190px] font-display text-2xl font-semibold leading-tight text-ink">{title}</h3>
-                  <p className="mt-3 max-w-xs text-sm leading-6 text-muted">{body}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
+      <section className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
+        <div className="max-w-2xl">
+          <p className="eyebrow text-brand">{locale === "fr" ? "LE PROCESSUS" : "THE PROCESS"}</p>
+          <h2 className="mt-2 font-display text-3xl font-semibold text-ink sm:text-4xl">{locale === "fr" ? "De la commande à votre destination" : "From order to destination"}</h2>
         </div>
+        <ol className="mt-10 divide-y divide-border border-y border-border">
+          {c.steps.map(([number, title, body]) => (
+            <li key={number} className="grid gap-4 py-7 sm:grid-cols-[72px_1fr_1.5fr] sm:gap-8 sm:py-9">
+              <span className="font-mono text-xs font-bold tracking-[0.12em] text-brand">{number}</span>
+              <h3 className="font-display text-2xl font-semibold leading-tight text-ink">{title}</h3>
+              <p className="max-w-xl text-sm leading-6 text-muted sm:text-base">{body}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="border-y border-border bg-surface">
-        <div className="mx-auto grid max-w-content gap-6 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2">
-          <div className="rounded-[1.25rem] border border-border bg-background p-6 sm:p-8">
-            <p className="eyebrow text-brand">{c.factorsEyebrow}</p>
+        <div className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
+          <div className="max-w-2xl">
+            <p className="eyebrow text-brand">{locale === "fr" ? "À SAVOIR" : "WHAT TO EXPECT"}</p>
             <h2 className="mt-2 font-display text-3xl font-semibold text-ink sm:text-4xl">{c.factorsTitle}</h2>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-muted sm:text-base">{c.factorsIntro}</p>
-            <div className="mt-8 grid sm:grid-cols-2">
-              {c.factors.map(([title, body, Icon], index) => (
-                <div key={title} className="border-t border-border py-6 first:border-t-0 sm:odd:border-r sm:odd:pr-7 sm:even:pl-7 sm:[&:nth-child(2)]:border-t-0">
-                  <div className="flex items-start gap-4">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-brand/20 text-brand">
-                      <Icon size={20} strokeWidth={1.7} aria-hidden="true" />
-                    </span>
-                    <div>
-                      <p className="font-mono text-[10px] font-bold text-brand">0{index + 1}</p>
-                      <h3 className="mt-1 font-display text-lg font-semibold text-ink">{title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-muted">{body}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p className="mt-3 text-muted">{c.factorsIntro}</p>
           </div>
-
-          <div className="overflow-hidden rounded-[1.25rem] border border-border bg-background">
-            <div className="relative aspect-[3/1] sm:aspect-[16/6]">
-              <Image src={nigeriaImage} alt="Truck loading goods for delivery" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
-            </div>
-            <div className="p-6 sm:p-8">
-              <article>
-                <div className="flex items-start gap-4">
-                  <Truck className="mt-1 shrink-0 text-brand" size={27} strokeWidth={1.7} aria-hidden="true" />
-                  <div>
-                    <h2 className="font-display text-2xl font-semibold text-ink">{c.nigeriaTitle}</h2>
-                    <p className="mt-2 text-sm leading-6 text-muted">{c.nigeriaBody}</p>
-                    <ul className="mt-4 grid gap-2 text-xs text-brand sm:grid-cols-2">
-                      {c.checksNigeria.map((item) => <li key={item} className="flex items-center gap-2"><Check size={14} aria-hidden="true" />{item}</li>)}
-                    </ul>
-                  </div>
-                </div>
-              </article>
-              <article className="mt-8 border-t border-border pt-8">
-                <div className="flex items-start gap-4">
-                  <Globe2 className="mt-1 shrink-0 text-brand" size={27} strokeWidth={1.7} aria-hidden="true" />
-                  <div>
-                    <h2 className="font-display text-2xl font-semibold text-ink">{c.internationalTitle}</h2>
-                    <p className="mt-2 text-sm leading-6 text-muted">{c.internationalBody}</p>
-                    <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-brand">
-                      {c.checksInternational.map((item) => <li key={item} className="flex items-center gap-2"><Check size={14} aria-hidden="true" />{item}</li>)}
-                    </ul>
-                  </div>
-                </div>
-              </article>
-            </div>
+          <div className="mt-10 grid gap-x-10 sm:grid-cols-2">
+            {c.factors.map(([title, body], i) => (
+              <div key={title} className="border-t border-border py-6">
+                <p className="font-mono text-xs font-bold text-brand">0{i + 1}</p>
+                <h3 className="mt-2 font-display text-xl font-semibold text-ink">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted">{body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-brand text-surface">
-        <div className="mx-auto grid max-w-content lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="relative z-10 px-4 py-12 sm:px-6 sm:py-16">
-            <p className="eyebrow text-surface/80">{c.ctaEyebrow}</p>
-            <h2 className="mt-2 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl">{c.ctaTitle}</h2>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-surface/80 sm:text-base">{c.ctaBody}</p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link href={`/${locale}/products`} className="inline-flex items-center gap-2 rounded-md bg-surface px-5 py-3 text-sm font-medium text-brand transition-colors hover:bg-surface/90">{c.build}<ArrowRight size={16} /></Link>
-              <Link href={`/${locale}/contact`} className="inline-flex items-center gap-2 rounded-md border border-surface/50 px-5 py-3 text-sm font-medium text-surface transition-colors hover:bg-surface/10">{c.contact}</Link>
-            </div>
-          </div>
-          <div className="relative min-h-[240px] lg:min-h-full">
-            <Image src={truckImage} alt="Delivery truck being loaded with goods" fill sizes="(max-width: 1024px) 100vw, 45vw" className="object-cover" />
-            <div className="absolute inset-0 bg-brand/10" />
-          </div>
+      <section className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
+        <div className="grid gap-10 sm:grid-cols-2">
+          <article className="border-t border-border pt-6">
+            <p className="eyebrow text-brand">01</p>
+            <h2 className="mt-2 font-display text-2xl font-semibold text-ink">{c.nigeriaTitle}</h2>
+            <p className="mt-3 leading-7 text-muted">{c.nigeriaBody}</p>
+          </article>
+          <article className="border-t border-border pt-6">
+            <p className="eyebrow text-brand">02</p>
+            <h2 className="mt-2 font-display text-2xl font-semibold text-ink">{c.internationalTitle}</h2>
+            <p className="mt-3 leading-7 text-muted">{c.internationalBody}</p>
+          </article>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-content px-4 py-10 sm:px-6 sm:py-12">
-        <p className="mx-auto max-w-3xl text-center text-xs leading-5 text-muted">{c.note}</p>
+        <div className="mt-10 border border-border bg-surface p-6 sm:p-8">
+          <p className="text-sm leading-6 text-muted">{c.note}</p>
+        </div>
+        <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <Link href={`/${locale}/products`} className="inline-flex w-fit items-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-brand-dark">{c.cta} →</Link>
+          <Link href={`/${locale}/contact`} className="text-sm font-medium text-ink underline decoration-border underline-offset-4 hover:decoration-ink">{c.contact} →</Link>
+        </div>
       </section>
     </main>
   );
