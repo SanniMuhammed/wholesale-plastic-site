@@ -8,7 +8,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) return {};
   const dict = getDictionary(rawLocale);
-  return { title: dict.meta.howItWorks.title, description: dict.meta.howItWorks.description };
+  return { title: dict.meta.howItWorks.title, description: dict.meta.howItWorks.description, alternates: { canonical: `/${rawLocale}/how-it-works` } };
 }
 
 export default async function HowItWorksPage({ params }: { params: Promise<{ locale: string }> }) {
