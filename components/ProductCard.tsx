@@ -44,14 +44,14 @@ export function ProductCard({
         />
       </Link>
 
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
         <p className="eyebrow min-h-[1.1rem] text-brand/70">
           {dict.categories[product.category]}
         </p>
 
         <Link
           href={href}
-          className="mt-1 line-clamp-2 min-h-[2.65rem] font-display text-base font-semibold leading-snug text-ink transition-colors group-hover:text-brand"
+          className="mt-1 line-clamp-2 min-h-[2.65rem] font-display text-[15px] font-semibold leading-snug text-ink transition-colors group-hover:text-brand sm:text-base"
         >
           {product.name[locale]}
         </Link>
@@ -73,7 +73,7 @@ export function ProductCard({
                 </p>
               </>
             ) : (
-              <p className="pt-1 font-medium leading-4 text-ink">
+              <p className="pt-1 text-sm font-medium leading-4 text-ink">
                 {locale === "fr"
                   ? "Prix de gros sur demande"
                   : "Wholesale price on request"}
