@@ -66,6 +66,30 @@ export async function updateHomepageSection(id: string, input: Partial<Omit<Home
   return data;
 }
 
+export async function uploadHomepageSectionImage(file: File, sectionId: string, slot: "desktop" | "mobile" = "desktop"): Promise<HomepageSection> {
+  const supabase = await createClient();
+  const { data: existing, error: existingError } = await supabase.from("homepage_sections").select("*").eq("id", sectionId).single();
+  if (existingError) throw existingError;
+  const extension = file.name.split(".").pop() || "jpg";
+  const storagePath = `homepage/sections/${existing.key}/${slot}/${crypto.randomUUID()}.${extension}`;
+  const { error: uploadError } = await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).upload(storagePath, file, { contentType: file.type });
+  if (uploadError) throw uploadError;
+  const column = slot === "mobile" ? "hero_mobile_image_path" : "hero_image_path";
+  const oldPath = existing[column];
+  if (oldPath && !oldPath.startsWith("/") && !oldPath.startsWith("http://") && !oldPath.startsWith("https://")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([oldPath]);
+  return updateHomepageSection(existing.id, { [column]: storagePath });
+}
+
+export async function removeHomepageSectionImage(sectionId: string, slot: "desktop" | "mobile" = "desktop"): Promise<HomepageSection> {
+  const supabase = await createClient();
+  const { data: existing, error: existingError } = await supabase.from("homepage_sections").select("*").eq("id", sectionId).single();
+  if (existingError) throw existingError;
+  const column = slot === "mobile" ? "hero_mobile_image_path" : "hero_image_path";
+  const path = existing[column];
+  if (path && !path.startsWith("/") && !path.startsWith("http://") && !path.startsWith("https://")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([path]);
+  return updateHomepageSection(existing.id, { [column]: null });
+}
+
 async function uploadHeroImage(file: File, slot: "desktop" | "mobile"): Promise<HomepageSection> {
   const supabase = await createClient();
   const { data: existing, error: existingError } = await supabase.from("homepage_sections").select("*").eq("key", "hero").single();
