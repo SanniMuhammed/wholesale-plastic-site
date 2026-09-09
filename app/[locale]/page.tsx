@@ -17,7 +17,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) return {};
   const dict = getDictionary(rawLocale);
-  return { title: dict.meta.home.title, description: dict.meta.home.description };
+  return {
+    title: dict.meta.home.title,
+    description: dict.meta.home.description,
+    alternates: {
+      canonical: `/${rawLocale}`,
+      languages: { en: "/en", fr: "/fr" },
+    },
+  };
 }
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
