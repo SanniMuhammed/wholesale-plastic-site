@@ -5,9 +5,7 @@ import { updateAdminSession } from "@/lib/supabase/proxy";
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // /admin is a locale-free area (see app/admin/layout.tsx) with its own
-  // auth handling -- keep it out of the locale-detection logic below
-  // entirely, or every /admin visit would get redirected to /en/admin.
+  // Admin has its own auth flow and does not use locale prefixes.
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
     return updateAdminSession(request);
   }
@@ -17,8 +15,7 @@ export async function proxy(request: NextRequest) {
   );
   if (pathnameHasLocale) return;
 
-  // No locale in the URL yet -- infer one from Accept-Language and redirect.
-  // Francophone visitors land on /fr by default; everyone else gets /en.
+  // Use the browser language when the URL has no locale yet.
   const acceptLanguage = request.headers.get("accept-language") || "";
   const preferredLocale = acceptLanguage.toLowerCase().includes("fr") ? "fr" : defaultLocale;
 

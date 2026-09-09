@@ -16,8 +16,7 @@ export function useInView<T extends HTMLElement>(options?: UseInViewOptions) {
     if (!el) return;
 
     if (typeof IntersectionObserver === "undefined") {
-      // Older browsers without IntersectionObserver should show the content.
-      // This is intentionally an effect fallback because the API is browser-only.
+      // Show the content in browsers without IntersectionObserver.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setInView(true);
       return;
@@ -33,6 +32,7 @@ export function useInView<T extends HTMLElement>(options?: UseInViewOptions) {
 
     observer.observe(el);
     return () => observer.disconnect();
+    // `once` controls whether the observer disconnects after the first hit.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [once]);
 
