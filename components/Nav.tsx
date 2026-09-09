@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { MouseEvent } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
@@ -65,17 +66,24 @@ export function Nav({ locale, dict }: NavProps) {
     { href: `${base}/contact`, label: dict.nav.contact },
   ];
 
+  function handleBrandClick(event: MouseEvent<HTMLAnchorElement>) {
+    if (window.location.pathname === base) {
+      event.preventDefault();
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }
+
   return (
     <header className={cx("sticky top-0 z-40 border-b bg-surface/95 backdrop-blur transition-shadow duration-300 print:hidden", scrolled ? "border-border shadow-card" : "border-transparent")}>
       <div className="mx-auto flex h-16 max-w-content items-center justify-between px-3 sm:px-6">
-        <a
+        <Link
           href={base}
           className="group shrink-0"
           aria-label="Sherinab Venture home"
-          onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "instant" })}
+          onClick={handleBrandClick}
         >
           <SherinabLogo />
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
           {links.map((link) => (
