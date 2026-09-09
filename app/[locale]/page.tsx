@@ -18,11 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) return {};
   const dict = getDictionary(rawLocale);
-  return {
-    title: dict.meta.home.title,
-    description: dict.meta.home.description,
-    alternates: { canonical: `/${rawLocale}`, languages: { en: "/en", fr: "/fr" } },
-  };
+  return { title: dict.meta.home.title, description: dict.meta.home.description, alternates: { canonical: `/${rawLocale}`, languages: { en: "/en", fr: "/fr" } } };
 }
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -55,7 +51,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <FeaturedProducts locale={locale} dict={dict} />
       <ShopByBusiness locale={locale} dict={dict} section={startBusinessSection} imageUrl={homepageImage(startBusinessSection, "desktop")} mobileImageUrl={homepageImage(startBusinessSection, "mobile")} />
       <WholesaleQuoteCta locale={locale} dict={dict} />
-      <HowItWorksSection dict={dict} section={howItWorksSection} imageUrl={homepageImage(howItWorksSection, "desktop")} mobileImageUrl={homepageImage(howItWorksSection, "mobile")} />
+      <HowItWorksSection locale={locale} dict={dict} section={howItWorksSection} imageUrl={homepageImage(howItWorksSection, "desktop")} mobileImageUrl={homepageImage(howItWorksSection, "mobile")} />
       <FinalCta locale={locale} dict={dict} imageUrl={finalCtaImage} section={finalCtaSection} />
     </>
   );
