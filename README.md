@@ -1,106 +1,167 @@
-# Wholesale Plastic Products — Website
+# Sherinab Venture — Wholesale Plastic Website
 
-A bilingual (French/English) B2B wholesale sourcing platform for a Nigerian
-plastic-products company, built with Next.js 14 (App Router), TypeScript and
-Tailwind CSS. This is a fresh build — there was no pre-existing project to
-audit, so everything here is new.
+Bilingual English/French B2B website for Sherinab Venture, a Nigerian wholesale plastic-products business serving customers in Nigeria and across West Africa.
 
-## What's here
+The site is built with Next.js, TypeScript, Tailwind CSS, Supabase and WhatsApp-based ordering. It is designed for wholesale enquiries rather than retail checkout.
 
-- Bilingual routing (`/en`, `/fr`) with automatic language detection on first
-  visit and a manual `FR | EN` switcher
-- Homepage funnel: hero, trust bar, categories, featured products, "you don't
-  need to travel to Nigeria", how-it-works, start-a-business, delivery
-  teaser, final CTA
-- Product catalog with search (matches English and French terms alike, e.g.
-  "bucket" and "seau" both work) and category filters
-- Product detail pages with a quantity picker
-- A client-side **Wholesale Order** (deliberately not a retail cart) that
-  persists across pages via `localStorage`
-- Order Summary page (`/order-summary`): a receipt-styled view of the
-  customer's order, with optional name/business/notes fields that enrich a
-  pre-filled WhatsApp message -- the primary, zero-friction path to confirm
-  pricing and delivery with a rep. A "Print / Save as PDF" action prints
-  just the receipt (nav/footer/form hidden via Tailwind `print:` classes).
-  A collapsed fallback form (`/api/quote`) remains for customers without
-  WhatsApp
-- Wholesale, Delivery, About and Contact pages
-- WhatsApp deep-links throughout, with contextual pre-filled messages in the
-  active language
+## What the site does
 
-No customer testimonials, stats, delivery times or prices are included
-anywhere — the brief was explicit that none of that should be invented, so
-those are left as clearly-marked placeholders instead (see below).
+- English and French routes under `/en` and `/fr`.
+- Language switching without losing the current page.
+- Product catalogue with search and category filters.
+- Product detail pages with galleries, specifications, pricing status and reviews.
+- Wholesale order list stored in the browser and kept while customers move around the site.
+- Order summary with a WhatsApp hand-off and a fallback quote form.
+- Delivery, About, Contact and How It Works pages.
+- Responsive navigation, product cards and order UI for mobile and desktop.
+- Admin dashboard for products, categories, colours, reviews, FAQs, company details, homepage content and delivery content.
+- Supabase-backed CMS and storage for site content and images.
+- Editable homepage and delivery-page images, including the delivery process images.
+- Product image management from the admin dashboard.
+- Business contact details managed from the CMS.
 
-## Getting started
+## Current site structure
 
+```text
+app/
+  [locale]/
+    page.tsx                    Homepage
+    products/                   Product catalogue
+    products/[slug]/            Product detail
+    how-it-works/               Ordering process
+    wholesale/                  Wholesale information
+    delivery/                   Delivery information
+    about/                      Company information
+    contact/                    Contact information
+    order-summary/              Customer order summary
+  admin/                        Admin dashboard and authentication
+  api/                          Public API routes
+
+components/
+  Nav.tsx                       Site navigation
+  Footer.tsx                    Site footer
+  Hero.tsx                      Homepage hero
+  ProductCard.tsx               Product card
+  ProductGallery.tsx            Product image gallery
+  HowItWorksSection.tsx         Homepage ordering steps
+  DeliveryTeaser.tsx            Homepage delivery section
+  FinalCta.tsx                  Homepage final CTA
+  admin/                        CMS controls
+  cart/                         Wholesale order UI
+
+lib/
+  cms/                          Supabase CMS access and types
+  i18n/                         English/French dictionaries
+  catalog/                      Catalogue helpers
+  supabase/                     Supabase clients
+  whatsapp.ts                   WhatsApp message builders
+
+supabase/
+  migrations/                   Database changes
+  seed/                         Development seed data
+
+public/
+  images/                       Site images
+  product-images/               Product image assets
 ```
+
+## CMS
+
+The public site reads editable business content from Supabase. The `/admin` dashboard is the place to manage that content.
+
+The CMS currently covers:
+
+- Homepage sections and visibility.
+- Homepage hero images, including a mobile image.
+- Homepage section images where an image slot exists.
+- Homepage final CTA image.
+- Delivery page images.
+- Delivery process step images.
+- Products, product images and pricing.
+- Product reviews and moderation.
+- Categories and category images.
+- Colours.
+- FAQs.
+- Company information and business hours.
+
+The delivery page's approved image-rich layout is kept in the code. CMS controls change its content and images without changing that layout.
+
+## Images
+
+Images can come from the public `public/` directory or Supabase storage. The CMS image helpers understand both public paths and full image URLs.
+
+Image uploads use Server Actions. `next.config.mjs` allows uploads up to 10 MB because Next.js defaults Server Action request bodies to 1 MB.
+
+Do not replace product images unless the product itself is being updated. Product photography is managed separately from the homepage and delivery-page artwork.
+
+## Ordering
+
+The site uses a wholesale order list rather than a normal retail shopping cart.
+
+Customers can:
+
+1. Add products and quantities.
+2. Review the order summary.
+3. Add their name, business and notes if needed.
+4. Send the order through WhatsApp.
+5. Use the fallback quote form when WhatsApp is not available.
+
+The public order path records the order in Supabase and sends the customer to WhatsApp with a pre-filled message.
+
+## Local development
+
+Create `.env.local` from `.env.example`, then install dependencies and start Next.js:
+
+```bash
 npm install
-cp .env.example .env.local   # then fill in real values
 npm run dev
 ```
 
-Visit `http://localhost:3000` — it redirects to `/en` or `/fr` based on your
-browser's language.
+The development site is available at `http://localhost:3000`.
 
-This project was written and syntax-checked in an environment with no
-network access, so `npm install` / `npm run dev` haven't actually been run
-against it yet. Everything follows standard, stable Next.js 14 App Router
-patterns, but budget a first local run to catch anything that needs a tweak.
+For this project, do not use `npm run build` in the Android/Termux environment. Production builds are checked through GitHub Actions and Vercel.
 
-## What to fill in before launch
+## Environment variables
 
-- **`.env.local`** — real WhatsApp number, email, phone, address (see
-  `.env.example` for the exact keys)
-- **`lib/products.ts`** — replace the sample catalog with the real product
-  list, specs, and (once available) photo paths via each product's `image`
-  field
-- **Product photography** — until a product's `image` is set, the UI shows a
-  plain color-block placeholder instead of a stock photo, on purpose; drop
-  real photos under `/public` and point `image` at them
-- **About page copy** — in `lib/i18n/en.json` and `fr.json`, under
-  `aboutPage.sections`, replace the bracketed placeholder text with the
-  company's real story
-- **`app/api/quote/route.ts`** — the fallback-form endpoint (for customers
-  without WhatsApp); currently only logs submissions to the server console.
-  Wire it to email (e.g. Resend, Nodemailer) or a database/CRM before launch
-- **`wholesalePage.whySection.points`** (`en.json` / `fr.json`) — confirm
-  these capability claims match what the business actually offers before
-  publishing them
+The application uses the following Supabase variables:
 
-## Structure
-
-```
-app/
-  layout.tsx            root layout (fonts, <html>/<body>)
-  [locale]/             all locale-prefixed routes (en/fr)
-    layout.tsx           Nav + Footer + wholesale-order state
-    page.tsx             Home
-    products/            catalog (search + category filters)
-    products/[slug]/     product detail
-    how-it-works/, wholesale/, delivery/, about/, order-summary/, contact/
-  api/quote/             fallback (no-WhatsApp) submission endpoint (stub — see above)
-middleware.ts            redirects "/" to /en or /fr based on Accept-Language
-lib/
-  i18n/                  en.json / fr.json dictionaries + locale config
-  products.ts            product & category data model + sample catalog
-  whatsapp.ts            wa.me link builders with pre-filled messages
-  getDictionary.ts       loads the right dictionary for a locale
-components/              UI, organized roughly by the section it renders
+```text
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
-## Known limitations / next steps
+Keep `.env.local` out of Git. Never put service-role credentials in client-side code.
 
-- `<html lang>` lives on the root layout (above the `[locale]` segment) and
-  is synced client-side once the locale is known
-  (`components/HtmlLangSync.tsx`). Fine at this scale; worth revisiting with
-  a library like `next-intl` if the site and its routes grow a lot.
-- No PDF catalog download yet (brief section 30) — add a PDF-generation step
-  once there's a real catalog to export.
-- No CMS/admin. Products live in `lib/products.ts`. If non-developers need
-  to edit the catalog directly, that's the natural next addition.
-- Country-specific landing pages (`/locations/...`) were intentionally left
-  out until there's enough real, country-specific content to justify them.
+## Database
 
-<!-- Deployment verification trigger: 2026-09-08 -->
-<!-- Deployment retry trigger: 2026-09-08 -->
+Supabase migrations live in `supabase/migrations/` and are applied in filename order. The current migration set includes the CMS schema, storage policies, product pricing and reviews, business hours, company address, delivery-page images and expanded CMS image slots.
+
+The production company address is:
+
+**Oke Sunnah, Saki, Oyo State, Nigeria**
+
+## Deployment
+
+The GitHub repository is connected to Vercel. Changes merged into `main` are picked up by the production project automatically.
+
+Before merging a larger change:
+
+1. Check the changed files and database migrations.
+2. Let the GitHub production-build workflow finish.
+3. Review the Vercel deployment.
+4. Test the affected page on both mobile and desktop.
+5. Check both `/en` and `/fr` when the change is user-facing.
+
+Avoid manual duplicate Vercel deployments when a GitHub deployment is already running.
+
+## Documentation
+
+- `ADMIN_SETUP.md` — admin, Supabase and CMS setup.
+- `CHANGES.md` — project history and notable changes.
+- `docs/homepage-redesign-plan.md` — current homepage design decisions.
+
+## Notes for contributors
+
+Keep the code straightforward. Prefer small components, clear names and simple data flow over abstractions that do not solve a real problem. Keep business copy in the dictionaries or CMS instead of scattering it through components.
+
+When changing the UI, preserve the existing responsive behaviour and accessibility attributes. When changing an image, check its mobile crop as well as its desktop presentation.
