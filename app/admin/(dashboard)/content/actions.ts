@@ -10,6 +10,8 @@ import {
   uploadHomepageMobileHeroImage,
   removeHomepageHeroImage,
   removeHomepageMobileHeroImage,
+  uploadHomepageFinalCtaImage,
+  removeFinalCtaImage,
 } from "@/lib/cms/settings";
 import type { CompanySettings, DeliveryContent, WholesaleContent, HomepageSection } from "@/lib/cms/types";
 
@@ -48,6 +50,20 @@ export async function removeHomepageHeroImageAction() {
 
 export async function removeHomepageMobileHeroImageAction() {
   const section = await removeHomepageMobileHeroImage();
+  revalidatePath("/admin/content/homepage"); revalidatePath("/[locale]", "page");
+  return section;
+}
+
+export async function uploadHomepageFinalCtaImageAction(formData: FormData) {
+  const file = formData.get("file") as File | null;
+  if (!file) throw new Error("No file provided");
+  const section = await uploadHomepageFinalCtaImage(file);
+  revalidatePath("/admin/content/homepage"); revalidatePath("/[locale]", "page");
+  return section;
+}
+
+export async function removeHomepageFinalCtaImageAction() {
+  const section = await removeFinalCtaImage();
   revalidatePath("/admin/content/homepage"); revalidatePath("/[locale]", "page");
   return section;
 }
