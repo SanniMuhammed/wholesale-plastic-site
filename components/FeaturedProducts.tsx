@@ -10,7 +10,7 @@ export async function FeaturedProducts({ locale, dict }: { locale: Locale; dict:
 
   return (
     <section className="bg-brand-light/40">
-      <div className="mx-auto max-w-content px-4 py-16 sm:px-6">
+      <div className="mx-auto max-w-content px-4 py-10 sm:px-6 sm:py-12">
         <div className="flex items-end justify-between gap-4 border-b border-brand/15 pb-5">
           <div>
             <p className="eyebrow text-brand">02 / Featured</p>
