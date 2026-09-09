@@ -12,6 +12,8 @@ import {
   removeHomepageMobileHeroImage,
   uploadHomepageFinalCtaImage,
   removeFinalCtaImage,
+  uploadHomepageSectionImage,
+  removeHomepageSectionImage,
   uploadDeliveryImage,
   removeDeliveryImage,
 } from "@/lib/cms/settings";
@@ -25,6 +27,25 @@ export async function updateHomepageSectionAction(id: string, input: Partial<Omi
   const section = await updateHomepageSection(id, input);
   revalidatePath("/admin/content/homepage");
   revalidatePath("/[locale]", "page");
+  return section;
+}
+
+export async function uploadHomepageSectionImageAction(formData: FormData) {
+  const file = formData.get("file") as File | null;
+  const sectionId = String(formData.get("sectionId") || "");
+  const slot = formData.get("slot");
+  if (!file) throw new Error("No file provided");
+  if (!sectionId) throw new Error("Missing homepage section");
+  if (slot !== "desktop" && slot !== "mobile") throw new Error("Invalid image slot");
+  const section = await uploadHomepageSectionImage(file, sectionId, slot);
+  revalidatePath("/admin/content/homepage"); revalidatePath("/[locale]", "page");
+  return section;
+}
+
+export async function removeHomepageSectionImageAction(sectionId: string, slot: "desktop" | "mobile" = "desktop") {
+  if (!sectionId) throw new Error("Missing homepage section");
+  const section = await removeHomepageSectionImage(sectionId, slot);
+  revalidatePath("/admin/content/homepage"); revalidatePath("/[locale]", "page");
   return section;
 }
 
