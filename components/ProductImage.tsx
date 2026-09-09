@@ -4,8 +4,6 @@ import type { Locale } from "@/lib/i18n/config";
 import { cx } from "@/lib/utils";
 import { CategoryIllustration } from "@/components/illustrations/CategoryIllustration";
 
-// Each category gets one consistent tint -- not an alternating pattern --
-// so color carries meaning instead of just breaking up a grid visually.
 const CATEGORY_TINTS: Record<CategorySlug, string> = {
   buckets: "bg-brand-light",
   basins: "bg-clay-light",
@@ -43,11 +41,7 @@ interface ProductImageProps {
   sizes?: string;
 }
 
-/**
- * Every product gets the same square image frame. Real photography is shown
- * without cropping so products with different source-image proportions still
- * sit in a consistent catalog grid.
- */
+/** Keep every product image in the same square frame without cropping it. */
 export function ProductImage({ product, locale, className, sizes }: ProductImageProps) {
   if (product.image) {
     return (
