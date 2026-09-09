@@ -11,9 +11,9 @@ import { RouteDiagram } from "@/components/illustrations/RouteDiagram";
 const HINGE_INDEX = 2;
 
 export function HowItWorksSection({ dict, locale, id, section, imageUrl, mobileImageUrl, deliverySection, deliveryImageUrl, deliveryMobileImageUrl }: { dict: Dictionary; locale: Locale; id?: string; section?: HomepageSection; imageUrl?: string | null; mobileImageUrl?: string | null; deliverySection?: HomepageSection; deliveryImageUrl?: string | null; deliveryMobileImageUrl?: string | null }) {
+  const { ref, inView } = useInView<HTMLDivElement>();
   if (section?.is_visible === false) return null;
   const steps = dict.howItWorksSection.steps;
-  const { ref, inView } = useInView<HTMLDivElement>();
   const title = section?.title_en && locale === "en" ? section.title_en : section?.title_fr && locale === "fr" ? section.title_fr : dict.howItWorksSection.title;
   const subtitle = section?.body_en && locale === "en" ? section.body_en : section?.body_fr && locale === "fr" ? section.body_fr : dict.howItWorksSection.subtitle;
   const deliveryVisible = deliverySection?.is_visible !== false;
