@@ -68,9 +68,14 @@ export function Nav({ locale, dict }: NavProps) {
   return (
     <header className={cx("sticky top-0 z-40 border-b bg-surface/95 backdrop-blur transition-shadow duration-300 print:hidden", scrolled ? "border-border shadow-card" : "border-transparent")}>
       <div className="mx-auto flex h-16 max-w-content items-center justify-between px-3 sm:px-6">
-        <Link href={base} className="group shrink-0" aria-label="Sherinab Venture home">
+        <a
+          href={base}
+          className="group shrink-0"
+          aria-label="Sherinab Venture home"
+          onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "instant" })}
+        >
           <SherinabLogo />
-        </Link>
+        </a>
 
         <nav className="hidden items-center gap-6 md:flex">
           {links.map((link) => (
