@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { CompanySettings, DeliveryContent, WholesaleContent, HomepageSection } from "@/lib/cms/types";
 
 const HOMEPAGE_IMAGES_BUCKET = "product-images";
+const FINAL_CTA_FALLBACK_IMAGE = "/images/sherinab-truck-cta.webp";
 
 export function buildHomepageImageUrl(storagePath: string): string {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -105,6 +106,42 @@ export function removeHomepageHeroImage() {
 
 export function removeHomepageMobileHeroImage() {
   return removeHeroImage("mobile");
+}
+
+async function uploadFinalCtaImage(file: File): Promise<HomepageSection> {
+  const supabase = await createClient();
+  const { data: existing, error: existingError } = await supabase.from("homepage_sections").select("*").eq("key", "final_cta").single();
+  if (existingError) throw existingError;
+
+  const extension = file.name.split(".").pop() || "jpg";
+  const storagePath = `homepage/final-cta/${crypto.randomUUID()}.${extension}`;
+  const { error: uploadError } = await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).upload(storagePath, file, { contentType: file.type });
+  if (uploadError) throw uploadError;
+
+  if (existing.hero_image_path) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([existing.hero_image_path]);
+  return updateHomepageSection(existing.id, { hero_image_path: storagePath });
+}
+
+export async function removeFinalCtaImage(): Promise<HomepageSection> {
+  const supabase = await createClient();
+  const { data: existing, error: existingError } = await supabase.from("homepage_sections").select("*").eq("key", "final_cta").single();
+  if (existingError) throw existingError;
+  if (existing.hero_image_path) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([existing.hero_image_path]);
+  return updateHomepageSection(existing.id, { hero_image_path: null });
+}
+
+export function uploadHomepageFinalCtaImage(file: File) {
+  return uploadFinalCtaImage(file);
+}
+
+export async function getHomepageFinalCtaImageUrl(): Promise<string> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.from("homepage_sections").select("hero_image_path").eq("key", "final_cta").single();
+    return data?.hero_image_path ? buildHomepageImageUrl(data.hero_image_path) : FINAL_CTA_FALLBACK_IMAGE;
+  } catch {
+    return FINAL_CTA_FALLBACK_IMAGE;
+  }
 }
 
 export async function getHomepageHeroImages(): Promise<{ desktop: string | null; mobile: string | null }> {
