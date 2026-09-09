@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, Filter, Search, X } from "lucide-react";
+import { ArrowRight, Filter, X } from "lucide-react";
 import { CATEGORIES, type CategorySlug } from "@/lib/products";
 import type { CatalogProduct } from "@/lib/catalog/products";
 import type { Locale } from "@/lib/i18n/config";
@@ -36,21 +36,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
       const q = query.trim().toLowerCase();
       list = products.filter((p) => {
         const category = CATEGORIES.find((c) => c.slug === p.category);
-        return [
-          p.name.en,
-          p.name.fr,
-          p.shortDescription.en,
-          p.shortDescription.fr,
-          p.description.en,
-          p.description.fr,
-          p.capacity ?? "",
-          p.material.en,
-          p.material.fr,
-          p.useCase.en,
-          p.useCase.fr,
-          category?.name.en ?? "",
-          category?.name.fr ?? "",
-        ].join(" ").toLowerCase().includes(q);
+        return [p.name.en, p.name.fr, p.shortDescription.en, p.shortDescription.fr, p.description.en, p.description.fr, p.capacity ?? "", p.material.en, p.material.fr, p.useCase.en, p.useCase.fr, category?.name.en ?? "", category?.name.fr ?? ""].join(" ").toLowerCase().includes(q);
       });
     }
     if (category) list = list.filter((p) => p.category === category);
@@ -59,77 +45,48 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
 
   const hasFilters = Boolean(category || query);
   const activeCategory = category ? CATEGORIES.find((c) => c.slug === category) : null;
-  const clearAll = () => {
-    setCategory(null);
-    setQuery("");
-  };
+  const clearAll = () => { setCategory(null); setQuery(""); };
 
   return (
     <div>
-      <div className="mb-6 sm:mb-8">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="min-w-0">
-            <p className="eyebrow">{dict.nav.categories}</p>
-            <label htmlFor="category-filter" className="mt-1 block font-display text-xl font-semibold text-ink sm:text-2xl">
-              {dict.nav.categories}
-            </label>
-          </div>
-
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="relative min-w-0 flex-1 sm:w-64 sm:flex-none">
-              <Filter size={15} strokeWidth={1.8} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
-              <select
-                id="category-filter"
-                value={category ?? ""}
-                onChange={(event) => setCategory(isCategorySlug(event.target.value) ? event.target.value : null)}
-                className="h-11 w-full appearance-none rounded border border-border bg-surface pl-9 pr-9 text-sm font-medium text-ink focus:border-ink focus:outline-none"
-              >
-                <option value="">{dict.common.all}</option>
-                {CATEGORIES.map((c) => (
-                  <option key={c.slug} value={c.slug}>
-                    {c.name[locale]}
-                  </option>
-                ))}
-              </select>
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden>⌄</span>
+      <div className="mb-7 sm:mb-9">
+        <div className="rounded-xl border border-border bg-surface p-3 shadow-sm sm:p-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-light text-brand"><Filter size={16} strokeWidth={1.9} aria-hidden /></span>
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">{dict.nav.categories}</p>
+                <p className="truncate font-display text-base font-semibold text-ink sm:text-lg">Filter products by category</p>
+              </div>
             </div>
-
-            <span className="shrink-0 font-mono text-[11px] text-muted sm:text-xs">
-              {String(products.length).padStart(2, "0")} {dict.common.items}
-            </span>
+            <div className="flex w-full items-center gap-2 sm:w-auto">
+              <div className="relative min-w-0 flex-1 sm:w-64">
+                <label htmlFor="category-filter" className="sr-only">{dict.nav.categories}</label>
+                <select id="category-filter" value={category ?? ""} onChange={(event) => setCategory(isCategorySlug(event.target.value) ? event.target.value : null)} className="h-11 w-full appearance-none rounded-lg border border-border bg-background px-3 pr-9 text-sm font-semibold text-ink outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/10">
+                  <option value="">{dict.common.all}</option>
+                  {CATEGORIES.map((c) => <option key={c.slug} value={c.slug}>{c.name[locale]}</option>)}
+                </select>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden>⌄</span>
+              </div>
+              {hasFilters && <button type="button" onClick={clearAll} aria-label={dict.common.clearFilters} className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted transition-colors hover:border-brand hover:text-brand"><X size={16} aria-hidden /></button>}
+            </div>
+          </div>
+          <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
+            <p className="text-xs text-muted">{activeCategory ? activeCategory.name[locale] : dict.common.all}</p>
+            <p className="font-mono text-xs font-semibold text-ink">{String(results.length).padStart(2, "0")} {dict.common.items}</p>
           </div>
         </div>
       </div>
 
-      <div className="sticky top-16 z-30 -mx-4 border-y border-border bg-background/95 px-4 py-3 backdrop-blur sm:top-[4.5rem] sm:-mx-6 sm:px-6 sm:py-4">
-        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-3">
-          <div className="relative flex-1 sm:max-w-lg">
-            <Search size={16} strokeWidth={1.75} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
-            <label htmlFor="catalog-search" className="sr-only">{dict.common.searchPlaceholder}</label>
-            <input id="catalog-search" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={dict.common.searchPlaceholder} autoComplete="off" className="w-full rounded border border-border bg-surface py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-muted focus:border-ink focus:outline-none" />
-          </div>
-          {hasFilters && <button type="button" onClick={clearAll} className="inline-flex min-h-10 items-center gap-1.5 self-start text-sm font-medium text-muted hover:text-ink sm:self-auto"><X size={14} aria-hidden />{dict.common.clearFilters}</button>}
-        </div>
-      </div>
-
-      <div className="mt-5 flex flex-wrap items-baseline justify-between gap-2 sm:mt-6">
-        <div>
-          <p className="font-display text-lg font-semibold text-ink">{activeCategory ? activeCategory.name[locale] : dict.nav.products}</p>
-          {activeCategory && <p className="mt-0.5 text-sm text-muted">{String(results.length).padStart(2, "0")} {dict.common.items}</p>}
-        </div>
-        {!activeCategory && <p className="font-mono text-sm text-muted">{String(results.length).padStart(2, "0")} {dict.common.items}</p>}
+      <div className="mb-4 flex items-end justify-between gap-3 sm:mb-5">
+        <div><p className="eyebrow">{dict.nav.products}</p><h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">{activeCategory ? activeCategory.name[locale] : dict.nav.products}</h2></div>
+        {hasFilters && <button type="button" onClick={clearAll} className="text-xs font-semibold text-muted transition-colors hover:text-brand">{dict.common.clearFilters}</button>}
       </div>
 
       {results.length === 0 ? (
-        <div className="mt-5 rounded-lg border border-dashed border-border bg-surface p-6 text-center sm:mt-6 sm:p-8">
-          <p className="font-medium text-ink">{dict.common.noResults}</p>
-          <p className="mx-auto mt-2 max-w-md text-sm text-muted">{dict.categoriesSection.subtitle}</p>
-          <button type="button" onClick={clearAll} className="mt-5 inline-flex min-h-10 items-center gap-2 rounded bg-ink px-4 py-2 text-sm font-medium text-surface">{dict.common.clearFilters}<ArrowRight size={14} aria-hidden /></button>
-        </div>
+        <div className="mt-5 rounded-lg border border-dashed border-border bg-surface p-6 text-center sm:mt-6 sm:p-8"><p className="font-medium text-ink">{dict.common.noResults}</p><p className="mx-auto mt-2 max-w-md text-sm text-muted">{dict.categoriesSection.subtitle}</p><button type="button" onClick={clearAll} className="mt-5 inline-flex min-h-10 items-center gap-2 rounded bg-ink px-4 py-2 text-sm font-medium text-surface">{dict.common.clearFilters}<ArrowRight size={14} aria-hidden /></button></div>
       ) : (
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
-          {results.map((product) => <ProductCard key={product.slug} product={product} locale={locale} dict={dict} />)}
-        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">{results.map((product) => <ProductCard key={product.slug} product={product} locale={locale} dict={dict} />)}</div>
       )}
     </div>
   );
