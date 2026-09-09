@@ -36,7 +36,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const byKey = new Map(sections.map((section) => [section.key, section]));
   const heroSection = byKey.get("hero");
   const startBusinessSection = byKey.get("start_business");
+  const travelSection = byKey.get("travel");
   const howItWorksSection = byKey.get("how_it_works");
+  const deliveryTeaserSection = byKey.get("delivery_teaser");
   const finalCtaSection = byKey.get("final_cta");
   const homepageImage = (section: HomepageSection | undefined, slot: "desktop" | "mobile") => {
     const path = slot === "mobile" ? section?.hero_mobile_image_path : section?.hero_image_path;
@@ -50,8 +52,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <ProductCategories locale={locale} dict={dict} categoryImages={categoryImages} />
       <FeaturedProducts locale={locale} dict={dict} />
       <ShopByBusiness locale={locale} dict={dict} section={startBusinessSection} imageUrl={homepageImage(startBusinessSection, "desktop")} mobileImageUrl={homepageImage(startBusinessSection, "mobile")} />
-      <WholesaleQuoteCta locale={locale} dict={dict} />
-      <HowItWorksSection locale={locale} dict={dict} section={howItWorksSection} imageUrl={homepageImage(howItWorksSection, "desktop")} mobileImageUrl={homepageImage(howItWorksSection, "mobile")} />
+      <WholesaleQuoteCta locale={locale} dict={dict} section={travelSection} imageUrl={homepageImage(travelSection, "desktop")} mobileImageUrl={homepageImage(travelSection, "mobile")} />
+      <HowItWorksSection locale={locale} dict={dict} section={howItWorksSection} imageUrl={homepageImage(howItWorksSection, "desktop")} mobileImageUrl={homepageImage(howItWorksSection, "mobile")} deliverySection={deliveryTeaserSection} deliveryImageUrl={homepageImage(deliveryTeaserSection, "desktop")} deliveryMobileImageUrl={homepageImage(deliveryTeaserSection, "mobile")} />
       <FinalCta locale={locale} dict={dict} imageUrl={finalCtaImage} section={finalCtaSection} />
     </>
   );
