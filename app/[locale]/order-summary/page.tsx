@@ -8,7 +8,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) return {};
   const dict = getDictionary(rawLocale);
-  return { title: dict.meta.orderSummary.title, description: dict.meta.orderSummary.description };
+  return {
+    title: dict.meta.orderSummary.title,
+    description: dict.meta.orderSummary.description,
+    robots: { index: false, follow: false },
+  };
 }
 
 export default async function OrderSummaryPage({ params }: { params: Promise<{ locale: string }> }) {
