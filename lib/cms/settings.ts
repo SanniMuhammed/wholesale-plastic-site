@@ -5,7 +5,7 @@ const HOMEPAGE_IMAGES_BUCKET = "product-images";
 const FINAL_CTA_FALLBACK_IMAGE = "/images/sherinab-truck-cta.webp";
 
 export function buildHomepageImageUrl(storagePath: string): string {
-  if (storagePath.startsWith("/")) return storagePath;
+  if (storagePath.startsWith("/") || storagePath.startsWith("http://") || storagePath.startsWith("https://")) return storagePath;
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   return `${base}/storage/v1/object/public/${HOMEPAGE_IMAGES_BUCKET}/${storagePath}`;
 }
@@ -70,55 +70,38 @@ async function uploadHeroImage(file: File, slot: "desktop" | "mobile"): Promise<
   const supabase = await createClient();
   const { data: existing, error: existingError } = await supabase.from("homepage_sections").select("*").eq("key", "hero").single();
   if (existingError) throw existingError;
-
   const extension = file.name.split(".").pop() || "jpg";
   const storagePath = `homepage/hero/${slot}/${crypto.randomUUID()}.${extension}`;
   const { error: uploadError } = await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).upload(storagePath, file, { contentType: file.type });
   if (uploadError) throw uploadError;
-
   const oldPath = slot === "desktop" ? existing.hero_image_path : existing.hero_mobile_image_path;
   if (oldPath && !oldPath.startsWith("/")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([oldPath]);
-
   return updateHomepageSection(existing.id, slot === "desktop" ? { hero_image_path: storagePath } : { hero_mobile_image_path: storagePath });
 }
 
-export function uploadHomepageHeroImage(file: File) {
-  return uploadHeroImage(file, "desktop");
-}
-
-export function uploadHomepageMobileHeroImage(file: File) {
-  return uploadHeroImage(file, "mobile");
-}
+export function uploadHomepageHeroImage(file: File) { return uploadHeroImage(file, "desktop"); }
+export function uploadHomepageMobileHeroImage(file: File) { return uploadHeroImage(file, "mobile"); }
 
 async function removeHeroImage(slot: "desktop" | "mobile"): Promise<HomepageSection> {
   const supabase = await createClient();
   const { data: existing, error: existingError } = await supabase.from("homepage_sections").select("*").eq("key", "hero").single();
   if (existingError) throw existingError;
-
   const path = slot === "desktop" ? existing.hero_image_path : existing.hero_mobile_image_path;
   if (path && !path.startsWith("/")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([path]);
-
   return updateHomepageSection(existing.id, slot === "desktop" ? { hero_image_path: null } : { hero_mobile_image_path: null });
 }
 
-export function removeHomepageHeroImage() {
-  return removeHeroImage("desktop");
-}
-
-export function removeHomepageMobileHeroImage() {
-  return removeHeroImage("mobile");
-}
+export function removeHomepageHeroImage() { return removeHeroImage("desktop"); }
+export function removeHomepageMobileHeroImage() { return removeHeroImage("mobile"); }
 
 async function uploadFinalCtaImage(file: File): Promise<HomepageSection> {
   const supabase = await createClient();
   const { data: existing, error: existingError } = await supabase.from("homepage_sections").select("*").eq("key", "final_cta").single();
   if (existingError) throw existingError;
-
   const extension = file.name.split(".").pop() || "jpg";
   const storagePath = `homepage/final-cta/${crypto.randomUUID()}.${extension}`;
   const { error: uploadError } = await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).upload(storagePath, file, { contentType: file.type });
   if (uploadError) throw uploadError;
-
   if (existing.hero_image_path && !existing.hero_image_path.startsWith("/")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([existing.hero_image_path]);
   return updateHomepageSection(existing.id, { hero_image_path: storagePath });
 }
@@ -131,34 +114,75 @@ export async function removeFinalCtaImage(): Promise<HomepageSection> {
   return updateHomepageSection(existing.id, { hero_image_path: null });
 }
 
-export function uploadHomepageFinalCtaImage(file: File) {
-  return uploadFinalCtaImage(file);
-}
+export function uploadHomepageFinalCtaImage(file: File) { return uploadFinalCtaImage(file); }
 
 export async function getHomepageFinalCtaImageUrl(): Promise<string> {
   try {
     const supabase = await createClient();
     const { data } = await supabase.from("homepage_sections").select("hero_image_path").eq("key", "final_cta").single();
     return data?.hero_image_path ? buildHomepageImageUrl(data.hero_image_path) : FINAL_CTA_FALLBACK_IMAGE;
-  } catch {
-    return FINAL_CTA_FALLBACK_IMAGE;
-  }
+  } catch { return FINAL_CTA_FALLBACK_IMAGE; }
 }
 
 export async function getHomepageHeroImages(): Promise<{ desktop: string | null; mobile: string | null }> {
   try {
     const supabase = await createClient();
     const { data } = await supabase.from("homepage_sections").select("hero_image_path, hero_mobile_image_path").eq("key", "hero").single();
-    return {
-      desktop: data?.hero_image_path ? buildHomepageImageUrl(data.hero_image_path) : null,
-      mobile: data?.hero_mobile_image_path ? buildHomepageImageUrl(data.hero_mobile_image_path) : null,
-    };
-  } catch {
-    return { desktop: null, mobile: null };
-  }
+    return { desktop: data?.hero_image_path ? buildHomepageImageUrl(data.hero_image_path) : null, mobile: data?.hero_mobile_image_path ? buildHomepageImageUrl(data.hero_mobile_image_path) : null };
+  } catch { return { desktop: null, mobile: null }; }
 }
 
 export async function getHomepageHeroImageUrl(): Promise<string | null> {
   const images = await getHomepageHeroImages();
   return images.desktop;
+}
+
+const DELIVERY_FALLBACKS = {
+  hero: "https://images.unsplash.com/photo-1779517225996-d5b751f80f48?auto=format&fit=crop&fm=jpg&q=82&w=1800",
+  nigeria: "https://images.unsplash.com/photo-1713859272775-2e1cf7d777a1?auto=format&fit=crop&fm=jpg&q=82&w=1400",
+  truck: "https://images.unsplash.com/photo-1620455800201-7f00aeef12ed?auto=format&fit=crop&fm=jpg&q=82&w=1400",
+} as const;
+
+export function buildDeliveryImageUrl(storagePath: string): string {
+  return buildHomepageImageUrl(storagePath);
+}
+
+export async function getDeliveryImages(): Promise<{ hero: string; nigeria: string; truck: string }> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.from("delivery_content").select("hero_image_path, nigeria_image_path, truck_image_path").eq("id", 1).single();
+    return {
+      hero: data?.hero_image_path ? buildDeliveryImageUrl(data.hero_image_path) : DELIVERY_FALLBACKS.hero,
+      nigeria: data?.nigeria_image_path ? buildDeliveryImageUrl(data.nigeria_image_path) : DELIVERY_FALLBACKS.nigeria,
+      truck: data?.truck_image_path ? buildDeliveryImageUrl(data.truck_image_path) : DELIVERY_FALLBACKS.truck,
+    };
+  } catch {
+    return DELIVERY_FALLBACKS;
+  }
+}
+
+type DeliveryImageSlot = "hero" | "nigeria" | "truck";
+
+export async function uploadDeliveryImage(file: File, slot: DeliveryImageSlot): Promise<DeliveryContent> {
+  const supabase = await createClient();
+  const { data: existing, error: existingError } = await supabase.from("delivery_content").select("*").eq("id", 1).single();
+  if (existingError) throw existingError;
+  const extension = file.name.split(".").pop() || "jpg";
+  const storagePath = `delivery/${slot}/${crypto.randomUUID()}.${extension}`;
+  const { error: uploadError } = await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).upload(storagePath, file, { contentType: file.type });
+  if (uploadError) throw uploadError;
+  const column = `${slot}_image_path` as const;
+  const oldPath = existing[column];
+  if (oldPath && !oldPath.startsWith("/" ) && !oldPath.startsWith("http://") && !oldPath.startsWith("https://")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([oldPath]);
+  return updateDeliveryContent({ [column]: storagePath });
+}
+
+export async function removeDeliveryImage(slot: DeliveryImageSlot): Promise<DeliveryContent> {
+  const supabase = await createClient();
+  const { data: existing, error: existingError } = await supabase.from("delivery_content").select("*").eq("id", 1).single();
+  if (existingError) throw existingError;
+  const column = `${slot}_image_path` as const;
+  const path = existing[column];
+  if (path && !path.startsWith("/") && !path.startsWith("http://") && !path.startsWith("https://")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([path]);
+  return updateDeliveryContent({ [column]: null });
 }
