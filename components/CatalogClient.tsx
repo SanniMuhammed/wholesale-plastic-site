@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, Filter, X } from "lucide-react";
+import { ArrowRight, Filter } from "lucide-react";
 import { CATEGORIES, type CategorySlug } from "@/lib/products";
 import type { CatalogProduct } from "@/lib/catalog/products";
 import type { Locale } from "@/lib/i18n/config";
@@ -50,37 +50,40 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
   return (
     <div>
       <div className="mb-7 sm:mb-9">
-        <div className="rounded-xl border border-border bg-surface p-3 shadow-sm sm:p-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex min-w-0 items-center gap-2.5">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-light text-brand"><Filter size={16} strokeWidth={1.9} aria-hidden /></span>
-              <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">{dict.nav.categories}</p>
-                <p className="truncate font-display text-base font-semibold text-ink sm:text-lg">Filter products by category</p>
-              </div>
-            </div>
-            <div className="flex w-full items-center gap-2 sm:w-auto">
-              <div className="relative min-w-0 flex-1 sm:w-64">
-                <label htmlFor="category-filter" className="sr-only">{dict.nav.categories}</label>
-                <select id="category-filter" value={category ?? ""} onChange={(event) => setCategory(isCategorySlug(event.target.value) ? event.target.value : null)} className="h-11 w-full appearance-none rounded-lg border border-border bg-background px-3 pr-9 text-sm font-semibold text-ink outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/10">
-                  <option value="">{dict.common.all}</option>
-                  {CATEGORIES.map((c) => <option key={c.slug} value={c.slug}>{c.name[locale]}</option>)}
-                </select>
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden>⌄</span>
-              </div>
-              {hasFilters && <button type="button" onClick={clearAll} aria-label={dict.common.clearFilters} className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted transition-colors hover:border-brand hover:text-brand"><X size={16} aria-hidden /></button>}
-            </div>
+        <div className="mb-3 flex items-end justify-between gap-3">
+          <div>
+            <p className="eyebrow">{dict.nav.categories}</p>
+            <h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">Filter by category</h2>
           </div>
-          <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
-            <p className="text-xs text-muted">{activeCategory ? activeCategory.name[locale] : dict.common.all}</p>
-            <p className="font-mono text-xs font-semibold text-ink">{String(results.length).padStart(2, "0")} {dict.common.items}</p>
+          <p className="font-mono text-xs font-semibold text-muted">{String(results.length).padStart(2, "0")} {dict.common.items}</p>
+        </div>
+
+        <div className="flex items-center gap-3 border-b border-border pb-5">
+          <Filter size={20} strokeWidth={1.8} className="shrink-0 text-brand" aria-hidden />
+          <div className="relative min-w-0 flex-1">
+            <label htmlFor="category-filter" className="sr-only">{dict.nav.categories}</label>
+            <select
+              id="category-filter"
+              value={category ?? ""}
+              onChange={(event) => setCategory(isCategorySlug(event.target.value) ? event.target.value : null)}
+              className="h-11 w-full appearance-none rounded-lg border border-border bg-background px-4 pr-9 text-sm font-medium text-ink outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/10"
+            >
+              <option value="">{dict.common.all}</option>
+              {CATEGORIES.map((c) => <option key={c.slug} value={c.slug}>{c.name[locale]}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden>⌄</span>
           </div>
+          {activeCategory && (
+            <button type="button" onClick={clearAll} className="shrink-0 text-xs font-semibold text-muted transition-colors hover:text-brand">
+              {dict.common.clearFilters}
+            </button>
+          )}
         </div>
       </div>
 
       <div className="mb-4 flex items-end justify-between gap-3 sm:mb-5">
         <div><p className="eyebrow">{dict.nav.products}</p><h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">{activeCategory ? activeCategory.name[locale] : dict.nav.products}</h2></div>
-        {hasFilters && <button type="button" onClick={clearAll} className="text-xs font-semibold text-muted transition-colors hover:text-brand">{dict.common.clearFilters}</button>}
+        {hasFilters && !activeCategory && <button type="button" onClick={clearAll} className="text-xs font-semibold text-muted transition-colors hover:text-brand">{dict.common.clearFilters}</button>}
       </div>
 
       {results.length === 0 ? (
