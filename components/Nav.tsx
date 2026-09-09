@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { MouseEvent, FormEvent } from "react";
 import Link from "next/link";
-import { Menu, Search, X } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
@@ -74,13 +74,13 @@ export function Nav({ locale, dict }: NavProps) {
 
   return (
     <header className={cx("sticky top-0 z-40 border-b bg-surface/95 backdrop-blur transition-shadow duration-300 print:hidden", scrolled ? "border-border shadow-card" : "border-transparent")}>
-      <div className="mx-auto flex h-[68px] max-w-content items-center gap-2 px-3 sm:gap-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-content items-center gap-2 px-3 sm:gap-4 sm:px-6">
         <Link href={base} className="group shrink-0" aria-label="Sherinab Venture home" onClick={handleBrandClick}><SherinabLogo /></Link>
 
         <form onSubmit={handleSearch} className="relative min-w-0 flex-1 md:max-w-xs lg:max-w-md">
-          <Search size={17} strokeWidth={1.9} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-brand" aria-hidden />
+          <Search size={16} strokeWidth={1.9} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-brand" aria-hidden />
           <label htmlFor="navbar-search" className="sr-only">{dict.common.searchPlaceholder}</label>
-          <input id="navbar-search" name="q" type="search" defaultValue={searchParams.get("q") ?? ""} placeholder={dict.common.searchPlaceholder} autoComplete="off" className="h-11 w-full rounded-lg border border-border bg-background pl-10 pr-3 text-sm text-ink shadow-sm outline-none transition-all placeholder:text-muted hover:border-brand/40 focus:border-brand focus:ring-2 focus:ring-brand/10 sm:text-[13px]" />
+          <input id="navbar-search" name="q" type="search" defaultValue={searchParams.get("q") ?? ""} placeholder={dict.common.searchPlaceholder} autoComplete="off" className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] text-ink shadow-sm outline-none transition-all placeholder:text-muted hover:border-brand/40 focus:border-brand focus:ring-2 focus:ring-brand/10" />
         </form>
 
         <nav className="hidden items-center gap-6 md:flex">
@@ -92,8 +92,8 @@ export function Nav({ locale, dict }: NavProps) {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5 md:hidden">
-          <CartTrigger dict={dict} variant="icon" />
-          <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={open ? dict.nav.close : dict.nav.menu} className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-background text-ink transition-colors hover:border-brand hover:text-brand active:bg-brand-light">{open ? <X size={20} /> : <Menu size={20} />}</button>
+          <CartTrigger dict={dict} />
+          <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={open ? dict.nav.close : dict.nav.menu} className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background text-ink transition-colors hover:border-brand hover:text-brand active:bg-brand-light">{open ? <X size={19} /> : <Menu size={19} />}</button>
         </div>
       </div>
 
