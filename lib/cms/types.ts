@@ -39,6 +39,11 @@ export interface DeliveryContent {
   hero_image_path: string | null;
   nigeria_image_path: string | null;
   truck_image_path: string | null;
+  step_1_image_path: string | null;
+  step_2_image_path: string | null;
+  step_3_image_path: string | null;
+  step_4_image_path: string | null;
+  step_5_image_path: string | null;
 }
 export interface WholesaleContent { body_en: string; body_fr: string; }
 export type HomepageSectionKey = "hero" | "trust_bar" | "how_it_works" | "start_business" | "travel" | "delivery_teaser" | "final_cta";
