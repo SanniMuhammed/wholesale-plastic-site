@@ -10,12 +10,15 @@ import { RouteDiagram } from "@/components/illustrations/RouteDiagram";
 
 const HINGE_INDEX = 2;
 
-export function HowItWorksSection({ dict, locale, id, section, imageUrl, mobileImageUrl }: { dict: Dictionary; locale: Locale; id?: string; section?: HomepageSection; imageUrl?: string | null; mobileImageUrl?: string | null }) {
+export function HowItWorksSection({ dict, locale, id, section, imageUrl, mobileImageUrl, deliverySection, deliveryImageUrl, deliveryMobileImageUrl }: { dict: Dictionary; locale: Locale; id?: string; section?: HomepageSection; imageUrl?: string | null; mobileImageUrl?: string | null; deliverySection?: HomepageSection; deliveryImageUrl?: string | null; deliveryMobileImageUrl?: string | null }) {
   if (section?.is_visible === false) return null;
   const steps = dict.howItWorksSection.steps;
   const { ref, inView } = useInView<HTMLDivElement>();
   const title = section?.title_en && locale === "en" ? section.title_en : section?.title_fr && locale === "fr" ? section.title_fr : dict.howItWorksSection.title;
   const subtitle = section?.body_en && locale === "en" ? section.body_en : section?.body_fr && locale === "fr" ? section.body_fr : dict.howItWorksSection.subtitle;
+  const deliveryVisible = deliverySection?.is_visible !== false;
+  const deliveryTitle = deliverySection?.title_en && locale === "en" ? deliverySection.title_en : deliverySection?.title_fr && locale === "fr" ? deliverySection.title_fr : dict.deliveryTeaser.title;
+  const deliverySubtitle = deliverySection?.body_en && locale === "en" ? deliverySection.body_en : deliverySection?.body_fr && locale === "fr" ? deliverySection.body_fr : dict.deliveryTeaser.subtitle;
 
   return (
     <section id={id} className="border-y border-border bg-surface scroll-mt-20">
@@ -40,11 +43,12 @@ export function HowItWorksSection({ dict, locale, id, section, imageUrl, mobileI
             })}
           </ol>
         </div>
-        <div className="mt-14 border-t border-border pt-10 sm:mt-16 sm:pt-12">
-          <div className="max-w-xl"><p className="eyebrow text-brand">{dict.deliveryTeaser.originLabel} → {dict.deliveryTeaser.destinationLabel}</p><h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">{dict.deliveryTeaser.title}</h3><p className="mt-3 text-muted">{dict.deliveryTeaser.subtitle}</p></div>
+        {deliveryVisible && <div className="mt-14 border-t border-border pt-10 sm:mt-16 sm:pt-12">
+          <div className="max-w-xl"><p className="eyebrow text-brand">{dict.deliveryTeaser.originLabel} → {dict.deliveryTeaser.destinationLabel}</p><h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">{deliveryTitle}</h3><p className="mt-3 text-muted">{deliverySubtitle}</p></div>
+          {deliveryImageUrl && <picture className="mt-8 block max-w-3xl overflow-hidden rounded-xl border border-border bg-background"><>{deliveryMobileImageUrl && <source media="(max-width: 640px)" srcSet={deliveryMobileImageUrl} />}</><img src={deliveryImageUrl} alt="" className="h-auto max-h-[320px] w-full object-cover" loading="lazy" /></picture>}
           <div className="mt-10 max-w-3xl sm:mt-12"><RouteDiagram active={inView} className="h-auto w-full text-brand" /><div className="mt-3 flex items-start justify-between gap-4"><span className="eyebrow">{dict.deliveryTeaser.originLabel}</span><span className="eyebrow text-right">{dict.deliveryTeaser.destinationLabel}</span></div></div>
-          <Link href={`/${dict.locale}/delivery`} className="mt-8 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface">{dict.deliveryTeaser.cta} →</Link>
-        </div>
+          <Link href={`/${locale}/delivery`} className="mt-8 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface">{dict.deliveryTeaser.cta} →</Link>
+        </div>}
       </div>
     </section>
   );
