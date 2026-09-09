@@ -13,6 +13,12 @@ if (supabaseUrl) {
 
 const nextConfig = {
   poweredByHeader: false,
+  experimental: {
+    serverActions: {
+      // Image uploads use Server Actions; the Next.js default is 1MB.
+      bodySizeLimit: "10mb",
+    },
+  },
   images: {
     remotePatterns: [
       {
