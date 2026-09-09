@@ -5,6 +5,7 @@ const HOMEPAGE_IMAGES_BUCKET = "product-images";
 const FINAL_CTA_FALLBACK_IMAGE = "/images/sherinab-truck-cta.webp";
 
 export function buildHomepageImageUrl(storagePath: string): string {
+  if (storagePath.startsWith("/")) return storagePath;
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   return `${base}/storage/v1/object/public/${HOMEPAGE_IMAGES_BUCKET}/${storagePath}`;
 }
@@ -76,7 +77,7 @@ async function uploadHeroImage(file: File, slot: "desktop" | "mobile"): Promise<
   if (uploadError) throw uploadError;
 
   const oldPath = slot === "desktop" ? existing.hero_image_path : existing.hero_mobile_image_path;
-  if (oldPath) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([oldPath]);
+  if (oldPath && !oldPath.startsWith("/")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([oldPath]);
 
   return updateHomepageSection(existing.id, slot === "desktop" ? { hero_image_path: storagePath } : { hero_mobile_image_path: storagePath });
 }
@@ -95,7 +96,7 @@ async function removeHeroImage(slot: "desktop" | "mobile"): Promise<HomepageSect
   if (existingError) throw existingError;
 
   const path = slot === "desktop" ? existing.hero_image_path : existing.hero_mobile_image_path;
-  if (path) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([path]);
+  if (path && !path.startsWith("/")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([path]);
 
   return updateHomepageSection(existing.id, slot === "desktop" ? { hero_image_path: null } : { hero_mobile_image_path: null });
 }
@@ -118,7 +119,7 @@ async function uploadFinalCtaImage(file: File): Promise<HomepageSection> {
   const { error: uploadError } = await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).upload(storagePath, file, { contentType: file.type });
   if (uploadError) throw uploadError;
 
-  if (existing.hero_image_path) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([existing.hero_image_path]);
+  if (existing.hero_image_path && !existing.hero_image_path.startsWith("/")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([existing.hero_image_path]);
   return updateHomepageSection(existing.id, { hero_image_path: storagePath });
 }
 
@@ -126,7 +127,7 @@ export async function removeFinalCtaImage(): Promise<HomepageSection> {
   const supabase = await createClient();
   const { data: existing, error: existingError } = await supabase.from("homepage_sections").select("*").eq("key", "final_cta").single();
   if (existingError) throw existingError;
-  if (existing.hero_image_path) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([existing.hero_image_path]);
+  if (existing.hero_image_path && !existing.hero_image_path.startsWith("/")) await supabase.storage.from(HOMEPAGE_IMAGES_BUCKET).remove([existing.hero_image_path]);
   return updateHomepageSection(existing.id, { hero_image_path: null });
 }
 
