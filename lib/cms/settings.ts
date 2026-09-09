@@ -175,14 +175,18 @@ export async function getDeliveryImages(): Promise<{ hero: string; nigeria: stri
   try {
     const supabase = await createClient();
     const { data } = await supabase.from("delivery_content").select("hero_image_path, nigeria_image_path, truck_image_path, step_1_image_path, step_2_image_path, step_3_image_path, step_4_image_path, step_5_image_path").eq("id", 1).single();
+    const stepPaths: Array<string | null> = [
+      data?.step_1_image_path ?? null,
+      data?.step_2_image_path ?? null,
+      data?.step_3_image_path ?? null,
+      data?.step_4_image_path ?? null,
+      data?.step_5_image_path ?? null,
+    ];
     return {
       hero: data?.hero_image_path ? buildDeliveryImageUrl(data.hero_image_path) : DELIVERY_FALLBACKS.hero,
       nigeria: data?.nigeria_image_path ? buildDeliveryImageUrl(data.nigeria_image_path) : DELIVERY_FALLBACKS.nigeria,
       truck: data?.truck_image_path ? buildDeliveryImageUrl(data.truck_image_path) : DELIVERY_FALLBACKS.truck,
-      steps: [1, 2, 3, 4, 5].map((n) => {
-        const path = data?.[`step_${n}_image_path`];
-        return path ? buildDeliveryImageUrl(path) : null;
-      }),
+      steps: stepPaths.map((path) => path ? buildDeliveryImageUrl(path) : null),
     };
   } catch {
     return { ...DELIVERY_FALLBACKS, steps: [null, null, null, null, null] };
