@@ -35,6 +35,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   const byKey = new Map(sections.map((section) => [section.key, section]));
   const heroSection = byKey.get("hero");
+  const trustSection = byKey.get("trust_bar");
   const startBusinessSection = byKey.get("start_business");
   const travelSection = byKey.get("travel");
   const howItWorksSection = byKey.get("how_it_works");
@@ -48,7 +49,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       <Hero locale={locale} dict={dict} categoryImages={categoryImages} heroImage={heroImages.desktop} mobileHeroImage={heroImages.mobile} section={heroSection} />
-      <TrustBar dict={dict} />
+      <TrustBar dict={dict} section={trustSection} imageUrl={homepageImage(trustSection, "desktop")} mobileImageUrl={homepageImage(trustSection, "mobile")} />
       <ProductCategories locale={locale} dict={dict} categoryImages={categoryImages} />
       <FeaturedProducts locale={locale} dict={dict} />
       <ShopByBusiness locale={locale} dict={dict} section={startBusinessSection} imageUrl={homepageImage(startBusinessSection, "desktop")} mobileImageUrl={homepageImage(startBusinessSection, "mobile")} />
