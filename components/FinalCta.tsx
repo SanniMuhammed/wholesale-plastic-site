@@ -3,7 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { generalInquiryLink } from "@/lib/whatsapp";
 
-export function FinalCta({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function FinalCta({ locale, dict, imageUrl }: { locale: Locale; dict: Dictionary; imageUrl: string }) {
   const base = `/${locale}`;
 
   return (
@@ -36,7 +36,7 @@ export function FinalCta({ locale, dict }: { locale: Locale; dict: Dictionary })
           className="min-h-[260px] overflow-hidden bg-cover bg-center bg-no-repeat sm:min-h-[320px] lg:min-h-[360px]"
           role="img"
           aria-label="Sherinab Venture delivery truck"
-          style={{ backgroundImage: "url('/images/sherinab-truck-cta.webp?v=4')" }}
+          style={{ backgroundImage: `url("${imageUrl}")` }}
         />
       </div>
     </section>
