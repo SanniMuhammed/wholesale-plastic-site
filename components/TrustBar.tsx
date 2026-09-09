@@ -1,13 +1,51 @@
 import type { Dictionary } from "@/lib/getDictionary";
 import type { HomepageSection } from "@/lib/cms/types";
 
-export function TrustBar({ dict, section, imageUrl, mobileImageUrl }: { dict: Dictionary; section?: HomepageSection; imageUrl?: string | null; mobileImageUrl?: string | null }) {
+type TrustBarProps = {
+  dict: Dictionary;
+  section?: HomepageSection;
+  imageUrl?: string | null;
+  mobileImageUrl?: string | null;
+};
+
+const icons = [
+  <svg key="location" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z" stroke="currentColor" strokeWidth="1.8" />
+    <circle cx="12" cy="9" r="2.2" stroke="currentColor" strokeWidth="1.8" />
+  </svg>,
+  <svg key="delivery" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M3 6.5h11v10H3zM14 10h3.8l3.2 3.2v3.3H14z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+    <circle cx="7" cy="18" r="1.8" stroke="currentColor" strokeWidth="1.8" />
+    <circle cx="18" cy="18" r="1.8" stroke="currentColor" strokeWidth="1.8" />
+  </svg>,
+  <svg key="international" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.8" />
+    <path d="M3.8 12h16.4M12 3.5c2.2 2.3 3.3 5.1 3.3 8.5S14.2 18.2 12 20.5M12 3.5C9.8 5.8 8.7 8.6 8.7 12s1.1 6.2 3.3 8.5" stroke="currentColor" strokeWidth="1.5" />
+  </svg>,
+  <svg key="whatsapp" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M19.1 4.9A9.9 9.9 0 0 0 12 2a10 10 0 0 0-8.6 15.1L2.5 22l5-1.7A10 10 0 0 0 12 22h.1A10 10 0 0 0 19.1 4.9Z" stroke="currentColor" strokeWidth="1.7" />
+    <path d="M8.2 7.6c.2-.4.4-.4.7-.4h.6c.2 0 .4.1.5.4l.8 1.9c.1.3.1.5-.1.7l-.6.7c.7 1.2 1.6 2.1 2.9 2.8l.7-.7c.2-.2.4-.2.7-.1l1.8.8c.3.1.4.3.4.6 0 .8-.3 1.4-.8 1.7-.5.3-1.3.5-2.1.3-1.6-.3-3.3-1.2-4.7-2.6-1.4-1.4-2.3-3.1-2.6-4.7-.1-.7 0-1.4.3-1.9Z" fill="currentColor" />
+  </svg>,
+];
+
+export function TrustBar({ dict, section, imageUrl, mobileImageUrl }: TrustBarProps) {
   if (section?.is_visible === false) return null;
+
   return (
     <section className="border-y border-border bg-surface">
-      {imageUrl && <picture className="mx-auto block max-w-content overflow-hidden border-b border-border">{mobileImageUrl && <source media="(max-width: 640px)" srcSet={mobileImageUrl} />}<img src={imageUrl} alt="" className="h-auto max-h-48 w-full object-cover" loading="lazy" /></picture>}
+      {imageUrl && (
+        <picture className="mx-auto block max-w-content overflow-hidden border-b border-border">
+          {mobileImageUrl && <source media="(max-width: 640px)" srcSet={mobileImageUrl} />}
+          <img src={imageUrl} alt="" className="h-auto max-h-48 w-full object-cover" loading="lazy" />
+        </picture>
+      )}
       <div className="mx-auto grid max-w-content grid-cols-2 sm:grid-cols-4 sm:divide-x sm:divide-border">
-        {dict.trustBar.items.map((item, i) => <div key={item} className="flex items-baseline gap-2.5 border-b border-border px-4 py-3 sm:border-b-0 sm:px-6"><span className="font-mono text-xs font-bold text-brand">{String(i + 1).padStart(2, "0")}</span><span className="text-sm font-medium text-ink-soft">{item}</span></div>)}
+        {dict.trustBar.items.map((item, index) => (
+          <div key={item} className="flex items-center gap-2.5 border-b border-border px-2 py-3 sm:border-b-0 sm:px-6">
+            <span className="h-5 w-5 shrink-0 text-brand">{icons[index]}</span>
+            <span className="whitespace-nowrap text-[11px] font-medium text-ink-soft sm:text-sm">{item}</span>
+          </div>
+        ))}
       </div>
     </section>
   );
