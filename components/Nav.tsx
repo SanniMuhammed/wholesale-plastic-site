@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { MouseEvent, FormEvent } from "react";
 import Link from "next/link";
 import { Menu, Search, X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { generalInquiryLink } from "@/lib/whatsapp";
@@ -47,6 +47,7 @@ export function Nav({ locale, dict }: NavProps) {
   const [scrolled, setScrolled] = useState(false);
   const base = `/${locale}`;
   const router = useRouter();
+  const searchParams = useSearchParams();
   const whatsappHref = generalInquiryLink(dict);
 
   useEffect(() => {
@@ -95,7 +96,7 @@ export function Nav({ locale, dict }: NavProps) {
             id="navbar-search"
             name="q"
             type="search"
-            defaultValue=""
+            defaultValue={searchParams.get("q") ?? ""}
             placeholder={dict.common.searchPlaceholder}
             autoComplete="off"
             className="h-10 w-full rounded-md border border-border bg-background pl-9 pr-3 text-xs text-ink placeholder:text-muted focus:border-brand focus:outline-none sm:text-sm"
