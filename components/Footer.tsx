@@ -56,7 +56,7 @@ export async function Footer({ locale, dict }: { locale: Locale; dict: Dictionar
         </div>
         <div className="mt-9 flex flex-col gap-4 border-t border-white/15 pt-6 sm:mt-16 sm:flex-row sm:items-center sm:justify-between sm:pt-7">
           <p className="font-mono text-xs tracking-wide text-white/50">{interpolate(dict.footer.copyright, { year })}</p>
-          <div className="inline-flex self-start rounded-full border border-white/20 bg-white/10 p-1 sm:self-auto"><LanguageSwitcher locale={locale} className="text-white" inverse /></div>
+          <div className="inline-flex self-start rounded-full border border-white/20 bg-white/10 p-1 sm:self-auto [&_a]:!text-white [&_span]:!text-white/30"><LanguageSwitcher locale={locale} /></div>
         </div>
       </div>
     </footer>
