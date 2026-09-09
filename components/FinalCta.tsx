@@ -34,7 +34,7 @@ export function FinalCta({ locale, dict }: { locale: Locale; dict: Dictionary })
 
         <div className="relative min-h-[260px] overflow-hidden sm:min-h-[320px] lg:min-h-[360px]">
           <img
-            src="/images/sherinab-truck-cta.webp?v=2"
+            src="/images/sherinab-truck-cta.webp?v=3"
             alt="Sherinab Venture delivery truck"
             loading="eager"
             decoding="async"
