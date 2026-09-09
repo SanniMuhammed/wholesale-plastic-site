@@ -30,42 +30,56 @@ export async function updateOrderStatus(id: string, status: OrderStatus): Promis
   if (error) throw error;
 }
 
-/** Called from app/api/orders/route.ts (public, unauthenticated) when a
- *  customer completes the WhatsApp hand-off or submits the fallback form.
- *  RLS allows anon inserts on orders/order_items and nothing else, so this
- *  is safe to call without an admin session. */
+/** Called from the public order API. Uses a client-generated UUID so the
+ * function never needs SELECT access to the newly inserted order. Product
+ * names are resolved from the published catalog rather than trusted from
+ * browser input. */
 export async function recordOrder(payload: NewOrderPayload): Promise<string> {
   const supabase = await createClient();
+  const slugs = [...new Set(payload.items.map((item) => item.slug))];
 
-  const { data: order, error: orderError } = await supabase
-    .from("orders")
-    .insert({
-      channel: payload.channel,
-      customer_name: payload.customerName || null,
-      business_name: payload.businessName || null,
-      contact: payload.contact || null,
-      country: payload.country || null,
-      city: payload.city || null,
-      note: payload.note || null,
-      locale: payload.locale,
-    })
-    .select("id")
-    .single();
+  const { data: products, error: productsError } = await supabase
+    .from("products")
+    .select("slug,name_en,name_fr,capacity")
+    .in("slug", slugs)
+    .eq("status", "published");
+
+  if (productsError) throw productsError;
+  if (!products || products.length !== slugs.length) {
+    throw new Error("One or more products are unavailable.");
+  }
+
+  const bySlug = new Map(products.map((product) => [product.slug, product]));
+  const orderId = crypto.randomUUID();
+
+  const { error: orderError } = await supabase.from("orders").insert({
+    id: orderId,
+    channel: payload.channel,
+    customer_name: payload.customerName || null,
+    business_name: payload.businessName || null,
+    contact: payload.contact || null,
+    country: payload.country || null,
+    city: payload.city || null,
+    note: payload.note || null,
+    locale: payload.locale,
+  });
 
   if (orderError) throw orderError;
 
-  if (payload.items.length > 0) {
-    const { error: itemsError } = await supabase.from("order_items").insert(
-      payload.items.map((item) => ({
-        order_id: order.id,
-        product_slug: item.slug,
-        product_name: item.name,
-        capacity: item.capacity || null,
+  const { error: itemsError } = await supabase.from("order_items").insert(
+    payload.items.map((item) => {
+      const product = bySlug.get(item.slug);
+      if (!product) throw new Error("Product validation failed.");
+      return {
+        order_id: orderId,
+        product_slug: product.slug,
+        product_name: payload.locale === "fr" ? product.name_fr : product.name_en,
+        capacity: product.capacity || null,
         quantity: item.quantity,
-      }))
-    );
-    if (itemsError) throw itemsError;
-  }
+      };
+    })
+  );
 
-  return order.id;
+  if (itemsError) throw itemsError;
+  return orderId;
 }

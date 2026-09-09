@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) return {};
   const dict = getDictionary(rawLocale);
-  return { title: dict.meta.contact.title, description: dict.meta.contact.description };
+  return { title: dict.meta.contact.title, description: dict.meta.contact.description, alternates: { canonical: `/${rawLocale}/contact` } };
 }
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {

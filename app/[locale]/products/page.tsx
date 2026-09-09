@@ -20,6 +20,7 @@ export async function generateMetadata({
   return {
     title: dict.meta.products.title,
     description: dict.meta.products.description,
+    alternates: { canonical: `/${rawLocale}/products` },
   };
 }
 
