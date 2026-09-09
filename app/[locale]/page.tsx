@@ -21,10 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: dict.meta.home.title,
     description: dict.meta.home.description,
-    alternates: {
-      canonical: `/${rawLocale}`,
-      languages: { en: "/en", fr: "/fr" },
-    },
+    alternates: { canonical: `/${rawLocale}`, languages: { en: "/en", fr: "/fr" } },
   };
 }
 
@@ -42,6 +39,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   const byKey = new Map(sections.map((section) => [section.key, section]));
   const heroSection = byKey.get("hero");
+  const startBusinessSection = byKey.get("start_business");
   const howItWorksSection = byKey.get("how_it_works");
   const finalCtaSection = byKey.get("final_cta");
   const homepageImage = (section: HomepageSection | undefined, slot: "desktop" | "mobile") => {
@@ -55,7 +53,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <TrustBar dict={dict} />
       <ProductCategories locale={locale} dict={dict} categoryImages={categoryImages} />
       <FeaturedProducts locale={locale} dict={dict} />
-      <ShopByBusiness locale={locale} dict={dict} />
+      <ShopByBusiness locale={locale} dict={dict} section={startBusinessSection} imageUrl={homepageImage(startBusinessSection, "desktop")} mobileImageUrl={homepageImage(startBusinessSection, "mobile")} />
       <WholesaleQuoteCta locale={locale} dict={dict} />
       <HowItWorksSection dict={dict} section={howItWorksSection} imageUrl={homepageImage(howItWorksSection, "desktop")} mobileImageUrl={homepageImage(howItWorksSection, "mobile")} />
       <FinalCta locale={locale} dict={dict} imageUrl={finalCtaImage} section={finalCtaSection} />
