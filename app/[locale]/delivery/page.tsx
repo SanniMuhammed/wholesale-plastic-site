@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Boxes, Check, CircleDollarSign, Globe2, MapPin, MessageSquare, PackageCheck, Truck, Warehouse } from "lucide-react";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
+import { getDeliveryImages } from "@/lib/cms/settings";
 
 const content = {
   en: {
@@ -77,10 +78,6 @@ const content = {
   },
 } as const;
 
-const heroImage = "https://images.unsplash.com/photo-1779517225996-d5b751f80f48?auto=format&fit=crop&fm=jpg&q=82&w=1800";
-const nigeriaImage = "https://images.unsplash.com/photo-1713859272775-2e1cf7d777a1?auto=format&fit=crop&fm=jpg&q=82&w=1400";
-const truckImage = "https://images.unsplash.com/photo-1620455800201-7f00aeef12ed?auto=format&fit=crop&fm=jpg&q=82&w=1400";
-
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) return {};
@@ -93,6 +90,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ local
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
   const c = content[locale];
+  const images = await getDeliveryImages();
 
   return (
     <main className="overflow-hidden">
@@ -104,7 +102,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ local
             <p className="mt-6 max-w-xl text-base leading-7 text-muted sm:text-lg">{c.intro}</p>
           </div>
           <div className="relative min-h-[300px] lg:min-h-[430px]">
-            <Image src={heroImage} alt="Forklift loading goods into a delivery truck" fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" />
+            <Image src={images.hero} alt="Forklift loading goods into a delivery truck" fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/20 to-transparent lg:-left-20" />
           </div>
         </div>
@@ -151,7 +149,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ local
           </div>
 
           <div className="overflow-hidden rounded-[1.25rem] border border-border bg-background">
-            <div className="relative aspect-[3/1] sm:aspect-[16/6]"><Image src={nigeriaImage} alt="Truck loading goods for delivery" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" /></div>
+            <div className="relative aspect-[3/1] sm:aspect-[16/6]"><Image src={images.nigeria} alt="Truck loading goods for delivery" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" /></div>
             <div className="p-6 sm:p-8">
               <article>
                 <div className="flex items-start gap-4">
@@ -189,7 +187,7 @@ export default async function DeliveryPage({ params }: { params: Promise<{ local
               <Link href={`/${locale}/contact`} className="inline-flex items-center gap-2 rounded-md border border-surface/50 px-5 py-3 text-sm font-medium text-surface transition-colors hover:bg-surface/10">{c.contact}</Link>
             </div>
           </div>
-          <div className="relative min-h-[240px] lg:min-h-full"><Image src={truckImage} alt="Delivery truck being loaded with goods" fill sizes="(max-width: 1024px) 100vw, 45vw" className="object-cover" /><div className="absolute inset-0 bg-brand/10" /></div>
+          <div className="relative min-h-[240px] lg:min-h-full"><Image src={images.truck} alt="Delivery truck being loaded with goods" fill sizes="(max-width: 1024px) 100vw, 45vw" className="object-cover" /><div className="absolute inset-0 bg-brand/10" /></div>
         </div>
       </section>
 
