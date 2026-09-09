@@ -31,13 +31,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     metadataBase: siteUrl ? new URL(siteUrl) : undefined,
     title: { default: dict.meta.home.title, template: `%s | ${dict.meta.home.title}` },
     description: dict.meta.home.description,
-    alternates: {
-      canonical: `/${rawLocale}`,
-      languages: {
-        en: "/en",
-        fr: "/fr",
-      },
-    },
     openGraph: {
       title: dict.meta.home.title,
       description: dict.meta.home.description,
