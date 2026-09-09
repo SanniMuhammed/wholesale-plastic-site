@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
 import { getCategoryCoverImageMap } from "@/lib/cms/categories";
-import { getHomepageHeroImages, getHomepageFinalCtaImageUrl } from "@/lib/cms/settings";
+import { buildHomepageImageUrl, getHomepageHeroImages, getHomepageFinalCtaImageUrl, listHomepageSections } from "@/lib/cms/settings";
+import type { HomepageSection } from "@/lib/cms/types";
 import { Hero } from "@/components/Hero";
 import { TrustBar } from "@/components/TrustBar";
 import { ProductCategories } from "@/components/ProductCategories";
@@ -32,22 +33,32 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
-  const [categoryImages, heroImages, finalCtaImage] = await Promise.all([
+  const [categoryImages, heroImages, finalCtaImage, sections] = await Promise.all([
     getCategoryCoverImageMap(),
     getHomepageHeroImages(),
     getHomepageFinalCtaImageUrl(),
+    listHomepageSections(),
   ]);
+
+  const byKey = new Map(sections.map((section) => [section.key, section]));
+  const heroSection = byKey.get("hero");
+  const howItWorksSection = byKey.get("how_it_works");
+  const finalCtaSection = byKey.get("final_cta");
+  const homepageImage = (section: HomepageSection | undefined, slot: "desktop" | "mobile") => {
+    const path = slot === "mobile" ? section?.hero_mobile_image_path : section?.hero_image_path;
+    return path ? buildHomepageImageUrl(path) : null;
+  };
 
   return (
     <>
-      <Hero locale={locale} dict={dict} categoryImages={categoryImages} heroImage={heroImages.desktop} mobileHeroImage={heroImages.mobile} />
+      <Hero locale={locale} dict={dict} categoryImages={categoryImages} heroImage={heroImages.desktop} mobileHeroImage={heroImages.mobile} section={heroSection} />
       <TrustBar dict={dict} />
       <ProductCategories locale={locale} dict={dict} categoryImages={categoryImages} />
       <FeaturedProducts locale={locale} dict={dict} />
       <ShopByBusiness locale={locale} dict={dict} />
       <WholesaleQuoteCta locale={locale} dict={dict} />
-      <HowItWorksSection dict={dict} />
-      <FinalCta locale={locale} dict={dict} imageUrl={finalCtaImage} />
+      <HowItWorksSection dict={dict} section={howItWorksSection} imageUrl={homepageImage(howItWorksSection, "desktop")} mobileImageUrl={homepageImage(howItWorksSection, "mobile")} />
+      <FinalCta locale={locale} dict={dict} imageUrl={finalCtaImage} section={finalCtaSection} />
     </>
   );
 }
