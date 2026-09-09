@@ -27,6 +27,7 @@ const nextConfig = {
       { protocol: "https", hostname: "assets.laicms.com", pathname: "/**" },
       { protocol: "https", hostname: "s.alicdn.com", pathname: "/**" },
       { protocol: "https", hostname: "bakehouse.pk", pathname: "/**" },
+      { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
     ],
   },
   async headers() {
