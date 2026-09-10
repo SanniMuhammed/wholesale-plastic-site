@@ -32,18 +32,18 @@ export function TrustBar({ dict, section, imageUrl, mobileImageUrl }: TrustBarPr
   if (section?.is_visible === false) return null;
 
   return (
-    <section className="border-y border-border bg-surface">
+    <section className="border-y border-brand-dark bg-brand text-white">
       {imageUrl && (
-        <picture className="mx-auto block max-w-content overflow-hidden border-b border-border">
+        <picture className="mx-auto block max-w-content overflow-hidden border-b border-brand-dark">
           {mobileImageUrl && <source media="(max-width: 640px)" srcSet={mobileImageUrl} />}
           <img src={imageUrl} alt="" className="h-auto max-h-48 w-full object-cover" loading="lazy" />
         </picture>
       )}
-      <div className="mx-auto grid max-w-content grid-cols-2 sm:grid-cols-4 sm:divide-x sm:divide-border">
+      <div className="mx-auto grid max-w-content grid-cols-2 sm:grid-cols-4 sm:divide-x sm:divide-white/15">
         {dict.trustBar.items.map((item, index) => (
-          <div key={item} className="flex items-center gap-2.5 border-b border-border px-2 py-3 sm:border-b-0 sm:px-6">
-            <span className="h-5 w-5 shrink-0 text-brand">{icons[index]}</span>
-            <span className="whitespace-nowrap text-[11px] font-medium text-ink-soft sm:text-sm">{item}</span>
+          <div key={item} className="flex items-center gap-2.5 border-b border-white/15 px-2 py-3 sm:border-b-0 sm:px-6">
+            <span className="h-5 w-5 shrink-0 text-white">{icons[index]}</span>
+            <span className="whitespace-nowrap text-[11px] font-medium text-white sm:text-sm">{item}</span>
           </div>
         ))}
       </div>
