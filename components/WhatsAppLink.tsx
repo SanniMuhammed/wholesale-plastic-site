@@ -17,7 +17,7 @@ export function WhatsAppLink({ href, label, variant = "button", className }: Wha
         rel="noopener noreferrer"
         aria-label={label}
         className={cx(
-          "inline-flex h-9 w-9 items-center justify-center rounded border border-border text-ink hover:border-brand hover:text-brand transition-colors",
+          "inline-flex h-9 w-9 items-center justify-center rounded border border-surface/35 text-surface hover:border-surface hover:bg-surface/10 transition-colors",
           className
         )}
       >
@@ -32,7 +32,7 @@ export function WhatsAppLink({ href, label, variant = "button", className }: Wha
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className={cx("inline-flex items-center gap-1.5 text-sm font-medium text-ink hover:text-brand transition-colors", className)}
+        className={cx("inline-flex items-center gap-1.5 text-sm font-medium text-surface hover:text-surface/80 transition-colors", className)}
       >
         <MessageCircle size={16} strokeWidth={1.75} />
         {label}
