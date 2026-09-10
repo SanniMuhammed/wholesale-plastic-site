@@ -23,8 +23,10 @@ export default async function OrderSummaryPage({ params }: { params: Promise<{ l
   const products = await getAllProducts();
 
   return (
-    <div className="mx-auto max-w-content px-4 py-14 sm:px-6">
-      <h1 className="font-display text-3xl font-semibold text-ink sm:text-4xl">{dict.orderSummaryPage.title}</h1>
+    <div className="order-summary-page mx-auto max-w-content px-4 py-14 sm:px-6">
+      <h1 className="font-display text-3xl font-semibold text-ink sm:text-4xl">
+        {dict.orderSummaryPage.title}
+      </h1>
       <p className="mt-3 max-w-xl text-muted">{dict.orderSummaryPage.intro}</p>
       <div className="mt-10">
         <OrderSummaryClient locale={locale} dict={dict} products={products} />
