@@ -77,27 +77,27 @@ export function Nav({ locale, dict }: NavProps) {
       <div className="mx-auto flex h-16 w-full max-w-content items-center gap-2 px-4 sm:h-[68px] sm:gap-4 sm:px-6 lg:px-8">
         <Link href={base} className="group shrink-0" aria-label="Sherinab Venture home" onClick={handleBrandClick}><SherinabLogo /></Link>
 
-        <form onSubmit={handleSearch} className="relative min-w-0 flex-1 md:max-w-xs lg:max-w-md">
+        <form onSubmit={handleSearch} className="relative min-w-0 flex-1 md:max-w-[230px] lg:max-w-md">
           <Search size={17} strokeWidth={1.9} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-brand" aria-hidden />
           <label htmlFor="navbar-search" className="sr-only">{dict.common.searchPlaceholder}</label>
           <input id="navbar-search" name="q" type="search" defaultValue={searchParams.get("q") ?? ""} placeholder={dict.common.searchPlaceholder} autoComplete="off" className="h-10 w-full rounded-lg border border-border bg-background pl-10 pr-3 text-sm text-ink shadow-sm outline-none transition-all placeholder:text-muted hover:border-brand/40 focus:border-brand focus:ring-2 focus:ring-brand/10 sm:h-11 sm:text-[13px]" />
         </form>
 
-        <nav className="hidden items-center gap-5 lg:flex xl:gap-6">
-          {links.map((link) => <Link key={link.href} href={link.href} className="relative whitespace-nowrap py-2 text-[12px] font-semibold uppercase tracking-[0.06em] text-ink-soft transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-brand after:transition-transform after:duration-300 after:ease-out hover:text-brand hover:after:scale-x-100">{link.label}</Link>)}
+        <nav className="hidden min-w-0 items-center gap-3 md:flex lg:gap-5 xl:gap-6">
+          {links.map((link) => <Link key={link.href} href={link.href} className="relative whitespace-nowrap py-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-ink-soft transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-brand after:transition-transform after:duration-300 after:ease-out hover:text-brand hover:after:scale-x-100 lg:text-[12px] lg:tracking-[0.06em]">{link.label}</Link>)}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex xl:gap-3">
-          <LanguageSwitcher locale={locale} /><span className="h-5 w-px bg-border" aria-hidden /><WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="icon" /><CartTrigger dict={dict} />
+        <div className="hidden shrink-0 items-center gap-1 md:flex lg:gap-2 xl:gap-3">
+          <span className="hidden lg:inline-flex"><LanguageSwitcher locale={locale} /></span><span className="hidden h-5 w-px bg-border lg:inline-block" aria-hidden /><span className="hidden lg:inline-flex"><WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="icon" /></span><CartTrigger dict={dict} />
         </div>
 
-        <div className="flex shrink-0 items-center gap-1.5 lg:hidden">
+        <div className="flex shrink-0 items-center gap-1.5 md:hidden">
           <CartTrigger dict={dict} variant="icon" />
           <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={open ? dict.nav.close : dict.nav.menu} className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background text-ink transition-colors hover:border-brand hover:text-brand active:bg-brand-light sm:h-11 sm:w-11">{open ? <X size={20} /> : <Menu size={20} />}</button>
         </div>
       </div>
 
-      {open && <div className="border-t border-border bg-surface lg:hidden"><nav className="flex flex-col divide-y divide-border px-4 sm:px-6">{links.map((link) => <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="py-4 text-base font-medium text-ink transition-colors hover:text-brand">{link.label}</Link>)}</nav><div className="flex items-center justify-between border-t border-border px-4 py-4 sm:px-6"><LanguageSwitcher locale={locale} /><WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="text" /></div></div>}
+      {open && <div className="border-t border-border bg-surface md:hidden"><nav className="flex flex-col divide-y divide-border px-4 sm:px-6">{links.map((link) => <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="py-4 text-base font-medium text-ink transition-colors hover:text-brand">{link.label}</Link>)}</nav><div className="flex items-center justify-between border-t border-border px-4 py-4 sm:px-6"><LanguageSwitcher locale={locale} /><WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="text" /></div></div>}
     </header>
   );
 }
