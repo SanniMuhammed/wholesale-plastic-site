@@ -68,7 +68,9 @@ export async function getProductBySlug(slug: string): Promise<CatalogProduct | u
   const product = (await listCmsProducts({ status: "published" })).find((item) => item.slug === slug);
   return product ? adaptProduct(product) : undefined;
 }
-export async function getFeaturedProducts(): Promise<CatalogProduct[]> { return (await getAllProducts()).filter((product) => product.featured); }
+export async function getFeaturedProducts(): Promise<CatalogProduct[]> {
+  return (await getAllProducts()).filter((product) => product.featured).slice(0, 16);
+}
 export async function getProductsByCategory(category: CategorySlug): Promise<CatalogProduct[]> { return (await getAllProducts()).filter((product) => product.category === category); }
 export function searchProducts(products: Product[], query: string): Product[] {
   const q = query.trim().toLowerCase(); if (!q) return products;
