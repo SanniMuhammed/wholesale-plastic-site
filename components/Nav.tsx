@@ -85,7 +85,7 @@ export function Nav({ locale, dict }: NavProps) {
           {links.map((link) => <Link key={link.href} href={link.href} className="relative shrink-0 whitespace-nowrap py-2 text-[11px] font-semibold uppercase tracking-[0.03em] text-surface/90 transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-surface after:transition-transform after:duration-300 after:ease-out hover:text-surface hover:after:scale-x-100 lg:text-[12px] lg:tracking-[0.05em]">{link.label}</Link>)}
         </nav>
         <div className="hidden shrink-0 items-center gap-1 md:flex lg:gap-1.5 xl:gap-2">
-          <span className="inline-flex shrink-0"><LanguageSwitcher locale={locale} /></span>
+          <span className="inline-flex shrink-0"><LanguageSwitcher locale={locale} dark /></span>
           <span className="h-5 w-px shrink-0 bg-surface/30" aria-hidden />
           <span className="inline-flex shrink-0"><WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="icon" /></span>
           <span className="inline-flex shrink-0"><CartTrigger dict={dict} /></span>
@@ -95,7 +95,7 @@ export function Nav({ locale, dict }: NavProps) {
           <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={open ? dict.nav.close : dict.nav.menu} className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-surface/40 bg-surface/10 text-surface transition-colors hover:border-surface hover:bg-surface/15 sm:h-11 sm:w-11">{open ? <X size={20} /> : <Menu size={20} />}</button>
         </div>
       </div>
-      {open && <div className="border-t border-surface/20 bg-brand md:hidden"><nav className="flex flex-col divide-y divide-surface/15 px-4 sm:px-6">{links.map((link) => <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="py-4 text-base font-medium text-surface transition-colors hover:text-surface/80">{link.label}</Link>)}</nav><div className="flex items-center justify-between border-t border-surface/15 px-4 py-4 sm:px-6"><LanguageSwitcher locale={locale} /><WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="text" /></div></div>}
+      {open && <div className="border-t border-surface/20 bg-brand md:hidden"><nav className="flex flex-col divide-y divide-surface/15 px-4 sm:px-6">{links.map((link) => <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="py-4 text-base font-medium text-surface transition-colors hover:text-surface/80">{link.label}</Link>)}</nav><div className="flex items-center justify-between border-t border-surface/15 px-4 py-4 sm:px-6"><LanguageSwitcher locale={locale} dark /><WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="text" /></div></div>}
     </header>
   );
 }
