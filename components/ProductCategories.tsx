@@ -37,7 +37,7 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
   const base = `/${locale}`;
 
   return (
-    <section id="categories" className="mx-auto max-w-content scroll-mt-20 px-4 pt-16 pb-8 sm:px-6 sm:pb-10">
+    <section id="categories" className="mx-auto max-w-content scroll-mt-20 px-4 pt-12 pb-8 sm:px-6 sm:pb-10 sm:pt-14">
       <div className="border-b border-border pb-5">
         <div>
           <p className="eyebrow text-brand">01 / {dict.categoriesSection.title}</p>
