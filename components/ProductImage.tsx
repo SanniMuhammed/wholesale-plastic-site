@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import type { Product, CategorySlug, ColorKey } from "@/lib/products";
 import type { Locale } from "@/lib/i18n/config";
