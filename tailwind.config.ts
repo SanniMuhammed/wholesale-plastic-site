@@ -12,27 +12,27 @@ const config: Config = {
         background: "#FFFFFF",
         surface: "#FFFFFF",
         ink: {
-          DEFAULT: "#171A18",
-          soft: "#3D433F",
+          DEFAULT: "#131A22",
+          soft: "#48515B",
         },
-        muted: "#6C726D",
-        border: "#E2E5DE",
+        muted: "#66717C",
+        border: "#D5DBE0",
         brand: {
-          DEFAULT: "#087443",
-          dark: "#075C36",
-          light: "#E8F4EE",
+          DEFAULT: "#131921",
+          dark: "#0B1116",
+          light: "#EA EDED".replace(" ", ""),
         },
         accent: {
-          DEFAULT: "#D9A441",
-          light: "#F5EBD3",
+          DEFAULT: "#FF9900",
+          light: "#FFF3E0",
         },
         clay: {
           DEFAULT: "#A8492E",
           light: "#F4DDD3",
         },
         ochre: {
-          DEFAULT: "#C08A1E",
-          light: "#F5E7C8",
+          DEFAULT: "#C98200",
+          light: "#FFF0D6",
         },
       },
       fontFamily: {
