@@ -6,7 +6,6 @@ import type { Dictionary } from "@/lib/getDictionary";
 import type { HomepageSection } from "@/lib/cms/types";
 import { useInView } from "@/lib/hooks/useInView";
 import { cx } from "@/lib/utils";
-import { RouteDiagram } from "@/components/illustrations/RouteDiagram";
 
 const HINGE_INDEX = 2;
 
@@ -99,25 +98,16 @@ export function HowItWorksSection({ dict, locale, id, section, imageUrl, mobileI
         {deliveryVisible && (
           <div className="mt-12 border-t border-border pt-9 sm:mt-14 sm:pt-10">
             <div className="max-w-xl">
-              <p className="eyebrow text-brand">{dict.deliveryTeaser.originLabel} → {dict.deliveryTeaser.destinationLabel}</p>
-              <h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">{deliveryCopy.title}</h3>
+              <h3 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{deliveryCopy.title}</h3>
               <p className="mt-3 text-muted">{deliveryCopy.body}</p>
             </div>
 
-            {deliveryImageUrl && (
+            {(deliveryImageUrl || deliveryMobileImageUrl) && (
               <picture className="mt-8 block max-w-3xl overflow-hidden rounded-xl border border-border bg-background">
                 {deliveryMobileImageUrl && <source media="(max-width: 640px)" srcSet={deliveryMobileImageUrl} />}
-                <img src={deliveryImageUrl} alt="" className="h-auto max-h-[320px] w-full object-cover" loading="lazy" />
+                {deliveryImageUrl && <img src={deliveryImageUrl} alt="" className="h-auto max-h-[320px] w-full object-cover" loading="lazy" />}
               </picture>
             )}
-
-            <div className="-my-3 max-w-3xl sm:-my-5">
-              <RouteDiagram active={inView} className="h-auto w-full text-brand" />
-              <div className="mt-2 flex items-start justify-between gap-4">
-                <span className="eyebrow">{dict.deliveryTeaser.originLabel}</span>
-                <span className="eyebrow text-right">{dict.deliveryTeaser.destinationLabel}</span>
-              </div>
-            </div>
 
             <Link href={`/${locale}/delivery`} className="mt-7 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface">
               {dict.deliveryTeaser.cta} →
