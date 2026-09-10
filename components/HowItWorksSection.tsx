@@ -6,6 +6,7 @@ import type { Dictionary } from "@/lib/getDictionary";
 import type { HomepageSection } from "@/lib/cms/types";
 import { useInView } from "@/lib/hooks/useInView";
 import { cx } from "@/lib/utils";
+import { generalInquiryLink } from "@/lib/whatsapp";
 
 type HowItWorksProps = {
   dict: Dictionary;
@@ -13,6 +14,7 @@ type HowItWorksProps = {
   id?: string;
   section?: HomepageSection;
   deliverySection?: HomepageSection;
+  finalCtaSection?: HomepageSection;
   deliveryImageUrl?: string | null;
   deliveryMobileImageUrl?: string | null;
 };
@@ -22,7 +24,15 @@ function sectionText(section: HomepageSection | undefined, locale: Locale, fallb
   return { title: section?.title_en || fallbackTitle, body: section?.body_en || fallbackBody };
 }
 
-export function HowItWorksSection({ dict, locale, id, section, deliverySection, deliveryImageUrl, deliveryMobileImageUrl }: HowItWorksProps) {
+function sectionTitle(section: HomepageSection | undefined, locale: Locale, fallback: string) {
+  return locale === "fr" ? section?.title_fr || fallback : section?.title_en || fallback;
+}
+
+function sectionBody(section: HomepageSection | undefined, locale: Locale, fallback: string) {
+  return locale === "fr" ? section?.body_fr || fallback : section?.body_en || fallback;
+}
+
+export function HowItWorksSection({ dict, locale, id, section, deliverySection, finalCtaSection, deliveryImageUrl, deliveryMobileImageUrl }: HowItWorksProps) {
   const { ref, inView } = useInView<HTMLDivElement>();
   if (section?.is_visible === false) return null;
 
@@ -30,9 +40,13 @@ export function HowItWorksSection({ dict, locale, id, section, deliverySection, 
   const copy = sectionText(section, locale, dict.howItWorksSection.title, dict.howItWorksSection.subtitle);
   const deliveryCopy = sectionText(deliverySection, locale, dict.deliveryTeaser.title, dict.deliveryTeaser.subtitle);
   const deliveryVisible = deliverySection?.is_visible !== false;
+  const ctaVisible = finalCtaSection?.is_visible !== false;
+  const ctaTitle = sectionTitle(finalCtaSection, locale, dict.finalCta.title);
+  const ctaBody = sectionBody(finalCtaSection, locale, dict.finalCta.subtitle);
+  const base = `/${locale}`;
 
   return (
-    <section id={id} className="scroll-mt-20 border-y border-border bg-surface">
+    <section id={id} className="scroll-mt-20 border-y border-border bg-white">
       <div className="mx-auto max-w-content px-4 py-12 sm:px-6 sm:py-16">
         <div className="max-w-2xl">
           <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{copy.title}</h2>
@@ -46,7 +60,7 @@ export function HowItWorksSection({ dict, locale, id, section, deliverySection, 
               return (
                 <li key={step.number} className="relative flex gap-4 pb-8 last:pb-0">
                   <div className="relative flex w-2 shrink-0 flex-col items-center">
-                    <span className="relative z-10 mt-1.5 h-2 w-2 shrink-0 rounded-full border border-border bg-surface" />
+                    <span className="relative z-10 mt-1.5 h-2 w-2 shrink-0 rounded-full border border-border bg-white" />
                     {!isLast && (
                       <>
                         <span className="absolute bottom-0 left-1/2 top-4 w-px -translate-x-1/2 bg-border" aria-hidden />
@@ -76,7 +90,7 @@ export function HowItWorksSection({ dict, locale, id, section, deliverySection, 
                       <span className="absolute left-[6px] top-[6px] h-px w-[calc(100%+1.25rem)] origin-left bg-brand lg:w-[calc(100%+1.75rem)]" style={{ transform: `scaleX(${inView ? 1 : 0})`, transitionProperty: "transform", transitionDuration: "0.6s", transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)", transitionDelay: `${index * 120}ms` }} aria-hidden />
                     </>
                   )}
-                  <span className="relative z-10 h-3 w-3 shrink-0 rounded-full border-2 border-brand bg-surface" />
+                  <span className="relative z-10 h-3 w-3 shrink-0 rounded-full border-2 border-brand bg-white" />
                   <p className="mt-3 font-mono text-xs font-bold text-muted">{step.number}</p>
                   <h3 className={cx("mt-2 font-display font-semibold leading-[1.05] text-ink", isBookend ? "text-2xl lg:text-3xl" : "text-xl lg:text-2xl")}>{step.title}</h3>
                   <p className="mt-2 max-w-[22ch] text-sm text-muted">{step.description}</p>
@@ -93,17 +107,34 @@ export function HowItWorksSection({ dict, locale, id, section, deliverySection, 
                 <p className="eyebrow text-brand/80">{locale === "fr" ? "Livraison" : "Delivery"}</p>
                 <h3 className="mt-2 font-display text-2xl font-semibold leading-tight text-ink sm:text-3xl">{deliveryCopy.title}</h3>
                 <p className="mt-3 max-w-lg text-sm leading-6 text-muted sm:text-base sm:leading-7">{deliveryCopy.body}</p>
-                <Link href={`/${locale}/delivery`} className="mt-6 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface">
+                <Link href={`/${locale}/delivery`} className="mt-6 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-white">
                   {dict.deliveryTeaser.cta} →
                 </Link>
               </div>
 
               {(deliveryImageUrl || deliveryMobileImageUrl) && (
-                <picture className="block overflow-hidden rounded-xl border border-border bg-background">
+                <picture className="block overflow-hidden rounded-xl border border-border bg-white">
                   {deliveryMobileImageUrl && <source media="(max-width: 640px)" srcSet={deliveryMobileImageUrl} />}
                   {deliveryImageUrl && <img src={deliveryImageUrl} alt="" className="h-auto max-h-[300px] w-full object-cover" loading="lazy" />}
                 </picture>
               )}
+            </div>
+          </div>
+        )}
+
+        {ctaVisible && (
+          <div className="mt-12 border-t border-border pt-10 sm:mt-14 sm:pt-12">
+            <div className="max-w-2xl">
+              <h3 className="font-display text-2xl font-semibold leading-tight text-ink sm:text-3xl">{ctaTitle}</h3>
+              <p className="mt-3 max-w-xl text-sm leading-6 text-muted sm:text-base sm:leading-7">{ctaBody}</p>
+              <div className="mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
+                <Link href={`${base}/order-summary`} className="inline-flex min-h-11 shrink-0 items-center justify-center rounded bg-brand px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 sm:px-6 sm:py-3">
+                  {dict.finalCta.primaryCta}
+                </Link>
+                <a href={generalInquiryLink(dict)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 shrink-0 items-center justify-center rounded border border-brand px-5 py-2.5 text-sm font-medium text-brand transition-colors hover:bg-brand hover:text-white sm:px-6 sm:py-3">
+                  {dict.finalCta.secondaryCta}
+                </a>
+              </div>
             </div>
           </div>
         )}
