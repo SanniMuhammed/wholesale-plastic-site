@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Loader2, Search, X } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
@@ -27,20 +28,21 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
   const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const base = `/${locale}`;
 
   useEffect(() => {
-    const value = query.trim();
-    if (value.length < 2) {
-      setResults([]);
-      setLoading(false);
-      setOpen(false);
-      setActiveIndex(-1);
-      return;
-    }
-
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
+      const value = query.trim();
+      if (value.length < 2) {
+        setResults([]);
+        setLoading(false);
+        setOpen(false);
+        setActiveIndex(-1);
+        return;
+      }
+
       setLoading(true);
       try {
         const response = await fetch(`/api/product-search?q=${encodeURIComponent(value)}&locale=${locale}`, {
@@ -79,7 +81,7 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
   function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const value = query.trim();
-    window.location.href = value ? `${base}/products?q=${encodeURIComponent(value)}` : `${base}/products`;
+    router.push(value ? `${base}/products?q=${encodeURIComponent(value)}` : `${base}/products`);
     setOpen(false);
   }
 
@@ -97,7 +99,8 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
       setActiveIndex((index) => (index - 1 + results.length) % results.length);
     } else if (event.key === "Enter" && activeIndex >= 0) {
       event.preventDefault();
-      window.location.href = `${base}/products/${results[activeIndex].slug}`;
+      router.push(`${base}/products/${results[activeIndex].slug}`);
+      setOpen(false);
     }
   }
 
@@ -117,7 +120,6 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
           placeholder={dict.common.searchPlaceholder}
           autoComplete="off"
           aria-autocomplete="list"
-          aria-expanded={open}
           aria-controls="navbar-search-results"
           className="h-10 w-full rounded-lg border border-border bg-surface pl-10 pr-10 text-sm text-ink shadow-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 sm:h-11 sm:text-[13px]"
         />
