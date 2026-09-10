@@ -29,12 +29,24 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
   const [sort, setSort] = useState<SortOption>(isSortOption(searchParams.get("sort")) ? searchParams.get("sort") as SortOption : "featured");
 
   useEffect(() => {
+    const nextCategory = searchParams.get("category");
+    const nextQuery = searchParams.get("q") ?? "";
+    const nextSort = searchParams.get("sort");
+    setCategory(isCategorySlug(nextCategory) ? nextCategory : null);
+    setQuery(nextQuery);
+    setSort(isSortOption(nextSort) ? nextSort : "featured");
+  }, [searchParams]);
+
+  useEffect(() => {
     const params = new URLSearchParams();
     if (category) params.set("category", category);
     if (query) params.set("q", query);
     if (sort !== "featured") params.set("sort", sort);
     const search = params.toString();
-    router.replace(search ? `${pathname}?${search}` : pathname, { scroll: false });
+    const nextUrl = search ? `${pathname}?${search}` : pathname;
+    if (`${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ""}` !== nextUrl) {
+      router.replace(nextUrl, { scroll: false });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, query, sort, pathname]);
 
