@@ -20,7 +20,7 @@ const config: Config = {
         brand: {
           DEFAULT: "#131921",
           dark: "#0B1116",
-          light: "#EA EDED".replace(" ", ""),
+          light: "#EAEDED",
         },
         accent: {
           DEFAULT: "#FF9900",
