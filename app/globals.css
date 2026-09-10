@@ -59,9 +59,7 @@ summary::-webkit-details-marker {
 @media print {
   @page {
     size: A4 portrait;
-    /* Reserve a dedicated physical band for the running header. Fixed/sticky
-       elements do not participate in normal document flow. */
-    margin: 34mm 12mm 16mm;
+    margin: 24mm 12mm 16mm;
   }
 
   html,
@@ -74,23 +72,6 @@ summary::-webkit-details-marker {
 
   body:has(.order-summary-page) header {
     display: none !important;
-  }
-
-  body:has(.order-summary-page)::before {
-    content: "Sherinab Venture.  •  Your Order";
-    position: fixed;
-    top: 6mm;
-    left: 12mm;
-    right: 12mm;
-    z-index: 9999;
-    display: block;
-    padding-bottom: 3mm;
-    border-bottom: 1px solid #d7dce2;
-    color: #131a22;
-    font-family: Arial, sans-serif;
-    font-size: 10pt;
-    font-weight: 700;
-    letter-spacing: 0.04em;
   }
 
   .order-summary-page {
@@ -122,7 +103,7 @@ summary::-webkit-details-marker {
   }
 
   .order-summary-page aside,
-  .order-summary-page .print\:hidden {
+  .order-summary-page .print\\:hidden {
     display: none !important;
   }
 
@@ -144,16 +125,16 @@ summary::-webkit-details-marker {
     page-break-inside: avoid !important;
   }
 
-  .order-summary-page .print-summary-footer {
+  .order-summary-page section > div:last-child {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
-  .order-summary-page .print\:block {
+  .order-summary-page .print\\:block {
     display: block !important;
   }
 
-  .order-summary-page .print\:inline {
+  .order-summary-page .print\\:inline {
     display: inline !important;
   }
 
@@ -166,9 +147,9 @@ summary::-webkit-details-marker {
     color: #131a22 !important;
   }
 
-  .order-summary-page .text-surface\/70,
-  .order-summary-page .text-surface\/75,
-  .order-summary-page .text-surface\/90 {
+  .order-summary-page .text-surface\\/70,
+  .order-summary-page .text-surface\\/75,
+  .order-summary-page .text-surface\\/90 {
     color: rgba(255, 255, 255, 0.96) !important;
   }
 
