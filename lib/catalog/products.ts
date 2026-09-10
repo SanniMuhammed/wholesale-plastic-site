@@ -45,6 +45,7 @@ function adaptProduct(product: CmsProduct): CatalogProduct {
   const images = (product.images ?? []).map((image) => buildProductImageUrl(image.storage_path));
   const mainImage = product.images?.find((image) => image.is_main) ?? product.images?.[0];
   const fallbackImage = PUBLIC_PRODUCT_IMAGES[product.slug];
+  const allImages = fallbackImage && !images.includes(fallbackImage) ? [...images, fallbackImage] : images;
   return {
     cmsId: product.id, slug: product.slug, category,
     name: { en: product.name_en, fr: product.name_fr },
@@ -59,7 +60,7 @@ function adaptProduct(product: CmsProduct): CatalogProduct {
     price: product.price ?? undefined,
     priceUnit: product.price_unit ?? undefined,
     image: mainImage ? buildProductImageUrl(mainImage.storage_path) : fallbackImage,
-    images: images.length > 0 ? images : fallbackImage ? [fallbackImage] : [],
+    images: allImages.length > 0 ? allImages : fallbackImage ? [fallbackImage] : [],
     featured: product.is_featured,
   };
 }
