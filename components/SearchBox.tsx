@@ -134,7 +134,7 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
             <div className="flex items-center gap-2 px-4 py-4 text-sm text-muted"><Loader2 size={16} className="animate-spin" /> Searching…</div>
           ) : results.length > 0 ? (
             <>
-              <div className="border-b border-border px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-muted">Products</div>
+              <div className="border-b border-border px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-muted">{dict.nav.products}</div>
               {results.map((result, index) => (
                 <Link
                   key={result.slug}
@@ -150,17 +150,16 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
                   </div>
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-ink">{result.name}</p>
-                    <p className="mt-0.5 text-[11px] text-muted">{result.category}</p>
+                    <p className="mt-0.5 text-[11px] text-muted">{dict.categories[result.category as keyof typeof dict.categories] ?? result.category}</p>
                   </div>
                 </Link>
               ))}
-              <button type="submit" form="navbar-search-form" className="hidden" aria-hidden="true" />
               <Link href={`${base}/products?q=${encodeURIComponent(query.trim())}`} onClick={() => setOpen(false)} className="flex items-center justify-between px-4 py-3 text-xs font-bold text-brand hover:bg-brand-light">
-                <span>View all results</span><span aria-hidden="true">→</span>
+                <span>{dict.common.exploreProducts}</span><span aria-hidden="true">→</span>
               </Link>
             </>
           ) : (
-            <div className="px-4 py-4 text-sm text-muted">No products match your search.</div>
+            <div className="px-4 py-4 text-sm text-muted">{dict.common.noResults}</div>
           )}
         </div>
       )}
