@@ -32,7 +32,12 @@ export async function deleteFaq(id: string): Promise<void> {
 
 export async function reorderFaqs(orderedIds: string[]): Promise<void> {
   const supabase = await createClient();
-  await Promise.all(
-    orderedIds.map((id, index) => supabase.from("faqs").update({ sort_order: index }).eq("id", id))
-  );
+  const { data: rows, error: fetchError } = await supabase.from("faqs").select("id");
+  if (fetchError) throw fetchError;
+  const actual = new Set((rows ?? []).map((row) => row.id));
+  const unique = new Set(orderedIds);
+  if (unique.size !== orderedIds.length || unique.size !== actual.size || orderedIds.some((id) => !actual.has(id))) throw new Error("FAQ order does not match the current FAQs.");
+  const results = await Promise.all(orderedIds.map((id, index) => supabase.from("faqs").update({ sort_order: index }).eq("id", id)));
+  const failed = results.find((result) => result.error);
+  if (failed?.error) throw failed.error;
 }
