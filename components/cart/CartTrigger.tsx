@@ -32,7 +32,7 @@ export function CartTrigger({
         <span
           data-cart-badge
           className={cx(
-            "absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full border border-brand bg-brand px-1 font-mono text-xs font-bold text-surface transition-opacity",
+            "absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full border border-brand bg-brand px-1 font-mono text-xs font-bold text-white transition-opacity",
             count === 0 && "opacity-0"
           )}
         >
