@@ -40,8 +40,7 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
     <section id="categories" className="mx-auto max-w-content scroll-mt-20 px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
       <div className="flex items-end justify-between gap-4 border-b border-border pb-4">
         <div>
-          <p className="eyebrow text-brand">01 / {dict.categoriesSection.title}</p>
-          <h2 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{dict.categoriesSection.title}</h2>
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{dict.categoriesSection.title}</h2>
         </div>
         <Link href={`${base}/products`} className="shrink-0 text-sm font-semibold text-brand underline decoration-brand/30 underline-offset-4 transition-colors hover:decoration-brand">
           {dict.common.exploreProducts} →
@@ -49,7 +48,7 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {CATEGORIES.map((category, i) => {
+        {CATEGORIES.map((category) => {
           const photoUrl = categoryImages?.[category.slug] || PUBLIC_CATEGORY_IMAGES[category.slug];
           return (
             <Link
@@ -66,9 +65,6 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 </>
               )}
-              <span className={cx("absolute left-3 top-3 z-10 font-mono text-[10px] font-bold", photoUrl ? "text-white/75" : "text-brand/70")}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
               {!photoUrl && (
                 <CategoryIllustration category={category.slug} className={cx("absolute -right-4 -top-4 h-28 w-28 opacity-25 transition-transform group-hover:scale-105", CATEGORY_INK[category.slug])} aria-hidden />
               )}
