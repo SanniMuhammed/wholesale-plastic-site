@@ -1,0 +1,55 @@
+-- Product-specific image mappings sourced from public product/manufacturer listings.
+-- Only add an image when the product does not already have one; this keeps the
+-- catalogue from reusing one photo for unrelated products.
+with image_map(slug, storage_path) as (values
+('500ml-takeaway-container','https://i.ebayimg.com/images/g/PBYAAOSwe5hi~Lw3/s-l400.jpg'),
+('4l-round-basin','https://cdn.dedeman.ro/media/catalog/product/7/0/7025887_1.jpg?canvas=%3A&fit=bounds&height=&optimize=low&width='),
+('deep-plastic-plate','https://shop13785.sfstatic.io/upload_dir/shop/_thumbs/Dyb-tallerken-blaa.w1200.jpg'),
+('25l-bucket-with-lid','https://www.roundplasticbuckets.com/photo/pl179227596-food_grade_round_plastic_bucket_with_lid_certificate_fda_gap_industrial.jpg'),
+('220l-plastic-drum','https://zonepackvietnam.com/upload/img/products/66224a30ecb0800994470d9e16914dec.jpg'),
+('400ml-pet-jar','https://cpimg.tistatic.com/05590442/b/5/400ml-PET-Jar.jpg'),
+('4l-pet-jar','https://lntsufin.com/storage/mediafiles/catalog/live/16434-1005/original/16434-1005_image_0.jpg'),
+('large-food-bowl-with-lid','https://www.funcarnival.com/cdn/shop/files/NW16024L-b_800x.jpg?v=1705351233'),
+('5l-mixing-bowl','https://i.ebayimg.com/images/g/s5sAAOSw5FVmGAkJ/s-l1600.jpg'),
+('vegetable-perforated-crate','https://i5.walmartimages.com/seo/Mainstays-Meal-Prep-3Comp-15PK_ad5d77b3-f703-4346-8467-fbf8c54066e7.02f2ffc5b47f5d5ba0cfb8b96f49a5ab.jpeg?odnBg=FFFFFF&odnHeight=576&odnWidth=576'),
+('20l-white-bucket','https://buybuckets.co.uk/wp-content/uploads/20L_WHITE_MH.jpg'),
+('1l-white-container','https://www.gourmet-versand.com/img_article_v3/126426-kunststoffdose-becher-ohne-deckel-weiss-durchmesser-11-cm-13-5-cm-hoch-1-liter.jpg'),
+('8l-round-basin','https://www.ezyhome.lk/cdn/shop/files/72.jpg?v=1763011501&width=2000'),
+('500ml-almond-container','https://www.plasticstore.ng/wp-content/uploads/2021/04/Copy-of-new-product-alert-2.png'),
+('plastic-cup-set','https://m.media-amazon.com/images/I/514V6YTMq2L._AC_SL1001_.jpg'),
+('1000ml-takeaway-container','https://img.yfisher.com/m4959/1758165774290-1000ml-lunch-box.jpg'),
+('4l-round-food-bucket','https://res.cloudinary.com/dvv9fvblr/image/upload/v1709026570/sfxbdgcf0dhjyzg6nr69.jpg'),
+('1l-almond-container','https://www.posuda.ru/upload/iblock/9cd/9cd679bdd20ba8bb029d9e20a7f4b031.jpg'),
+('15l-white-bucket','https://a.allegroimg.com/original/1175e7/38c87eba4df39ee114bfe2ffee2d/WIADRO-PLASTIKOWE-15L-z-pokrywka-WIADERKO-15L-BIALE-UNIWERSALNE-JAKOSC'),
+('3-compartment-food-container','https://i5.walmartimages.com/seo/Mainstays-Meal-Prep-3Comp-15PK_ad5d77b3-f703-4346-8467-fbf8c54066e7.02f2ffc5b47f5d5ba0cfb8b96f49a5ab.jpeg?odnBg=FFFFFF&odnHeight=576&odnWidth=576'),
+('crystal-plastic-jug','https://www.sophistiplate.com/cdn/shop/products/PT-100_1.jpg?v=1735522680&width=1080'),
+('60l-plastic-drum','https://s.alicdn.com/%40sc04/kf/Hbace3f399df84f64a98c59f912f831c28/Large-60L-HDPE-Plastic-Drum-Barrel-Food-Grade-Iron-Ring-Flange-Design-with-Ring-Lock-System-for-Secure-Water-Chemical-Storage.jpg'),
+('12l-round-bucket','https://www.yohohongkong.com/_next/image?q=100&url=https%3A%2F%2Fstore.yohohongkong.com%2Fmkp%2Fgallery%2Fgoods%2Fimages%2F3c3afe05-2988-4d0a-9578-4974835f0693_mkp_image.webp&w=960'),
+('55l-large-basin','https://image.made-in-china.com/202f0j00YnLTKUqEvQzA/55cm-Large-Size-Colored-Plastic-Wash-Basin-with-Top-Quality.jpg'),
+('25l-laundry-basin','https://a.allegroimg.com/original/113757/47976b464da381bc6a7e70812f80/ARTGOS-Miska-plastikowa-na-pranie-Miednica-Kosz-25-L'),
+('plastic-water-jug','https://www.sophistiplate.com/cdn/shop/products/PT-100_1.jpg?v=1735522680&width=1080&jug=1'),
+('30l-laundry-basin','https://www.cdiscount.com/pdt2/4/0/3/3/700x700/aaaoy92403/rw/kadax-bassine-en-plastique.jpg'),
+('2l-almond-container','https://down-my.img.susercontent.com/file/sg-11134207-7repk-m8ypo4c801q844'),
+('6l-pet-jar','https://bottleworld.co.kr/data/goods/1/2020/08/1553_tmp_a232cf947e50cbb95bf9045642c7952b1187large.jpg'),
+('4l-transparent-container','https://tiendaenlinea.casaahued.com/8325-large_default/a344-4-porta-facil-4-lts.jpg'),
+('2l-takeaway-container','https://pack2u.co.kr/web/product/big/202407/b0d98e58e06e82300158d522f371a572.jpg'),
+('40l-plastic-drum','https://static-01.daraz.com.bd/p/bbe63b9eb6b1a0dc2d34080bf22ee924.jpg'),
+('6l-round-wash-basin','https://i.ebayimg.com/images/g/6zUAAOSwP5dlSuTw/s-l400.jpg'),
+('plastic-dish-drying-rack','https://s.alicdn.com/%40sc04/kf/H7f0a6386f512493697a0994ffdee9aedr/Factory-Wholesale-Plastic-Kitchen-Dishes-Storage-Rack-Home-Storage-Organization-and-Drying-Use-Tableware-Storage-Rack.jpg'),
+('650ml-pet-jar','https://cpimg.tistatic.com/07839570/b/4/Plastic-jar-650ml.jpg'),
+('700ml-white-plastic-bowl','https://cdn-881a96c5-a77b871b.commercebuild.com/427e26e73b54e40756206ba7cc6a8882/contents/B08LBK700W/B08LBK700W.jpg'),
+('250ml-food-jar','https://cdn.salla.sa/WzXPa/ypVs1DGh5PbSfba8UThgiwjYzqkDwxpItDBlKRmh.jpg'),
+('14l-premium-basin','https://down-id.img.susercontent.com/file/id-11134207-822wk-mlbq1kqv0hkzbe'),
+('8l-round-bucket','https://www.toyogogroup.com/cdn/shop/files/632-BLU_36d3882e-059a-4fce-b13f-c392f2dd1c0e.jpg?v=1754457590&width=2000'),
+('12l-round-basin','https://levon.bg/image/catalog/Products/Brands/Drina/Cleaning/Basin/Basin/Basin%2012L/legen-basin-12-l-drina-d-10035-10.webp'),
+('4-5l-blue-water-bucket','https://www.toyogogroup.com/cdn/shop/files/632-BLU_36d3882e-059a-4fce-b13f-c392f2dd1c0e.jpg?v=1754457590&bucket=45'),
+('500ml-blue-plastic-bowl','https://http2.mlstatic.com/D_Q_NP_855740-MLU74479037799_022024-O.webp'),
+('deep-storage-basket','https://s7d9.scene7.com/is/image/dolgen/pop-01154501-1'),
+('20l-tamper-proof-bucket','https://buybuckets.co.uk/wp-content/uploads/20L_WHITE_MH.jpg'),
+('4-compartment-food-container','https://item-shopping.c.yimg.jp/i/n/kawauchi_2ymd46027_6_d_20260403095821'),
+('plastic-plate-set','https://www.cagrashop.com/idea/lm/98/myassets/products/730/tabak-set-plastik-4lu-renkli-18951_min.jpeg?revision=1778488287')
+)
+insert into public.product_images(product_id, storage_path, sort_order, is_main)
+select p.id, m.storage_path, 0, true
+from image_map m join public.products p on p.slug=m.slug
+where not exists (select 1 from public.product_images pi where pi.product_id=p.id);
