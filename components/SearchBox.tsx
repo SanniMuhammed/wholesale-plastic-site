@@ -153,7 +153,7 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
           autoComplete="off"
           aria-autocomplete="list"
           aria-controls="navbar-search-results"
-          className="h-10 w-full rounded-lg border border-border bg-surface pl-10 pr-10 text-sm text-ink shadow-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 sm:h-11 sm:text-[13px]"
+          className="h-10 w-full rounded-lg border border-border bg-surface pl-10 pr-10 text-sm text-ink shadow-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 sm:h-11 sm:text-[13px] [&::-webkit-search-cancel-button]:appearance-none"
         />
         {query && (
           <button type="button" onClick={() => setQuery("")} className="absolute right-2.5 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:bg-brand-light hover:text-brand" aria-label="Clear search">
