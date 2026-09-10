@@ -44,6 +44,7 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
       }
 
       setLoading(true);
+      setOpen(true);
       try {
         const response = await fetch(`/api/product-search?q=${encodeURIComponent(value)}&locale=${locale}`, {
           signal: controller.signal,
@@ -52,17 +53,13 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
         if (!response.ok) throw new Error("Search failed");
         const data = (await response.json()) as { results?: SearchResult[] };
         setResults(data.results ?? []);
-        setOpen(true);
         setActiveIndex(-1);
       } catch (error) {
-        if ((error as Error).name !== "AbortError") {
-          setResults([]);
-          setOpen(true);
-        }
+        if ((error as Error).name !== "AbortError") setResults([]);
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
-    }, 180);
+    }, 50);
 
     return () => {
       window.clearTimeout(timer);
