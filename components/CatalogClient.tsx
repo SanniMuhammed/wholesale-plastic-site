@@ -50,8 +50,16 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
     if (category) list = list.filter((p) => p.category === category);
 
     return [...list].sort((a, b) => {
-      if (sort === "price-asc") return (a.price ?? Number.POSITIVE_INFINITY) - (b.price ?? Number.POSITIVE_INFINITY);
-      if (sort === "price-desc") return (b.price ?? -1) - (a.price ?? -1);
+      if (sort === "price-asc") {
+        const aPrice = a.price ?? Number.POSITIVE_INFINITY;
+        const bPrice = b.price ?? Number.POSITIVE_INFINITY;
+        return aPrice - bPrice;
+      }
+      if (sort === "price-desc") {
+        const aPrice = a.price ?? Number.NEGATIVE_INFINITY;
+        const bPrice = b.price ?? Number.NEGATIVE_INFINITY;
+        return bPrice - aPrice;
+      }
       if (sort === "name") return a.name[locale].localeCompare(b.name[locale]);
       return Number(b.featured) - Number(a.featured);
     });
@@ -60,6 +68,16 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
   const hasFilters = Boolean(category || query || sort !== "featured");
   const activeCategory = category ? CATEGORIES.find((c) => c.slug === category) : null;
   const clearAll = () => { setCategory(null); setQuery(""); setSort("featured"); };
+  const isFrench = locale === "fr";
+
+  const catalogCopy = {
+    filterTitle: isFrench ? "Filtrer par catégorie" : "Filter by category",
+    sortLabel: isFrench ? "Trier les produits" : "Sort products",
+    featured: isFrench ? "En vedette" : "Featured",
+    priceAsc: isFrench ? "Prix : du plus bas au plus haut" : "Price: Low to high",
+    priceDesc: isFrench ? "Prix : du plus haut au plus bas" : "Price: High to low",
+    name: isFrench ? "Nom" : "Name",
+  };
 
   return (
     <div>
@@ -70,7 +88,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
               <Filter size={16} strokeWidth={1.8} className="shrink-0 text-brand" aria-hidden />
               <p className="eyebrow text-brand">{dict.nav.categories}</p>
             </div>
-            <h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">Filter by category</h2>
+            <h2 className="mt-1 font-display text-xl font-semibold text-ink sm:text-2xl">{catalogCopy.filterTitle}</h2>
           </div>
           <p className="font-mono text-xs font-semibold text-muted">{String(results.length).padStart(2, "0")} {dict.common.items}</p>
         </div>
@@ -105,12 +123,12 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
 
         <label className="flex shrink-0 items-center gap-2 text-xs font-semibold text-muted">
           <ArrowUpDown size={14} aria-hidden />
-          <span className="sr-only">Sort products</span>
-          <select value={sort} onChange={(event) => setSort(event.target.value as SortOption)} className="h-9 rounded-md border border-border bg-surface px-2.5 text-xs font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/10">
-            <option value="featured">Featured</option>
-            <option value="price-asc">Price: Low to high</option>
-            <option value="price-desc">Price: High to low</option>
-            <option value="name">Name</option>
+          <span className="sr-only">{catalogCopy.sortLabel}</span>
+          <select aria-label={catalogCopy.sortLabel} value={sort} onChange={(event) => setSort(event.target.value as SortOption)} className="h-9 rounded-md border border-border bg-surface px-2.5 text-xs font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/10">
+            <option value="featured">{catalogCopy.featured}</option>
+            <option value="price-asc">{catalogCopy.priceAsc}</option>
+            <option value="price-desc">{catalogCopy.priceDesc}</option>
+            <option value="name">{catalogCopy.name}</option>
           </select>
         </label>
       </div>
