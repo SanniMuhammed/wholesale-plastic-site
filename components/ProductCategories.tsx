@@ -24,6 +24,15 @@ const CATEGORY_INK: Record<CategorySlug, string> = {
   other: "text-clay",
 };
 
+const CATEGORY_LABELS: Record<CategorySlug, { en: string; fr: string }> = {
+  buckets: { en: "Buckets & Drums", fr: "Seaux & bidons" },
+  basins: { en: "Basins & Tubs", fr: "Bassines & cuves" },
+  bowls: { en: "Bowls & Kitchenware", fr: "Bols & cuisine" },
+  containers: { en: "Food Containers & Packaging", fr: "Boîtes & emballages" },
+  household: { en: "Storage, Laundry & Cleaning", fr: "Rangement, lessive & nettoyage" },
+  other: { en: "Furniture, Crates & Commercial", fr: "Mobilier, caisses & commercial" },
+};
+
 const PUBLIC_CATEGORY_IMAGES: Record<CategorySlug, string> = {
   buckets: "/product-images/15l-bucket-with-lid.jpg",
   basins: "/product-images/40l-large-basin.jpg",
@@ -50,6 +59,7 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
       <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {CATEGORIES.map((category) => {
           const photoUrl = categoryImages?.[category.slug] || PUBLIC_CATEGORY_IMAGES[category.slug];
+          const label = CATEGORY_LABELS[category.slug][locale];
           return (
             <Link
               key={category.slug}
@@ -61,7 +71,7 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
             >
               {photoUrl && (
                 <>
-                  <Image src={photoUrl} alt={category.name[locale]} fill sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                  <Image src={photoUrl} alt={label} fill sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 </>
               )}
@@ -69,7 +79,7 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
                 <CategoryIllustration category={category.slug} className={cx("absolute -right-4 -top-4 h-28 w-28 opacity-25 transition-transform group-hover:scale-105", CATEGORY_INK[category.slug])} aria-hidden />
               )}
               <span className={cx("relative z-10 p-3 font-display text-base font-semibold leading-tight sm:text-[17px]", photoUrl ? "text-white" : "text-ink")}>
-                {category.name[locale]}
+                {label}
               </span>
             </Link>
           );
