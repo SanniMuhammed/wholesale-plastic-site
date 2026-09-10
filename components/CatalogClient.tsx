@@ -19,6 +19,15 @@ function isSortOption(value: string | null): value is SortOption {
   return value === "featured" || value === "price-asc" || value === "price-desc" || value === "name";
 }
 
+const CATEGORY_LABELS: Record<CategorySlug, { en: string; fr: string }> = {
+  buckets: { en: "Buckets & Drums", fr: "Seaux & bidons" },
+  basins: { en: "Basins & Tubs", fr: "Bassines & cuves" },
+  bowls: { en: "Bowls & Kitchenware", fr: "Bols & cuisine" },
+  containers: { en: "Food Containers & Packaging", fr: "Boîtes & emballages" },
+  household: { en: "Storage, Laundry & Cleaning", fr: "Rangement, lessive & nettoyage" },
+  other: { en: "Furniture, Crates & Commercial", fr: "Mobilier, caisses & commercial" },
+};
+
 export function CatalogClient({ locale, dict, products }: { locale: Locale; dict: Dictionary; products: CatalogProduct[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -54,7 +63,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
       const q = query.trim().toLowerCase();
       list = products.filter((p) => {
         const category = CATEGORIES.find((c) => c.slug === p.category);
-        return [p.name.en, p.name.fr, p.shortDescription.en, p.shortDescription.fr, p.description.en, p.description.fr, p.capacity ?? "", p.material.en, p.material.fr, p.useCase.en, p.useCase.fr, category?.name.en ?? "", category?.name.fr ?? ""].join(" ").toLowerCase().includes(q);
+        return [p.name.en, p.name.fr, p.shortDescription.en, p.shortDescription.fr, p.description.en, p.description.fr, p.capacity ?? "", p.material.en, p.material.fr, p.useCase.en, p.useCase.fr, category?.name.en ?? "", category?.name.fr ?? "", CATEGORY_LABELS[p.category].en, CATEGORY_LABELS[p.category].fr].join(" ").toLowerCase().includes(q);
       });
     }
     if (category) list = list.filter((p) => p.category === category);
@@ -111,7 +120,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
             const selected = category === c.slug;
             return (
               <button key={c.slug} type="button" onClick={() => updateFilters({ category: c.slug })} aria-pressed={selected} className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${selected ? "border-brand bg-brand text-surface" : "border-border bg-surface text-ink-soft hover:border-brand/40 hover:text-brand"}`}>
-                {c.name[locale]}
+                {CATEGORY_LABELS[c.slug][locale]}
               </button>
             );
           })}
@@ -122,7 +131,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
         <div className="flex min-w-0 items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {activeCategory && (
             <button type="button" onClick={() => updateFilters({ category: null })} className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-brand-light px-3 py-1.5 text-xs font-semibold text-brand">
-              {activeCategory.name[locale]} <X size={13} aria-hidden />
+              {CATEGORY_LABELS[activeCategory.slug][locale]} <X size={13} aria-hidden />
             </button>
           )}
           {query && (
@@ -145,7 +154,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
 
       {hasFilters && (
         <div className="mb-5 flex items-center justify-between gap-3">
-          <p className="font-display text-xl font-semibold text-ink sm:text-2xl">{activeCategory ? activeCategory.name[locale] : dict.nav.products}</p>
+          <p className="font-display text-xl font-semibold text-ink sm:text-2xl">{category ? CATEGORY_LABELS[category][locale] : dict.nav.products}</p>
           <button type="button" onClick={clearAll} className="shrink-0 text-xs font-semibold text-muted underline decoration-border underline-offset-4 transition-colors hover:text-brand">{dict.common.clearFilters}</button>
         </div>
       )}
