@@ -69,13 +69,6 @@ summary::-webkit-details-marker {
     overflow: hidden !important;
   }
 
-  /* The order-summary page has a screen-only title/intro above the receipt.
-     Hide those and print only the actual order receipt. */
-  .order-summary-page > h1,
-  .order-summary-page > p {
-    display: none !important;
-  }
-
   .order-summary-page {
     width: 100% !important;
     max-width: none !important;
@@ -93,9 +86,6 @@ summary::-webkit-details-marker {
     zoom: 0.5;
   }
 
-  /* Never force the whole receipt section onto a new page. Individual rows
-     can stay together, while the receipt itself is allowed to paginate during
-     layout before the 50% zoom is applied. */
   .order-summary-page section,
   .order-summary-page li {
     break-inside: auto;
