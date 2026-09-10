@@ -41,14 +41,14 @@ export function ProductOrderPanel({ product, locale, dict, hasConfirmedPrice = f
   const whatsappHref = productInquiryLink(dict, { product: product.name[locale], quantity, city: destinationCity, country: destinationCountry });
 
   return (
-    <div className="mt-8 flex flex-col gap-5">
+    <div className="mt-7 flex flex-col gap-4">
       <div className="rounded-xl border border-border bg-surface p-4 sm:p-5">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
           <h2 className="font-display text-lg font-semibold text-ink">{locale === "fr" ? "Détails de la commande" : "Order details"}</h2>
-          <span className="rounded-full bg-brand-light px-2.5 py-1 font-mono text-[10px] font-medium text-brand">{dict.common.wholesaleOrdersOnly}</span>
+          <span className="font-mono text-[10px] uppercase tracking-wider text-muted">Wholesale</span>
         </div>
 
-        <div className="mt-5">
+        <div className="mt-4">
           <div className="flex items-center justify-between gap-3"><label className="text-sm font-medium text-ink-soft" htmlFor="product-qty">{dict.common.quantity}</label>{packSize && <span className="font-mono text-[10px] text-muted">{locale === "fr" ? `Carton de ${packSize}` : `Carton of ${packSize}`}</span>}</div>
           <div className="mt-2 flex items-center gap-2"><button type="button" aria-label={locale === "fr" ? "Diminuer la quantité" : "Decrease quantity"} onClick={() => setSafeQuantity(quantity - 1)} className="inline-flex h-11 w-11 items-center justify-center rounded border border-border text-ink transition-colors hover:border-ink"><Minus size={16} /></button><input id="product-qty" type="number" min={1} inputMode="numeric" value={quantity} onChange={(e) => setSafeQuantity(Number(e.target.value))} className="h-11 min-w-0 flex-1 rounded border border-border bg-surface px-3 text-center font-mono text-base font-medium text-ink outline-none focus:border-brand" /><button type="button" aria-label={locale === "fr" ? "Augmenter la quantité" : "Increase quantity"} onClick={() => setSafeQuantity(quantity + 1)} className="inline-flex h-11 w-11 items-center justify-center rounded border border-border text-ink transition-colors hover:border-ink"><Plus size={16} /></button></div>
           <div className="mt-3 flex flex-wrap gap-2">{quickQuantities.map((value) => <button key={value} type="button" onClick={() => setSafeQuantity(value)} className={cx("rounded-full border px-3 py-1.5 font-mono text-xs transition-colors", quantity === value ? "border-brand bg-brand text-surface" : "border-border text-ink-soft hover:border-ink")}>{value.toLocaleString()}</button>)}</div>
