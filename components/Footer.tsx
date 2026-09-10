@@ -25,7 +25,7 @@ export async function Footer({ locale, dict }: { locale: Locale; dict: Dictionar
           Sherinab <span className="ml-2 text-[0.72em] font-normal tracking-[0.18em] text-ink-soft">VENTURE</span><span className="ml-1.5 text-brand">.</span>
         </Link>
         <p className="mt-5 max-w-2xl font-display text-lg leading-snug text-ink sm:mt-6 sm:text-2xl">{mission}</p>
-        <div className="mt-10 grid grid-cols-2 gap-x-8 gap-y-9 border-t border-border pt-8 sm:mt-14 sm:grid-cols-[1.4fr_0.9fr_0.7fr_1fr] sm:gap-8 sm:pt-12">
+        <div className="mt-10 grid grid-cols-2 gap-x-8 gap-y-9 border-t border-border pt-8 sm:mt-14 sm:grid-cols-[1.3fr_0.85fr_0.65fr_1.2fr] sm:gap-8 sm:pt-12">
           <div>
             <h3 className="eyebrow">{dict.footer.productsHeading}</h3>
             <p className="mt-3 max-w-xs text-sm leading-6 text-muted">{locale === "fr" ? "Un catalogue pensé pour les commerces, la restauration et l’hôtellerie." : "A practical catalogue for shops, restaurants, hospitality and growing businesses."}</p>
@@ -51,7 +51,7 @@ export async function Footer({ locale, dict }: { locale: Locale; dict: Dictionar
           </div>
           <div className="col-span-2 border-t border-border pt-6 sm:col-span-1 sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
             <h3 className="eyebrow">{locale === "fr" ? "ADRESSE" : "LOCATION"}</h3>
-            <p className="mt-4 max-w-xs text-sm leading-6 text-ink-soft">{address}</p>
+            <p className="mt-4 max-w-xs text-sm leading-6 text-ink-soft [text-wrap:balance]">{address}</p>
           </div>
         </div>
         <div className="mt-9 flex flex-col gap-4 border-t border-border pt-6 sm:mt-16 sm:flex-row sm:items-center sm:justify-between sm:pt-7">
