@@ -12,7 +12,6 @@ import { FeaturedProducts } from "@/components/FeaturedProducts";
 import { ShopByBusiness } from "@/components/ShopByBusiness";
 import { WholesaleQuoteCta } from "@/components/WholesaleQuoteCta";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
-import { FinalCta } from "@/components/FinalCta";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
@@ -59,10 +58,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         dict={dict}
         section={howItWorksSection}
         deliverySection={deliveryTeaserSection}
+        finalCtaSection={finalCtaSection}
         deliveryImageUrl={finalCtaImage}
         deliveryMobileImageUrl={finalCtaImage}
       />
-      <FinalCta locale={locale} dict={dict} section={finalCtaSection} />
     </>
   );
 }
