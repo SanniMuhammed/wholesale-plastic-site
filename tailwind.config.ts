@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#F7F5EF",
+        background: "#FFFFFF",
         surface: "#FFFFFF",
         ink: {
           DEFAULT: "#171A18",
@@ -55,21 +55,16 @@ const config: Config = {
         lifted: "0 12px 28px -12px rgba(27,27,23,0.22)",
       },
       keyframes: {
-        // Cart badge confirms a quantity change -- the one indicator that
-        // should visibly react every time an item is added.
         pop: {
           "0%": { transform: "scale(1)" },
           "30%": { transform: "scale(1.3)" },
           "60%": { transform: "scale(0.92)" },
           "100%": { transform: "scale(1)" },
         },
-        // Draws the How It Works / Delivery connector left-to-right, once,
-        // to visualise an actual sequence -- not a generic reveal.
         "grow-x": {
           "0%": { transform: "scaleX(0)" },
           "100%": { transform: "scaleX(1)" },
         },
-        // The single hero entrance moment; not reused elsewhere.
         "settle-up": {
           "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
