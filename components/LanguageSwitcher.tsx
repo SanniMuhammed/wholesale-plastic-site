@@ -12,7 +12,15 @@ function pathWithLocale(pathname: string, target: Locale): string {
   return segments.join("/") || `/${target}`;
 }
 
-export function LanguageSwitcher({ locale, className }: { locale: Locale; className?: string }) {
+export function LanguageSwitcher({
+  locale,
+  className,
+  dark = false,
+}: {
+  locale: Locale;
+  className?: string;
+  dark?: boolean;
+}) {
   const pathname = usePathname() || `/${locale}`;
 
   return (
@@ -24,12 +32,18 @@ export function LanguageSwitcher({ locale, className }: { locale: Locale; classN
             aria-current={code === locale ? "true" : undefined}
             className={cx(
               "uppercase tracking-normal transition-colors",
-              code === locale ? "text-ink" : "text-muted hover:text-ink"
+              dark
+                ? code === locale
+                  ? "text-surface"
+                  : "text-surface/65 hover:text-surface"
+                : code === locale
+                  ? "text-ink"
+                  : "text-muted hover:text-ink"
             )}
           >
             {code}
           </Link>
-          {i < locales.length - 1 && <span className="text-border">|</span>}
+          {i < locales.length - 1 && <span className={dark ? "text-surface/35" : "text-border"}>|</span>}
         </span>
       ))}
     </div>
