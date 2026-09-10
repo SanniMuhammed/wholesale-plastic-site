@@ -56,6 +56,29 @@ summary::-webkit-details-marker {
   }
 }
 
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 5mm;
+  }
+
+  html,
+  body {
+    width: 100%;
+    min-height: 100%;
+  }
+
+  body {
+    overflow: visible;
+    zoom: 0.62;
+  }
+
+  section,
+  li {
+    break-inside: avoid;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
