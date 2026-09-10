@@ -60,6 +60,12 @@ function formatPrice(value: number, locale: Locale) {
   })}`;
 }
 
+function getDisplayCapacity(name: string, capacity?: string) {
+  if (capacity?.trim()) return capacity.trim();
+  const match = name.match(/\b\d+(?:\.\d+)?\s?(?:ml|cl|l)\b/i);
+  return match?.[0] ?? undefined;
+}
+
 export function OrderSummaryClient({
   locale,
   dict,
@@ -251,19 +257,19 @@ export function OrderSummaryClient({
           <div className="border-b border-border bg-brand px-5 py-5 text-surface sm:px-7">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-surface/70">
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-surface/90">
                   Sherinab Venture.
                 </p>
                 <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight">
                   {sp.orderSummaryTitle}
                 </h2>
               </div>
-              <span className="font-mono text-[10px] text-surface/70">
+              <span className="font-mono text-[10px] text-surface/90">
                 {isFrench ? "COMMANDE" : "ORDER"}
               </span>
             </div>
             <div className="mt-5 flex items-end justify-between gap-4 border-t border-surface/20 pt-4">
-              <span className="text-xs text-surface/75">
+              <span className="text-xs text-surface/90">
                 {isFrench ? "Sélection actuelle" : "Current selection"}
               </span>
               <span className="font-mono text-sm font-semibold">
@@ -276,91 +282,96 @@ export function OrderSummaryClient({
             {hasItems ? (
               <>
                 <ul className="divide-y divide-border">
-                  {resolvedItems.map((item) => (
-                    <li
-                      key={item.slug}
-                      className={cx(
-                        "grid transition-[grid-template-rows] duration-300",
-                        removingSlugs.has(item.slug) ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
-                      )}
-                    >
-                      <div className="overflow-hidden">
-                        <div
-                          className={cx(
-                            "grid grid-cols-[1fr_auto] gap-4 py-4 transition-opacity sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center",
-                            removingSlugs.has(item.slug) && "opacity-0"
-                          )}
-                        >
-                          <div className="min-w-0">
-                            <p className="font-display text-base font-semibold text-ink">{item.name}</p>
-                            {item.capacity && (
-                              <p className="mt-1 font-mono text-[11px] text-muted">{item.capacity}</p>
+                  {resolvedItems.map((item) => {
+                    const displayCapacity = getDisplayCapacity(item.name, item.capacity);
+                    return (
+                      <li
+                        key={item.slug}
+                        className={cx(
+                          "grid transition-[grid-template-rows] duration-300",
+                          removingSlugs.has(item.slug) ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
+                        )}
+                      >
+                        <div className="overflow-hidden">
+                          <div
+                            className={cx(
+                              "grid grid-cols-[1fr_auto] gap-4 py-4 transition-opacity sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center",
+                              removingSlugs.has(item.slug) && "opacity-0"
                             )}
-                          </div>
+                          >
+                            <div className="min-w-0">
+                              <p className="font-display text-base font-semibold text-ink">{item.name}</p>
+                              {displayCapacity && (
+                                <p className="mt-1 font-mono text-[11px] font-semibold text-ink/70">
+                                  {displayCapacity}
+                                </p>
+                              )}
+                            </div>
 
-                          <div className="text-right sm:min-w-[120px]">
-                            <p className="text-[10px] font-medium uppercase tracking-wider text-muted">
-                              {item.pricingMode === "starting_from"
-                                ? isFrench
-                                  ? "À partir de"
-                                  : "Starting from"
-                                : isFrench
-                                  ? "Prix"
-                                  : "Price"}
-                            </p>
-                            <p className="mt-0.5 font-display text-sm font-semibold text-ink">
-                              {item.price != null ? formatPrice(item.price, locale) : isFrench ? "Sur demande" : "On request"}
-                            </p>
-                          </div>
+                            <div className="text-right sm:min-w-[120px]">
+                              <p className="text-[10px] font-medium uppercase tracking-wider text-muted">
+                                {item.pricingMode === "starting_from"
+                                  ? isFrench
+                                    ? "À partir de"
+                                    : "Starting from"
+                                  : isFrench
+                                    ? "Prix"
+                                    : "Price"}
+                              </p>
+                              <p className="mt-0.5 font-display text-sm font-semibold text-ink">
+                                {item.price != null ? formatPrice(item.price, locale) : isFrench ? "Sur demande" : "On request"}
+                              </p>
+                            </div>
 
-                          <div className="col-span-2 flex items-center justify-between gap-3 sm:col-span-1">
-                            <span className="text-[11px] font-medium uppercase tracking-wider text-muted sm:hidden">
-                              {dict.common.quantity}
-                            </span>
-                            <div className="flex items-center gap-3">
-                              <div className="flex h-10 items-center rounded-lg border border-border bg-surface print:hidden">
+                            <div className="col-span-2 flex items-center justify-between gap-3 sm:col-span-1">
+                              <span className="text-[11px] font-medium uppercase tracking-wider text-muted sm:hidden print:hidden">
+                                {dict.common.quantity}
+                              </span>
+                              <div className="flex items-center gap-3">
+                                <div className="flex h-10 items-center rounded-lg border border-border bg-surface print:hidden">
+                                  <button
+                                    type="button"
+                                    onClick={() => updateQuantity(item.slug, Math.max(1, item.quantity - 1))}
+                                    className="inline-flex h-full w-9 items-center justify-center text-muted hover:text-ink"
+                                    aria-label={`Decrease ${item.name}`}
+                                  >
+                                    −
+                                  </button>
+                                  <input
+                                    type="number"
+                                    min={1}
+                                    value={item.quantity}
+                                    onChange={(e) => updateQuantity(item.slug, Number(e.target.value) || 1)}
+                                    aria-label={dict.common.quantity}
+                                    className="h-full w-14 border-x border-border bg-transparent text-center font-mono text-sm font-semibold text-ink outline-none"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => updateQuantity(item.slug, item.quantity + 1)}
+                                    className="inline-flex h-full w-9 items-center justify-center text-muted hover:text-ink"
+                                    aria-label={`Increase ${item.name}`}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                                <span className="hidden font-mono text-sm font-semibold text-ink print:inline">
+                                  {dict.common.quantity}: {item.quantity.toLocaleString()}
+                                </span>
                                 <button
                                   type="button"
-                                  onClick={() => updateQuantity(item.slug, Math.max(1, item.quantity - 1))}
-                                  className="inline-flex h-full w-9 items-center justify-center text-muted hover:text-ink"
-                                  aria-label={`Decrease ${item.name}`}
+                                  onClick={() => handleRemove(item.slug)}
+                                  className="hidden h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-brand-light hover:text-brand print:hidden sm:inline-flex"
+                                  aria-label={`${dict.common.removeFromOrder}: ${item.name}`}
                                 >
-                                  −
-                                </button>
-                                <input
-                                  type="number"
-                                  min={1}
-                                  value={item.quantity}
-                                  onChange={(e) => updateQuantity(item.slug, Number(e.target.value) || 1)}
-                                  aria-label={dict.common.quantity}
-                                  className="h-full w-14 border-x border-border bg-transparent text-center font-mono text-sm font-semibold text-ink outline-none"
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => updateQuantity(item.slug, item.quantity + 1)}
-                                  className="inline-flex h-full w-9 items-center justify-center text-muted hover:text-ink"
-                                  aria-label={`Increase ${item.name}`}
-                                >
-                                  +
+                                  <Trash2 size={14} />
                                 </button>
                               </div>
-                              <span className="hidden font-mono text-sm font-semibold text-ink print:inline">
-                                × {item.quantity.toLocaleString()}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => handleRemove(item.slug)}
-                                className="hidden h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-brand-light hover:text-brand print:hidden sm:inline-flex"
-                                aria-label={`${dict.common.removeFromOrder}: ${item.name}`}
-                              >
-                                <Trash2 size={14} />
-                              </button>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </li>
-                  ))}
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 <div className="mt-2 border-t-2 border-ink/10 pt-5">
@@ -437,7 +448,7 @@ export function OrderSummaryClient({
               </div>
             )}
             <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-              <span className="font-semibold text-ink">{isFrench ? "Total" : "Total"}</span>
+              <span className="font-semibold text-ink">Total</span>
               <span className="font-display text-xl font-semibold text-ink">
                 {hasUnpricedItems ? (isFrench ? "Sur demande" : "On request") : formatPrice(orderTotal, locale)}
               </span>
@@ -460,16 +471,8 @@ export function OrderSummaryClient({
               <p className="mt-1 text-sm leading-6 text-muted">{sp.detailsNote}</p>
             </div>
             <div className="mt-5 grid gap-4">
-              <Field
-                label={sp.fields.customerName}
-                value={details.customerName}
-                onChange={(v) => updateDetail("customerName", v)}
-              />
-              <Field
-                label={sp.fields.businessName}
-                value={details.businessName}
-                onChange={(v) => updateDetail("businessName", v)}
-              />
+              <Field label={sp.fields.customerName} value={details.customerName} onChange={(v) => updateDetail("customerName", v)} />
+              <Field label={sp.fields.businessName} value={details.businessName} onChange={(v) => updateDetail("businessName", v)} />
               <label className="block">
                 <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">
                   {isFrench ? "Livraison" : "Delivery to"}
@@ -479,145 +482,62 @@ export function OrderSummaryClient({
                   onChange={(e) => handleRegionChange(e.target.value as DeliveryRegion | "")}
                   className="h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm text-ink outline-none focus:border-brand"
                 >
-                  <option value="">
-                    {isFrench ? "Choisir une destination" : "Choose a destination"}
-                  </option>
-                  <option value="nigeria">
-                    {isFrench ? "Nigeria — partout dans le pays" : "Nigeria — anywhere in the country"}
-                  </option>
-                  <option value="international">
-                    {isFrench ? "Hors du Nigeria" : "Outside Nigeria"}
-                  </option>
+                  <option value="">{isFrench ? "Choisir une destination" : "Choose a destination"}</option>
+                  <option value="nigeria">{isFrench ? "Nigeria — partout dans le pays" : "Nigeria — anywhere in the country"}</option>
+                  <option value="international">{isFrench ? "Hors du Nigeria" : "Outside Nigeria"}</option>
                 </select>
               </label>
               {details.region === "nigeria" ? (
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <SelectField
-                    label={isFrench ? "État" : "State"}
-                    value={details.state}
-                    onChange={(v) => updateDetail("state", v)}
-                    options={NIGERIAN_STATES}
-                    placeholder={isFrench ? "Choisir un État" : "Select a state"}
-                    required
-                  />
-                  <Field
-                    label={isFrench ? "Ville / zone" : "City / area"}
-                    required
-                    value={details.city}
-                    onChange={(v) => updateDetail("city", v)}
-                  />
+                  <SelectField label={isFrench ? "État" : "State"} value={details.state} onChange={(v) => updateDetail("state", v)} options={NIGERIAN_STATES} placeholder={isFrench ? "Choisir un État" : "Select a state"} required />
+                  <Field label={isFrench ? "Ville / zone" : "City / area"} required value={details.city} onChange={(v) => updateDetail("city", v)} />
                 </div>
               ) : details.region === "international" ? (
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field
-                    label={isFrench ? "Pays" : "Country"}
-                    required
-                    value={details.country}
-                    onChange={(v) => updateDetail("country", v)}
-                  />
-                  <Field
-                    label={isFrench ? "Ville" : "City"}
-                    required
-                    value={details.city}
-                    onChange={(v) => updateDetail("city", v)}
-                  />
+                  <Field label={isFrench ? "Pays" : "Country"} required value={details.country} onChange={(v) => updateDetail("country", v)} />
+                  <Field label={isFrench ? "Ville" : "City"} required value={details.city} onChange={(v) => updateDetail("city", v)} />
                 </div>
               ) : null}
               <label className="block">
                 <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">
                   {isFrench ? "Préférence de livraison" : "Delivery preference"}
                 </span>
-                <select
-                  value={details.deliveryPreference}
-                  onChange={(e) => updateDetail("deliveryPreference", e.target.value)}
-                  className="h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm text-ink outline-none focus:border-brand"
-                >
+                <select value={details.deliveryPreference} onChange={(e) => updateDetail("deliveryPreference", e.target.value)} className="h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm text-ink outline-none focus:border-brand">
                   <option value="">{isFrench ? "Facultatif" : "Optional"}</option>
-                  {deliveryOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
+                  {deliveryOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                 </select>
               </label>
-              <TextAreaField
-                label={sp.fields.otherInfo}
-                value={details.otherInfo}
-                onChange={(v) => updateDetail("otherInfo", v)}
-              />
+              <TextAreaField label={sp.fields.otherInfo} value={details.otherInfo} onChange={(v) => updateDetail("otherInfo", v)} />
             </div>
           </section>
 
           <section className="rounded-2xl border border-brand/20 bg-brand-light/45 p-5 sm:p-6">
             <div className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand text-surface">
-                <Send size={16} />
-              </div>
+              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand text-surface"><Send size={16} /></div>
               <div>
-                <h2 className="font-display text-lg font-semibold text-ink">
-                  {isFrench ? "Envoyer la commande complète" : "Send the complete order"}
-                </h2>
-                <p className="mt-1 text-sm leading-6 text-muted">
-                  {isFrench
-                    ? "Votre sélection, vos quantités et les détails de destination seront préparés dans WhatsApp."
-                    : "Your selection, quantities and destination details will be prepared in WhatsApp."}
-                </p>
+                <h2 className="font-display text-lg font-semibold text-ink">{isFrench ? "Envoyer la commande complète" : "Send the complete order"}</h2>
+                <p className="mt-1 text-sm leading-6 text-muted">{isFrench ? "Votre sélection, vos quantités et les détails de destination seront préparés dans WhatsApp." : "Your selection, quantities and destination details will be prepared in WhatsApp."}</p>
               </div>
             </div>
             {hasItems ? (
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={handleWhatsAppClick}
-                className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand px-5 text-sm font-semibold text-surface shadow-sm transition-all hover:bg-brand-dark active:scale-[0.99]"
-              >
-                <Send size={17} />
-                {sp.continueOnWhatsapp}
-              </a>
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" onClick={handleWhatsAppClick} className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand px-5 text-sm font-semibold text-surface shadow-sm transition-all hover:bg-brand-dark active:scale-[0.99]"><Send size={17} />{sp.continueOnWhatsapp}</a>
             ) : (
-              <span
-                aria-disabled="true"
-                className="mt-5 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-brand px-5 text-sm font-semibold text-surface opacity-50"
-              >
-                <Send size={17} />
-                {sp.continueOnWhatsapp}
-              </span>
+              <span aria-disabled="true" className="mt-5 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-brand px-5 text-sm font-semibold text-surface opacity-50"><Send size={17} />{sp.continueOnWhatsapp}</span>
             )}
-            <p className="mt-3 text-center text-[11px] leading-5 text-muted">
-              {isFrench
-                ? "WhatsApp s'ouvrira avec votre demande déjà préparée."
-                : "WhatsApp will open with your order request already prepared."}
-            </p>
+            <p className="mt-3 text-center text-[11px] leading-5 text-muted">{isFrench ? "WhatsApp s'ouvrira avec votre demande déjà préparée." : "WhatsApp will open with your order request already prepared."}</p>
           </section>
 
           <div className="border-t border-border pt-5">
             <div className="rounded-2xl border border-border bg-surface p-4 shadow-card sm:p-5">
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-light text-brand">
-                  <FileDown size={18} />
-                </div>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-light text-brand"><FileDown size={18} /></div>
                 <div className="min-w-0">
                   <p className="eyebrow text-brand">{isFrench ? "Copie locale" : "Your copy"}</p>
-                  <h3 className="mt-1 font-display text-base font-semibold text-ink">
-                    {isFrench ? "Imprimer ou enregistrer en PDF" : "Print or save as PDF"}
-                  </h3>
-                  <p className="mt-1 text-xs leading-5 text-muted">
-                    {isFrench
-                      ? "Gardez une copie de votre demande pour vos dossiers."
-                      : "Keep a copy of your order request for your records."}
-                  </p>
+                  <h3 className="mt-1 font-display text-base font-semibold text-ink">{isFrench ? "Imprimer ou enregistrer en PDF" : "Print or save as PDF"}</h3>
+                  <p className="mt-1 text-xs leading-5 text-muted">{isFrench ? "Gardez une copie de votre demande pour vos dossiers." : "Keep a copy of your order request for your records."}</p>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={handlePrint}
-                disabled={!hasItems}
-                className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-ink px-4 text-sm font-semibold text-ink transition-all hover:bg-ink hover:text-surface active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                <FileDown size={15} />
-                {isFrench ? "Imprimer / Enregistrer en PDF" : "Print / Save as PDF"}
-              </button>
+              <button type="button" onClick={handlePrint} disabled={!hasItems} className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-ink px-4 text-sm font-semibold text-ink transition-all hover:bg-ink hover:text-surface active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"><FileDown size={15} />{isFrench ? "Imprimer / Enregistrer en PDF" : "Print / Save as PDF"}</button>
             </div>
             <p className="mt-3 text-center text-[11px] leading-5 text-muted">{sp.receiptNote}</p>
           </div>
@@ -627,94 +547,32 @@ export function OrderSummaryClient({
   );
 }
 
-function Field({
-  label,
-  value,
-  onChange,
-  required,
-  type = "text",
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  required?: boolean;
-  type?: string;
-}) {
+function Field({ label, value, onChange, required, type = "text" }: { label: string; value: string; onChange: (value: string) => void; required?: boolean; type?: string }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">
-        {label}
-        {required ? " *" : ""}
-      </span>
-      <input
-        type={type}
-        required={required}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-muted focus:border-brand"
-      />
+      <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">{label}{required ? " *" : ""}</span>
+      <input type={type} required={required} value={value} onChange={(e) => onChange(e.target.value)} className="h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-muted focus:border-brand" />
     </label>
   );
 }
 
-function SelectField({
-  label,
-  value,
-  onChange,
-  options,
-  placeholder,
-  required,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  options: readonly string[];
-  placeholder: string;
-  required?: boolean;
-}) {
+function SelectField({ label, value, onChange, options, placeholder, required }: { label: string; value: string; onChange: (value: string) => void; options: readonly string[]; placeholder: string; required?: boolean }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">
-        {label}
-        {required ? " *" : ""}
-      </span>
-      <select
-        required={required}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm text-ink outline-none focus:border-brand"
-      >
+      <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">{label}{required ? " *" : ""}</span>
+      <select required={required} value={value} onChange={(e) => onChange(e.target.value)} className="h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm text-ink outline-none focus:border-brand">
         <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
+        {options.map((option) => <option key={option} value={option}>{option}</option>)}
       </select>
     </label>
   );
 }
 
-function TextAreaField({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-}) {
+function TextAreaField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">
-        {label}
-      </span>
-      <textarea
-        rows={3}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full resize-none rounded-lg border border-border bg-surface px-3 py-2.5 text-sm leading-6 text-ink outline-none placeholder:text-muted focus:border-brand"
-      />
+      <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">{label}</span>
+      <textarea rows={3} value={value} onChange={(e) => onChange(e.target.value)} className="w-full resize-none rounded-lg border border-border bg-surface px-3 py-2.5 text-sm leading-6 text-ink outline-none placeholder:text-muted focus:border-brand" />
     </label>
   );
 }
