@@ -46,14 +46,14 @@ export function CartTrigger({
     <button
       type="button"
       onClick={openDrawer}
-      className="inline-flex items-center justify-center gap-2 rounded bg-accent px-4 py-2 text-sm font-semibold text-brand transition-colors hover:bg-accent/90"
+      className="inline-flex items-center justify-center gap-2 rounded border border-brand bg-brand px-4 py-2 text-sm font-semibold text-surface transition-colors hover:bg-brand-dark"
     >
       <ShoppingBag size={16} strokeWidth={1.75} />
       {dict.nav.reviewOrder}
       <span
         data-cart-badge
         className={cx(
-          "inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-brand px-1 font-mono text-xs font-bold text-surface transition-opacity",
+          "inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-accent px-1 font-mono text-xs font-bold text-brand transition-opacity",
           count === 0 && "opacity-0"
         )}
       >
