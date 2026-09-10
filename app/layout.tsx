@@ -7,10 +7,10 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "sw
 const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap" });
 const spaceMono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://wholesale-plastic-site-two.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL || "https://wholesale-plastic-site-one.vercel.app";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(siteUrl.startsWith("http") ? siteUrl : `https://${siteUrl}`),
   title: "Sherinab Venture — Wholesale Plastic Products in Nigeria & Beyond",
   description: "Sherinab Venture supplies wholesale plastic products to businesses anywhere in Nigeria and to customers beyond Nigeria.",
   applicationName: "Sherinab Venture",
