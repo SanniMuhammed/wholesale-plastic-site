@@ -21,6 +21,30 @@ interface SearchBoxProps {
   initialQuery?: string;
 }
 
+const searchCache = new Map<string, { results: SearchResult[]; timestamp: number }>();
+const SEARCH_CACHE_TTL = 30_000;
+const SEARCH_CACHE_LIMIT = 40;
+
+function readCachedResults(key: string): SearchResult[] | null {
+  const cached = searchCache.get(key);
+  if (!cached) return null;
+  if (Date.now() - cached.timestamp > SEARCH_CACHE_TTL) {
+    searchCache.delete(key);
+    return null;
+  }
+  return cached.results;
+}
+
+function writeCachedResults(key: string, results: SearchResult[]) {
+  searchCache.delete(key);
+  searchCache.set(key, { results, timestamp: Date.now() });
+  while (searchCache.size > SEARCH_CACHE_LIMIT) {
+    const oldestKey = searchCache.keys().next().value;
+    if (!oldestKey) break;
+    searchCache.delete(oldestKey);
+  }
+}
+
 export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -43,16 +67,27 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
         return;
       }
 
+      const cacheKey = `${locale}:${value.toLowerCase()}`;
+      const cached = readCachedResults(cacheKey);
+      if (cached) {
+        setResults(cached);
+        setLoading(false);
+        setOpen(true);
+        setActiveIndex(-1);
+        return;
+      }
+
       setLoading(true);
       setOpen(true);
       try {
         const response = await fetch(`/api/product-search?q=${encodeURIComponent(value)}&locale=${locale}`, {
           signal: controller.signal,
-          cache: "no-store",
         });
         if (!response.ok) throw new Error("Search failed");
         const data = (await response.json()) as { results?: SearchResult[] };
-        setResults(data.results ?? []);
+        const nextResults = data.results ?? [];
+        writeCachedResults(cacheKey, nextResults);
+        setResults(nextResults);
         setActiveIndex(-1);
       } catch (error) {
         if ((error as Error).name !== "AbortError") setResults([]);
