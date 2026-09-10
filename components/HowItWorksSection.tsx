@@ -7,15 +7,11 @@ import type { HomepageSection } from "@/lib/cms/types";
 import { useInView } from "@/lib/hooks/useInView";
 import { cx } from "@/lib/utils";
 
-const HINGE_INDEX = 2;
-
 type HowItWorksProps = {
   dict: Dictionary;
   locale: Locale;
   id?: string;
   section?: HomepageSection;
-  imageUrl?: string | null;
-  mobileImageUrl?: string | null;
   deliverySection?: HomepageSection;
   deliveryImageUrl?: string | null;
   deliveryMobileImageUrl?: string | null;
@@ -26,7 +22,7 @@ function sectionText(section: HomepageSection | undefined, locale: Locale, fallb
   return { title: section?.title_en || fallbackTitle, body: section?.body_en || fallbackBody };
 }
 
-export function HowItWorksSection({ dict, locale, id, section, imageUrl, mobileImageUrl, deliverySection, deliveryImageUrl, deliveryMobileImageUrl }: HowItWorksProps) {
+export function HowItWorksSection({ dict, locale, id, section, deliverySection, deliveryImageUrl, deliveryMobileImageUrl }: HowItWorksProps) {
   const { ref, inView } = useInView<HTMLDivElement>();
   if (section?.is_visible === false) return null;
 
@@ -37,23 +33,18 @@ export function HowItWorksSection({ dict, locale, id, section, imageUrl, mobileI
 
   return (
     <section id={id} className="scroll-mt-20 border-y border-border bg-surface">
-      <div className="mx-auto max-w-content px-4 pb-9 pt-12 sm:px-6 sm:pb-12 sm:pt-16">
-        <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{copy.title}</h2>
-        <p className="mt-2 max-w-md text-muted">{copy.body}</p>
-
-        {imageUrl && (
-          <picture className="mt-8 block overflow-hidden rounded-xl border border-border bg-background">
-            {mobileImageUrl && <source media="(max-width: 640px)" srcSet={mobileImageUrl} />}
-            <img src={imageUrl} alt="" className="h-auto max-h-[420px] w-full object-cover" loading="lazy" />
-          </picture>
-        )}
+      <div className="mx-auto max-w-content px-4 py-12 sm:px-6 sm:py-16">
+        <div className="max-w-2xl">
+          <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{copy.title}</h2>
+          <p className="mt-2 text-sm leading-6 text-muted sm:text-base sm:leading-7">{copy.body}</p>
+        </div>
 
         <div ref={ref}>
-          <ol className="mt-12 sm:hidden">
+          <ol className="mt-10 sm:hidden">
             {steps.map((step, index) => {
               const isLast = index === steps.length - 1;
               return (
-                <li key={step.number} className="relative flex gap-4 pb-9 last:pb-0">
+                <li key={step.number} className="relative flex gap-4 pb-8 last:pb-0">
                   <div className="relative flex w-2 shrink-0 flex-col items-center">
                     <span className="relative z-10 mt-1.5 h-2 w-2 shrink-0 rounded-full border border-border bg-surface" />
                     {!isLast && (
@@ -65,29 +56,29 @@ export function HowItWorksSection({ dict, locale, id, section, imageUrl, mobileI
                   </div>
                   <div className="flex-1">
                     <p className="font-mono text-[11px] font-bold tracking-[0.08em] text-muted">{step.number}</p>
-                    <h3 className="mt-1 font-display text-2xl font-semibold leading-tight text-ink">{step.title}</h3>
-                    <p className="mt-1.5 max-w-[30ch] text-sm text-muted">{step.description}</p>
+                    <h3 className="mt-1 font-display text-xl font-semibold leading-tight text-ink">{step.title}</h3>
+                    <p className="mt-1.5 max-w-[34ch] text-sm text-muted">{step.description}</p>
                   </div>
                 </li>
               );
             })}
           </ol>
 
-          <ol className="relative mt-14 hidden gap-x-6 sm:grid sm:grid-cols-[1.25fr,1fr,1.2fr,1fr,1.25fr]">
+          <ol className="relative mt-12 hidden gap-x-5 sm:grid sm:grid-cols-5 lg:gap-x-7">
             {steps.map((step, index) => {
               const isBookend = index === 0 || index === steps.length - 1;
               const isLast = index === steps.length - 1;
               return (
-                <li key={step.number} className="relative flex flex-col">
+                <li key={step.number} className="relative flex min-w-0 flex-col">
                   {!isLast && (
                     <>
-                      <span className="absolute left-[6px] top-[6px] h-px w-full bg-border" aria-hidden />
-                      <span className="absolute left-[6px] top-[6px] h-px w-full origin-left bg-brand" style={{ transform: `scaleX(${inView ? 1 : 0})`, transitionProperty: "transform", transitionDuration: "0.6s", transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)", transitionDelay: `${index * 120}ms` }} aria-hidden />
+                      <span className="absolute left-[6px] top-[6px] h-px w-[calc(100%+1.25rem)] bg-border lg:w-[calc(100%+1.75rem)]" aria-hidden />
+                      <span className="absolute left-[6px] top-[6px] h-px w-[calc(100%+1.25rem)] origin-left bg-brand lg:w-[calc(100%+1.75rem)]" style={{ transform: `scaleX(${inView ? 1 : 0})`, transitionProperty: "transform", transitionDuration: "0.6s", transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)", transitionDelay: `${index * 120}ms` }} aria-hidden />
                     </>
                   )}
                   <span className="relative z-10 h-3 w-3 shrink-0 rounded-full border-2 border-brand bg-surface" />
                   <p className="mt-3 font-mono text-xs font-bold text-muted">{step.number}</p>
-                  <h3 className={cx("mt-2 font-display font-semibold leading-[1.05] text-ink", isBookend ? "text-3xl" : "text-2xl")}>{step.title}</h3>
+                  <h3 className={cx("mt-2 font-display font-semibold leading-[1.05] text-ink", isBookend ? "text-2xl lg:text-3xl" : "text-xl lg:text-2xl")}>{step.title}</h3>
                   <p className="mt-2 max-w-[22ch] text-sm text-muted">{step.description}</p>
                 </li>
               );
@@ -96,22 +87,24 @@ export function HowItWorksSection({ dict, locale, id, section, imageUrl, mobileI
         </div>
 
         {deliveryVisible && (
-          <div className="mt-12 border-t border-border pt-9 sm:mt-14 sm:pt-10">
-            <div className="max-w-xl">
-              <h3 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{deliveryCopy.title}</h3>
-              <p className="mt-3 text-muted">{deliveryCopy.body}</p>
+          <div className="mt-12 border-t border-border pt-10 sm:mt-14 sm:pt-12">
+            <div className="grid items-center gap-7 lg:grid-cols-[1fr_minmax(320px,0.9fr)] lg:gap-12">
+              <div className="max-w-xl">
+                <p className="eyebrow text-brand/80">{locale === "fr" ? "Livraison" : "Delivery"}</p>
+                <h3 className="mt-2 font-display text-2xl font-semibold leading-tight text-ink sm:text-3xl">{deliveryCopy.title}</h3>
+                <p className="mt-3 max-w-lg text-sm leading-6 text-muted sm:text-base sm:leading-7">{deliveryCopy.body}</p>
+                <Link href={`/${locale}/delivery`} className="mt-6 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface">
+                  {dict.deliveryTeaser.cta} →
+                </Link>
+              </div>
+
+              {(deliveryImageUrl || deliveryMobileImageUrl) && (
+                <picture className="block overflow-hidden rounded-xl border border-border bg-background">
+                  {deliveryMobileImageUrl && <source media="(max-width: 640px)" srcSet={deliveryMobileImageUrl} />}
+                  {deliveryImageUrl && <img src={deliveryImageUrl} alt="" className="h-auto max-h-[300px] w-full object-cover" loading="lazy" />}
+                </picture>
+              )}
             </div>
-
-            {(deliveryImageUrl || deliveryMobileImageUrl) && (
-              <picture className="mt-8 block max-w-3xl overflow-hidden rounded-xl border border-border bg-background">
-                {deliveryMobileImageUrl && <source media="(max-width: 640px)" srcSet={deliveryMobileImageUrl} />}
-                {deliveryImageUrl && <img src={deliveryImageUrl} alt="" className="h-auto max-h-[320px] w-full object-cover" loading="lazy" />}
-              </picture>
-            )}
-
-            <Link href={`/${locale}/delivery`} className="mt-7 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface">
-              {dict.deliveryTeaser.cta} →
-            </Link>
           </div>
         )}
       </div>
