@@ -59,35 +59,77 @@ summary::-webkit-details-marker {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 5mm;
+    margin: 16mm 12mm 14mm;
   }
 
   html,
   body {
     width: 100%;
     min-height: 0;
-    overflow: hidden !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  /* Never print the live website chrome on the order-summary document. */
+  body:has(.order-summary-page) header {
+    display: none !important;
+  }
+
+  /* A fixed print header is repeated by the browser on every printed page. */
+  body:has(.order-summary-page)::before {
+    content: "Sherinab Venture.  •  Your Order";
+    position: fixed;
+    top: 4mm;
+    left: 12mm;
+    right: 12mm;
+    z-index: 9999;
+    display: block;
+    padding-bottom: 3mm;
+    border-bottom: 1px solid #d7dce2;
+    color: #131a22;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    font-weight: 700;
+    letter-spacing: 0.04em;
   }
 
   .order-summary-page {
     width: 100% !important;
     max-width: none !important;
-    padding: 0 !important;
+    padding: 5mm 0 0 !important;
     margin: 0 !important;
+    color: #131a22 !important;
   }
 
-  /* The client root contains the printable receipt and the screen-only form.
-     Make it the only print flow and scale the complete receipt down as one unit. */
+  .order-summary-page > h1,
+  .order-summary-page > p {
+    display: none !important;
+  }
+
   .order-summary-page > div:last-child {
     display: block !important;
-    width: 200% !important;
+    width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    zoom: 0.5;
+    zoom: 1 !important;
   }
 
-  .order-summary-page section,
-  .order-summary-page li {
+  .order-summary-page .grid {
+    display: block !important;
+  }
+
+  .order-summary-page aside,
+  .order-summary-page .print\:hidden {
+    display: none !important;
+  }
+
+  .order-summary-page section {
+    width: 100% !important;
+    max-width: none !important;
+    box-shadow: none !important;
+  }
+
+  .order-summary-page section > div {
     break-inside: auto;
     page-break-inside: auto;
   }
@@ -95,6 +137,36 @@ summary::-webkit-details-marker {
   .order-summary-page li {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+
+  .order-summary-page .print\:block {
+    display: block !important;
+  }
+
+  .order-summary-page .print\:inline {
+    display: inline !important;
+  }
+
+  .order-summary-page .text-muted,
+  .order-summary-page .eyebrow {
+    color: #4b5563 !important;
+  }
+
+  .order-summary-page .text-ink {
+    color: #131a22 !important;
+  }
+
+  .order-summary-page .text-surface\/70,
+  .order-summary-page .text-surface\/75 {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  .order-summary-page .border-border {
+    border-color: #d7dce2 !important;
+  }
+
+  .order-summary-page .divide-border > :not([hidden]) ~ :not([hidden]) {
+    border-color: #d7dce2 !important;
   }
 }
 
