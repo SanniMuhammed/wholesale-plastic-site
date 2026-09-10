@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, ArrowUpDown, Filter, X } from "lucide-react";
 import { CATEGORIES, type CategorySlug } from "@/lib/products";
@@ -23,32 +23,30 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const paramCategory = searchParams.get("category");
-  const [category, setCategory] = useState<CategorySlug | null>(isCategorySlug(paramCategory) ? paramCategory : null);
-  const [query, setQuery] = useState(searchParams.get("q") ?? "");
-  const [sort, setSort] = useState<SortOption>(isSortOption(searchParams.get("sort")) ? searchParams.get("sort") as SortOption : "featured");
 
-  useEffect(() => {
-    const nextCategory = searchParams.get("category");
-    const nextQuery = searchParams.get("q") ?? "";
-    const nextSort = searchParams.get("sort");
-    setCategory(isCategorySlug(nextCategory) ? nextCategory : null);
-    setQuery(nextQuery);
-    setSort(isSortOption(nextSort) ? nextSort : "featured");
-  }, [searchParams]);
+  const categoryParam = searchParams.get("category");
+  const category = isCategorySlug(categoryParam) ? categoryParam : null;
+  const query = searchParams.get("q") ?? "";
+  const sortParam = searchParams.get("sort");
+  const sort: SortOption = isSortOption(sortParam) ? sortParam : "featured";
 
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (category) params.set("category", category);
-    if (query) params.set("q", query);
-    if (sort !== "featured") params.set("sort", sort);
-    const search = params.toString();
-    const nextUrl = search ? `${pathname}?${search}` : pathname;
-    if (`${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ""}` !== nextUrl) {
-      router.replace(nextUrl, { scroll: false });
+  const updateFilters = (next: { category?: CategorySlug | null; query?: string; sort?: SortOption }) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (next.category !== undefined) {
+      if (next.category) params.set("category", next.category);
+      else params.delete("category");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, query, sort, pathname]);
+    if (next.query !== undefined) {
+      if (next.query) params.set("q", next.query);
+      else params.delete("q");
+    }
+    if (next.sort !== undefined) {
+      if (next.sort !== "featured") params.set("sort", next.sort);
+      else params.delete("sort");
+    }
+    const search = params.toString();
+    router.replace(search ? `${pathname}?${search}` : pathname, { scroll: false });
+  };
 
   const results = useMemo<CatalogProduct[]>(() => {
     let list = products;
@@ -79,7 +77,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
 
   const hasFilters = Boolean(category || query || sort !== "featured");
   const activeCategory = category ? CATEGORIES.find((c) => c.slug === category) : null;
-  const clearAll = () => { setCategory(null); setQuery(""); setSort("featured"); };
+  const clearAll = () => updateFilters({ category: null, query: "", sort: "featured" });
   const isFrench = locale === "fr";
 
   const catalogCopy = {
@@ -106,13 +104,13 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
         </div>
 
         <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <button type="button" onClick={() => setCategory(null)} aria-pressed={!category} className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${!category ? "border-brand bg-brand text-surface" : "border-border bg-surface text-ink-soft hover:border-brand/40 hover:text-brand"}`}>
+          <button type="button" onClick={() => updateFilters({ category: null })} aria-pressed={!category} className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${!category ? "border-brand bg-brand text-surface" : "border-border bg-surface text-ink-soft hover:border-brand/40 hover:text-brand"}`}>
             {dict.common.all}
           </button>
           {CATEGORIES.map((c) => {
             const selected = category === c.slug;
             return (
-              <button key={c.slug} type="button" onClick={() => setCategory(c.slug)} aria-pressed={selected} className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${selected ? "border-brand bg-brand text-surface" : "border-border bg-surface text-ink-soft hover:border-brand/40 hover:text-brand"}`}>
+              <button key={c.slug} type="button" onClick={() => updateFilters({ category: c.slug })} aria-pressed={selected} className={`shrink-0 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${selected ? "border-brand bg-brand text-surface" : "border-border bg-surface text-ink-soft hover:border-brand/40 hover:text-brand"}`}>
                 {c.name[locale]}
               </button>
             );
@@ -123,7 +121,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-y border-border py-3 sm:mb-6">
         <div className="flex min-w-0 items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {activeCategory && (
-            <button type="button" onClick={() => setCategory(null)} className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-brand-light px-3 py-1.5 text-xs font-semibold text-brand">
+            <button type="button" onClick={() => updateFilters({ category: null })} className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-brand-light px-3 py-1.5 text-xs font-semibold text-brand">
               {activeCategory.name[locale]} <X size={13} aria-hidden />
             </button>
           )}
@@ -136,7 +134,7 @@ export function CatalogClient({ locale, dict, products }: { locale: Locale; dict
         <label className="flex shrink-0 items-center gap-2 text-xs font-semibold text-muted">
           <ArrowUpDown size={14} aria-hidden />
           <span className="sr-only">{catalogCopy.sortLabel}</span>
-          <select aria-label={catalogCopy.sortLabel} value={sort} onChange={(event) => setSort(event.target.value as SortOption)} className="h-9 rounded-md border border-border bg-surface px-2.5 text-xs font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/10">
+          <select aria-label={catalogCopy.sortLabel} value={sort} onChange={(event) => updateFilters({ sort: event.target.value as SortOption })} className="h-9 rounded-md border border-border bg-surface px-2.5 text-xs font-semibold text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/10">
             <option value="featured">{catalogCopy.featured}</option>
             <option value="price-asc">{catalogCopy.priceAsc}</option>
             <option value="price-desc">{catalogCopy.priceDesc}</option>
