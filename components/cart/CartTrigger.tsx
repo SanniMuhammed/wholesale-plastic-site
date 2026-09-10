@@ -26,13 +26,13 @@ export function CartTrigger({
         type="button"
         onClick={openDrawer}
         aria-label={dict.nav.reviewOrder}
-        className="relative inline-flex h-10 w-10 items-center justify-center rounded border border-border text-ink"
+        className="relative inline-flex h-10 w-10 items-center justify-center rounded border border-accent bg-accent text-brand"
       >
         <ShoppingBag size={18} strokeWidth={1.75} />
         <span
           data-cart-badge
           className={cx(
-            "absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-accent px-1 font-mono text-xs font-bold text-brand transition-opacity",
+            "absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full border border-brand bg-brand px-1 font-mono text-xs font-bold text-surface transition-opacity",
             count === 0 && "opacity-0"
           )}
         >
@@ -46,14 +46,14 @@ export function CartTrigger({
     <button
       type="button"
       onClick={openDrawer}
-      className="inline-flex items-center justify-center gap-2 rounded border border-brand bg-brand px-4 py-2 text-sm font-semibold text-surface transition-colors hover:bg-brand-dark"
+      className="inline-flex items-center justify-center gap-2 rounded border border-accent bg-accent px-4 py-2 text-sm font-semibold text-brand transition-colors hover:bg-accent/90"
     >
       <ShoppingBag size={16} strokeWidth={1.75} />
       {dict.nav.reviewOrder}
       <span
         data-cart-badge
         className={cx(
-          "inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-accent px-1 font-mono text-xs font-bold text-brand transition-opacity",
+          "inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-brand px-1 font-mono text-xs font-bold text-surface transition-opacity",
           count === 0 && "opacity-0"
         )}
       >
