@@ -78,7 +78,7 @@ export function HowItWorksSection({
       id={id}
       className="scroll-mt-20 border-y border-border bg-surface"
     >
-      <div className="mx-auto max-w-content px-4 py-14 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-content px-4 pb-9 pt-12 sm:px-6 sm:pb-12 sm:pt-16">
         <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
           {copy.title}
         </h2>
@@ -101,7 +101,6 @@ export function HowItWorksSection({
         <div ref={ref}>
           <ol className="mt-12 sm:hidden">
             {steps.map((step, index) => {
-              const isHinge = index === HINGE_INDEX;
               const isLast = index === steps.length - 1;
 
               return (
@@ -110,14 +109,7 @@ export function HowItWorksSection({
                   className="relative flex gap-4 pb-9 last:pb-0"
                 >
                   <div className="relative flex w-2 shrink-0 flex-col items-center">
-                    <span
-                      className={cx(
-                        "relative z-10 mt-1.5 shrink-0 rounded-full",
-                        isHinge
-                          ? "h-2.5 w-2.5 bg-brand"
-                          : "h-2 w-2 border border-border bg-surface",
-                      )}
-                    />
+                    <span className="relative z-10 mt-1.5 h-2 w-2 shrink-0 rounded-full border border-border bg-surface" />
                     {!isLast && (
                       <>
                         <span
@@ -141,20 +133,10 @@ export function HowItWorksSection({
                   </div>
 
                   <div className="flex-1">
-                    <p
-                      className={cx(
-                        "font-mono text-[11px] font-bold tracking-[0.08em]",
-                        isHinge ? "text-brand" : "text-muted",
-                      )}
-                    >
+                    <p className="font-mono text-[11px] font-bold tracking-[0.08em] text-muted">
                       {step.number}
                     </p>
-                    <h3
-                      className={cx(
-                        "mt-1 font-display font-semibold leading-tight text-ink",
-                        isHinge ? "text-[1.7rem]" : "text-2xl",
-                      )}
-                    >
+                    <h3 className="mt-1 font-display text-2xl font-semibold leading-tight text-ink">
                       {step.title}
                     </h3>
                     <p className="mt-1.5 max-w-[30ch] text-sm text-muted">
@@ -166,9 +148,8 @@ export function HowItWorksSection({
             })}
           </ol>
 
-          <ol className="relative mt-16 hidden gap-x-6 sm:grid sm:grid-cols-[1.25fr,1fr,1.2fr,1fr,1.25fr]">
+          <ol className="relative mt-14 hidden gap-x-6 sm:grid sm:grid-cols-[1.25fr,1fr,1.2fr,1fr,1.25fr]">
             {steps.map((step, index) => {
-              const isHinge = index === HINGE_INDEX;
               const isBookend = index === 0 || index === steps.length - 1;
               const isLast = index === steps.length - 1;
 
@@ -195,25 +176,14 @@ export function HowItWorksSection({
                     </>
                   )}
 
-                  <span
-                    className={cx(
-                      "relative z-10 h-3 w-3 shrink-0 rounded-full",
-                      isHinge
-                        ? "bg-brand"
-                        : "border-2 border-brand bg-surface",
-                    )}
-                  />
+                  <span className="relative z-10 h-3 w-3 shrink-0 rounded-full border-2 border-brand bg-surface" />
                   <p className="mt-3 font-mono text-xs font-bold text-muted">
                     {step.number}
                   </p>
                   <h3
                     className={cx(
                       "mt-2 font-display font-semibold leading-[1.05] text-ink",
-                      isHinge
-                        ? "text-4xl"
-                        : isBookend
-                          ? "text-3xl"
-                          : "text-2xl",
+                      isBookend ? "text-3xl" : "text-2xl",
                     )}
                   >
                     {step.title}
@@ -228,7 +198,7 @@ export function HowItWorksSection({
         </div>
 
         {deliveryVisible && (
-          <div className="mt-14 border-t border-border pt-10 sm:mt-16 sm:pt-12">
+          <div className="mt-12 border-t border-border pt-9 sm:mt-14 sm:pt-10">
             <div className="max-w-xl">
               <p className="eyebrow text-brand">
                 {dict.deliveryTeaser.originLabel} → {dict.deliveryTeaser.destinationLabel}
@@ -256,12 +226,12 @@ export function HowItWorksSection({
               </picture>
             )}
 
-            <div className="mt-10 max-w-3xl sm:mt-12">
+            <div className="mt-8 max-w-3xl sm:mt-10">
               <RouteDiagram
                 active={inView}
                 className="h-auto w-full text-brand"
               />
-              <div className="mt-3 flex items-start justify-between gap-4">
+              <div className="mt-2 flex items-start justify-between gap-4">
                 <span className="eyebrow">{dict.deliveryTeaser.originLabel}</span>
                 <span className="eyebrow text-right">
                   {dict.deliveryTeaser.destinationLabel}
@@ -271,7 +241,7 @@ export function HowItWorksSection({
 
             <Link
               href={`/${locale}/delivery`}
-              className="mt-8 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface"
+              className="mt-7 inline-flex items-center gap-1.5 rounded border border-ink px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface"
             >
               {dict.deliveryTeaser.cta} →
             </Link>
