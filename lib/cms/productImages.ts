@@ -2,13 +2,17 @@ const PRODUCT_IMAGES_BUCKET = "product-images";
 
 /**
  * Builds the public URL for a stored product photo.
- * Local public paths and approved external photo URLs are also supported so
- * product catalogue data can use real product photography without requiring
- * every image to be uploaded into Supabase Storage first.
+ * Local public paths are returned as-is. Remote catalogue photos are routed
+ * through our own image proxy so hosts that block hotlinking do not leave
+ * blank product cards in the browser.
  */
 export function buildProductImageUrl(storagePath: string): string {
-  if (storagePath.startsWith("/") || storagePath.startsWith("http://") || storagePath.startsWith("https://")) {
+  if (storagePath.startsWith("/")) {
     return storagePath;
+  }
+
+  if (storagePath.startsWith("http://") || storagePath.startsWith("https://")) {
+    return `/api/product-image?url=${encodeURIComponent(storagePath)}`;
   }
 
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL!;
