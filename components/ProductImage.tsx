@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { useState } from "react";
 import type { Product, CategorySlug, ColorKey } from "@/lib/products";
 import type { Locale } from "@/lib/i18n/config";
 import { cx } from "@/lib/utils";
@@ -42,16 +42,20 @@ interface ProductImageProps {
 }
 
 /** Keep every product image in the same square frame without cropping it. */
-export function ProductImage({ product, locale, className, sizes }: ProductImageProps) {
-  if (product.image) {
+export function ProductImage({ product, locale, className }: ProductImageProps) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const showImage = Boolean(product.image) && !imageFailed;
+
+  if (showImage) {
     return (
       <div className={cx("relative aspect-square overflow-hidden rounded-lg bg-white", className)}>
-        <Image
+        <img
           src={product.image}
           alt={product.name[locale]}
-          fill
-          sizes={sizes || "(min-width: 768px) 25vw, 50vw"}
-          className="object-contain p-2 transition-transform duration-300 ease-out group-hover:scale-[1.02]"
+          loading="lazy"
+          decoding="async"
+          onError={() => setImageFailed(true)}
+          className="h-full w-full object-contain p-2 transition-transform duration-300 ease-out group-hover:scale-[1.02]"
         />
       </div>
     );
