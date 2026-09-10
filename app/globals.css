@@ -59,7 +59,9 @@ summary::-webkit-details-marker {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 24mm 12mm 16mm;
+    /* Reserve a dedicated physical band for the running header. Fixed/sticky
+       elements do not participate in normal document flow. */
+    margin: 34mm 12mm 16mm;
   }
 
   html,
@@ -74,12 +76,10 @@ summary::-webkit-details-marker {
     display: none !important;
   }
 
-  /* Fixed headers are repeated by Chromium on every printed page. The larger
-     @page top margin above keeps all document content below this header. */
   body:has(.order-summary-page)::before {
     content: "Sherinab Venture.  •  Your Order";
     position: fixed;
-    top: 4mm;
+    top: 6mm;
     left: 12mm;
     right: 12mm;
     z-index: 9999;
@@ -121,8 +121,6 @@ summary::-webkit-details-marker {
     zoom: 1 !important;
   }
 
-  /* Do not flatten every grid: the printable order document may contain
-     legitimate internal two-column detail layouts. */
   .order-summary-page aside,
   .order-summary-page .print\:hidden {
     display: none !important;
@@ -139,15 +137,14 @@ summary::-webkit-details-marker {
     page-break-inside: auto;
   }
 
-  /* A product is atomic for printing: never let its title/details/quantity
-     split between two pages. */
-  .order-summary-page li {
+  .order-summary-page li,
+  .order-summary-page li > div,
+  .order-summary-page li > div > div {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
-  .order-summary-page li > div,
-  .order-summary-page li > div > div {
+  .order-summary-page .print-summary-footer {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
@@ -182,7 +179,7 @@ summary::-webkit-details-marker {
   .order-summary-page .divide-border > :not([hidden]) ~ :not([hidden]) {
     border-color: #d7dce2 !important;
   }
-} 
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
