@@ -3,7 +3,7 @@ import { locales } from "@/lib/i18n/config";
 import { getAllProducts } from "@/lib/catalog/products";
 
 function getSiteUrl(): string {
-  const configured = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL || "https://wholesale-plastic-site-two.vercel.app";
+  const configured = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL || "https://wholesale-plastic-site-one.vercel.app";
   return configured.startsWith("http") ? configured.replace(/\/$/, "") : `https://${configured.replace(/\/$/, "")}`;
 }
 
