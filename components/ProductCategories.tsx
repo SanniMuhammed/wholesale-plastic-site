@@ -37,16 +37,18 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
   const base = `/${locale}`;
 
   return (
-    <section id="categories" className="mx-auto max-w-content scroll-mt-20 px-4 pt-12 pb-8 sm:px-6 sm:pb-10 sm:pt-14">
-      <div className="border-b border-border pb-5">
+    <section id="categories" className="mx-auto max-w-content scroll-mt-20 px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+      <div className="flex items-end justify-between gap-4 border-b border-border pb-4">
         <div>
           <p className="eyebrow text-brand">01 / {dict.categoriesSection.title}</p>
-          <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">{dict.categoriesSection.title}</h2>
-          <p className="mt-2 max-w-xl text-muted">{dict.categoriesSection.subtitle}</p>
+          <h2 className="mt-1.5 font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{dict.categoriesSection.title}</h2>
         </div>
+        <Link href={`${base}/products`} className="shrink-0 text-sm font-semibold text-brand underline decoration-brand/30 underline-offset-4 transition-colors hover:decoration-brand">
+          {dict.common.exploreProducts} →
+        </Link>
       </div>
 
-      <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
+      <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {CATEGORIES.map((category, i) => {
           const photoUrl = categoryImages?.[category.slug] || PUBLIC_CATEGORY_IMAGES[category.slug];
           return (
@@ -54,23 +56,23 @@ export function ProductCategories({ locale, dict, categoryImages }: { locale: Lo
               key={category.slug}
               href={`${base}/products?category=${category.slug}`}
               className={cx(
-                "group relative flex aspect-[4/3] items-end overflow-hidden rounded-lg border border-border p-5 transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted sm:aspect-[3/2]",
+                "group relative flex aspect-square items-end overflow-hidden rounded-lg border border-border transition-all hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted",
                 !photoUrl && CATEGORY_TINTS[category.slug],
               )}
             >
               {photoUrl && (
                 <>
-                  <Image src={photoUrl} alt={category.name[locale]} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+                  <Image src={photoUrl} alt={category.name[locale]} fill sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 </>
               )}
-              <span className={cx("absolute left-5 top-4 z-10 font-mono text-xs font-bold", photoUrl ? "text-white/80" : "text-brand/70")}>
+              <span className={cx("absolute left-3 top-3 z-10 font-mono text-[10px] font-bold", photoUrl ? "text-white/75" : "text-brand/70")}>
                 {String(i + 1).padStart(2, "0")}
               </span>
               {!photoUrl && (
-                <CategoryIllustration category={category.slug} className={cx("absolute -right-4 -top-4 h-32 w-32 opacity-25 transition-transform group-hover:scale-105 sm:h-40 sm:w-40", CATEGORY_INK[category.slug])} aria-hidden />
+                <CategoryIllustration category={category.slug} className={cx("absolute -right-4 -top-4 h-28 w-28 opacity-25 transition-transform group-hover:scale-105", CATEGORY_INK[category.slug])} aria-hidden />
               )}
-              <span className={cx("relative z-10 font-display text-lg font-semibold sm:text-xl", photoUrl ? "text-white" : "text-ink")}>
+              <span className={cx("relative z-10 p-3 font-display text-base font-semibold leading-tight sm:text-[17px]", photoUrl ? "text-white" : "text-ink")}>
                 {category.name[locale]}
               </span>
             </Link>
