@@ -4,9 +4,65 @@ import type { Product, ProductInput, ProductImage, Color } from "@/lib/cms/types
 
 const PRODUCT_IMAGES_BUCKET = "product-images";
 const PRODUCT_SELECT = `*, category:categories(*), images:product_images(*), colors:product_colors(color:colors(*))`;
+const SEARCH_SELECT = `slug,name_en,name_fr,short_description_en,short_description_fr,category:categories(slug,name_en,name_fr),images:product_images(storage_path,is_main,sort_order)`;
 function normalizeProduct(row: any): Product { return { ...row, images: (row.images ?? []).sort((a: ProductImage,b: ProductImage)=>a.sort_order-b.sort_order), colors: (row.colors ?? []).map((c:any)=>c.color).filter(Boolean) as Color[] }; }
 
 export async function listProducts(opts?: { status?: "draft"|"published" }): Promise<Product[]> { const supabase=opts?.status==="published"?createPublicClient():await createClient(); let query=supabase.from("products").select(PRODUCT_SELECT).order("sort_order",{ascending:true}).order("created_at",{ascending:false}); if(opts?.status)query=query.eq("status",opts.status); const{data,error}=await query;if(error)throw error;return(data??[]).map(normalizeProduct); }
+
+export async function searchPublishedProducts(query: string): Promise<Array<{slug:string;name_en:string;name_fr:string;category_slug:string;category_name_en:string;category_name_fr:string;image_path:string|null}>> {
+  const q = query.trim().replace(/[%,_]/g, " ").replace(/\s+/g, " ").slice(0, 80);
+  if (q.length < 2) return [];
+  const pattern = `%${q}%`;
+  const supabase = createPublicClient();
+  const [{ data: products, error: productError }, { data: categories, error: categoryError }] = await Promise.all([
+    supabase
+      .from("products")
+      .select(SEARCH_SELECT)
+      .eq("status", "published")
+      .or(`name_en.ilike.${pattern},name_fr.ilike.${pattern},short_description_en.ilike.${pattern},short_description_fr.ilike.${pattern}`)
+      .order("sort_order", { ascending: true })
+      .limit(6),
+    supabase
+      .from("categories")
+      .select("id,slug,name_en,name_fr")
+      .eq("is_active", true)
+      .or(`slug.ilike.${pattern},name_en.ilike.${pattern},name_fr.ilike.${pattern}`)
+      .limit(6),
+  ]);
+  if (productError) throw productError;
+  if (categoryError) throw categoryError;
+
+  const categoryIds = (categories ?? []).map((category) => category.id);
+  let categoryProducts: any[] = [];
+  if (categoryIds.length > 0) {
+    const { data, error } = await supabase
+      .from("products")
+      .select(SEARCH_SELECT)
+      .eq("status", "published")
+      .in("category_id", categoryIds)
+      .order("sort_order", { ascending: true })
+      .limit(6);
+    if (error) throw error;
+    categoryProducts = data ?? [];
+  }
+
+  const merged = [...(products ?? []), ...categoryProducts];
+  const seen = new Set<string>();
+  return merged.filter((product: any) => {
+    if (seen.has(product.slug)) return false;
+    seen.add(product.slug);
+    return true;
+  }).slice(0, 6).map((product: any) => ({
+    slug: product.slug,
+    name_en: product.name_en,
+    name_fr: product.name_fr,
+    category_slug: product.category?.slug ?? "other",
+    category_name_en: product.category?.name_en ?? product.category?.slug ?? "other",
+    category_name_fr: product.category?.name_fr ?? product.category?.slug ?? "other",
+    image_path: product.images?.find((image: any) => image.is_main)?.storage_path ?? product.images?.[0]?.storage_path ?? null,
+  }));
+}
+
 export async function getProduct(id:string):Promise<Product|null>{const s=await createClient();const{data,error}=await s.from("products").select(PRODUCT_SELECT).eq("id",id).maybeSingle();if(error)throw error;return data?normalizeProduct(data):null;}
 export async function createProduct(input:ProductInput):Promise<Product>{const s=await createClient();const{data,error}=await s.from("products").insert(input).select(PRODUCT_SELECT).single();if(error)throw error;return normalizeProduct(data);}
 export async function updateProduct(id:string,input:Partial<ProductInput>):Promise<Product>{const s=await createClient();const{data,error}=await s.from("products").update(input).eq("id",id).select(PRODUCT_SELECT).single();if(error)throw error;return normalizeProduct(data);}
