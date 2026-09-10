@@ -8,7 +8,7 @@ html {
 
 body {
   background-color: #ffffff;
-  color: #171a18;
+  color: #131a22;
   overflow-x: hidden;
 }
 
@@ -26,7 +26,7 @@ video {
 }
 
 *:focus-visible {
-  outline: 2px solid #087443;
+  outline: 2px solid #ff9900;
   outline-offset: 2px;
 }
 
@@ -35,14 +35,10 @@ summary::-webkit-details-marker {
 }
 
 @layer components {
-  /* Shared responsive container: compact phone gutters, then a stable
-     reading width as the viewport grows. */
   .site-container {
     @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
   }
 
-  /* Shared section rhythm. Components can still override this when a
-     deliberately tighter or larger editorial treatment is needed. */
   .section-padding {
     @apply py-10 sm:py-12 lg:py-16;
   }
@@ -51,17 +47,10 @@ summary::-webkit-details-marker {
     @apply py-12 sm:py-16 lg:py-20;
   }
 
-  /* Small uppercase mono metadata label -- the recurring "eyebrow" used
-     above headings, on product plates and in section frames throughout
-     the editorial system. One definition so the tracking/size/color stay
-     identical everywhere it appears. */
   .eyebrow {
     @apply font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-muted;
   }
 
-  /* Hairline rule with an index number set into it, used to break up
-     editorial lists (wholesale "who we serve", delivery factors, contact
-     channels) without falling back to bordered icon boxes. */
   .rule-row {
     @apply flex items-baseline justify-between gap-4 border-b border-border py-3;
   }
