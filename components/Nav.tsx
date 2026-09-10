@@ -74,21 +74,24 @@ export function Nav({ locale, dict }: NavProps) {
 
   return (
     <header className={cx("sticky top-0 z-40 border-b bg-surface/95 backdrop-blur transition-shadow duration-300 print:hidden", scrolled ? "border-border shadow-card" : "border-transparent")}>
-      <div className="mx-auto flex h-16 w-full max-w-content items-center gap-2 px-4 sm:h-[68px] sm:gap-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 w-full max-w-content items-center gap-2 px-4 sm:h-[68px] sm:gap-3 sm:px-6 lg:gap-4 lg:px-8">
         <Link href={base} className="group shrink-0" aria-label="Sherinab Venture home" onClick={handleBrandClick}><SherinabLogo /></Link>
 
-        <form onSubmit={handleSearch} className="relative min-w-0 flex-1 md:max-w-[230px] lg:max-w-md">
+        <form onSubmit={handleSearch} className="relative min-w-0 flex-1 md:max-w-[220px] lg:max-w-md">
           <Search size={17} strokeWidth={1.9} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-brand" aria-hidden />
           <label htmlFor="navbar-search" className="sr-only">{dict.common.searchPlaceholder}</label>
           <input id="navbar-search" name="q" type="search" defaultValue={searchParams.get("q") ?? ""} placeholder={dict.common.searchPlaceholder} autoComplete="off" className="h-10 w-full rounded-lg border border-border bg-background pl-10 pr-3 text-sm text-ink shadow-sm outline-none transition-all placeholder:text-muted hover:border-brand/40 focus:border-brand focus:ring-2 focus:ring-brand/10 sm:h-11 sm:text-[13px]" />
         </form>
 
-        <nav className="hidden min-w-0 items-center gap-3 md:flex lg:gap-5 xl:gap-6">
-          {links.map((link) => <Link key={link.href} href={link.href} className="relative whitespace-nowrap py-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-ink-soft transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-brand after:transition-transform after:duration-300 after:ease-out hover:text-brand hover:after:scale-x-100 lg:text-[12px] lg:tracking-[0.06em]">{link.label}</Link>)}
+        <nav className="hidden min-w-0 shrink-0 items-center gap-2 md:flex lg:gap-4 xl:gap-5">
+          {links.map((link) => <Link key={link.href} href={link.href} className="relative shrink-0 whitespace-nowrap py-2 text-[11px] font-semibold uppercase tracking-[0.03em] text-ink-soft transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-brand after:transition-transform after:duration-300 after:ease-out hover:text-brand hover:after:scale-x-100 lg:text-[12px] lg:tracking-[0.05em]">{link.label}</Link>)}
         </nav>
 
-        <div className="hidden shrink-0 items-center gap-1 md:flex lg:gap-2 xl:gap-3">
-          <span className="hidden lg:inline-flex"><LanguageSwitcher locale={locale} /></span><span className="hidden h-5 w-px bg-border lg:inline-block" aria-hidden /><span className="hidden lg:inline-flex"><WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="icon" /></span><CartTrigger dict={dict} />
+        <div className="hidden shrink-0 items-center gap-1 md:flex lg:gap-1.5 xl:gap-2">
+          <span className="inline-flex shrink-0"><LanguageSwitcher locale={locale} /></span>
+          <span className="h-5 w-px shrink-0 bg-border" aria-hidden />
+          <span className="inline-flex shrink-0"><WhatsAppLink href={whatsappHref} label={dict.nav.whatsapp} variant="icon" /></span>
+          <span className="inline-flex shrink-0"><CartTrigger dict={dict} /></span>
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5 md:hidden">
