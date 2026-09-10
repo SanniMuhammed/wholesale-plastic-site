@@ -58,8 +58,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         locale={locale}
         dict={dict}
         section={howItWorksSection}
-        imageUrl={homepageImage(howItWorksSection, "desktop")}
-        mobileImageUrl={homepageImage(howItWorksSection, "mobile")}
         deliverySection={deliveryTeaserSection}
         deliveryImageUrl={finalCtaImage}
         deliveryMobileImageUrl={finalCtaImage}
