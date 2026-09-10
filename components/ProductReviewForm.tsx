@@ -19,7 +19,8 @@ export function ProductReviewForm({ productId, locale }: Props) {
     event.preventDefault();
     setStatus("submitting");
     setError("");
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
 
     try {
       const response = await fetch("/api/products/reviews", {
@@ -37,7 +38,7 @@ export function ProductReviewForm({ productId, locale }: Props) {
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || t.error);
-      event.currentTarget.reset();
+      formElement.reset();
       setRating(5);
       setStatus("success");
     } catch (submissionError) {
