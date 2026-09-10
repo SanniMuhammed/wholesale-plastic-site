@@ -59,7 +59,7 @@ summary::-webkit-details-marker {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 16mm 12mm 14mm;
+    margin: 24mm 12mm 16mm;
   }
 
   html,
@@ -70,12 +70,12 @@ summary::-webkit-details-marker {
     background: #fff !important;
   }
 
-  /* Never print the live website chrome on the order-summary document. */
   body:has(.order-summary-page) header {
     display: none !important;
   }
 
-  /* A fixed print header is repeated by the browser on every printed page. */
+  /* Fixed headers are repeated by Chromium on every printed page. The larger
+     @page top margin above keeps all document content below this header. */
   body:has(.order-summary-page)::before {
     content: "Sherinab Venture.  •  Your Order";
     position: fixed;
@@ -96,14 +96,21 @@ summary::-webkit-details-marker {
   .order-summary-page {
     width: 100% !important;
     max-width: none !important;
-    padding: 5mm 0 0 !important;
+    padding: 0 !important;
     margin: 0 !important;
     color: #131a22 !important;
   }
 
-  .order-summary-page > h1,
+  .order-summary-page > h1 {
+    display: block !important;
+    margin: 0 0 3mm !important;
+    color: #131a22 !important;
+  }
+
   .order-summary-page > p {
-    display: none !important;
+    display: block !important;
+    margin: 0 0 7mm !important;
+    color: #4b5563 !important;
   }
 
   .order-summary-page > div:last-child {
@@ -114,10 +121,8 @@ summary::-webkit-details-marker {
     zoom: 1 !important;
   }
 
-  .order-summary-page .grid {
-    display: block !important;
-  }
-
+  /* Do not flatten every grid: the printable order document may contain
+     legitimate internal two-column detail layouts. */
   .order-summary-page aside,
   .order-summary-page .print\:hidden {
     display: none !important;
@@ -134,9 +139,17 @@ summary::-webkit-details-marker {
     page-break-inside: auto;
   }
 
+  /* A product is atomic for printing: never let its title/details/quantity
+     split between two pages. */
   .order-summary-page li {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .order-summary-page li > div,
+  .order-summary-page li > div > div {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   .order-summary-page .print\:block {
@@ -157,8 +170,9 @@ summary::-webkit-details-marker {
   }
 
   .order-summary-page .text-surface\/70,
-  .order-summary-page .text-surface\/75 {
-    color: rgba(255, 255, 255, 0.9) !important;
+  .order-summary-page .text-surface\/75,
+  .order-summary-page .text-surface\/90 {
+    color: rgba(255, 255, 255, 0.96) !important;
   }
 
   .order-summary-page .border-border {
@@ -168,7 +182,7 @@ summary::-webkit-details-marker {
   .order-summary-page .divide-border > :not([hidden]) ~ :not([hidden]) {
     border-color: #d7dce2 !important;
   }
-}
+} 
 
 @media (prefers-reduced-motion: reduce) {
   *,
