@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, LayoutDashboard, Package, ShoppingBag, FileText, Settings, FolderTree, Palette, Globe2, Building2, HelpCircle, Home, Truck } from "lucide-react";
+import { Menu, X, LayoutDashboard, Package, ShoppingBag, Settings, FolderTree, Palette, Globe2, Building2, HelpCircle, Home, Truck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cx } from "@/lib/utils";
 
