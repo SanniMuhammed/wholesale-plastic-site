@@ -15,6 +15,10 @@ export function CompanySettingsForm({ settings }: { settings: CompanySettings })
     countries_served: settings.countries_served.join(", "),
     business_hours_en: settings.business_hours_en,
     business_hours_fr: settings.business_hours_fr,
+    facebook: settings.social_links?.facebook ?? "",
+    instagram: settings.social_links?.instagram ?? "",
+    linkedin: settings.social_links?.linkedin ?? "",
+    tiktok: settings.social_links?.tiktok ?? "",
   });
   const [saveState, setSaveState] = useState<SaveState>("idle");
 
@@ -28,12 +32,14 @@ export function CompanySettingsForm({ settings }: { settings: CompanySettings })
         phone: form.phone,
         whatsapp_number: form.whatsapp_number,
         address: form.address,
-        countries_served: form.countries_served
-          .split(",")
-          .map((c) => c.trim())
-          .filter(Boolean),
+        countries_served: form.countries_served.split(",").map((c) => c.trim()).filter(Boolean),
         business_hours_en: form.business_hours_en,
         business_hours_fr: form.business_hours_fr,
+        social_links: Object.fromEntries(
+          Object.entries({ facebook: form.facebook, instagram: form.instagram, linkedin: form.linkedin, tiktok: form.tiktok })
+            .map(([key, value]) => [key, value.trim()])
+            .filter(([, value]) => Boolean(value))
+        ),
       });
       setSaveState("saved");
     } catch {
@@ -42,7 +48,8 @@ export function CompanySettingsForm({ settings }: { settings: CompanySettings })
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4 rounded-lg border border-border bg-surface p-4 sm:p-5">
+    <form onSubmit={handleSubmit} className="grid gap-5 rounded-lg border border-border bg-surface p-4 sm:p-5">
+      <div><h2 className="font-display text-lg font-semibold text-ink">Contact details</h2><p className="mt-1 text-xs text-muted">These details are used across the public website.</p></div>
       <Field label="Company name"><input value={form.company_name} onChange={(e) => setForm((f) => ({ ...f, company_name: e.target.value }))} className={inputClass} /></Field>
       <Field label="Email"><input type="email" value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} className={inputClass} /></Field>
       <Field label="Phone"><input value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} className={inputClass} /></Field>
@@ -53,6 +60,13 @@ export function CompanySettingsForm({ settings }: { settings: CompanySettings })
         <Field label="Business hours (English)" hint="Example: Mon–Sat, 8:00 AM–6:00 PM"><input value={form.business_hours_en} onChange={(e) => setForm((f) => ({ ...f, business_hours_en: e.target.value }))} className={inputClass} /></Field>
         <Field label="Business hours (French)" hint="Example: Lun–Sam, 8h00–18h00"><input value={form.business_hours_fr} onChange={(e) => setForm((f) => ({ ...f, business_hours_fr: e.target.value }))} className={inputClass} /></Field>
       </div>
+
+      <div className="border-t border-border pt-5"><h2 className="font-display text-lg font-semibold text-ink">Social links</h2><p className="mt-1 text-xs text-muted">Paste the full public profile URL. Leave blank to hide a platform.</p><div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <Field label="Facebook"><input type="url" value={form.facebook} onChange={(e) => setForm((f) => ({ ...f, facebook: e.target.value }))} placeholder="https://facebook.com/..." className={inputClass} /></Field>
+        <Field label="Instagram"><input type="url" value={form.instagram} onChange={(e) => setForm((f) => ({ ...f, instagram: e.target.value }))} placeholder="https://instagram.com/..." className={inputClass} /></Field>
+        <Field label="LinkedIn"><input type="url" value={form.linkedin} onChange={(e) => setForm((f) => ({ ...f, linkedin: e.target.value }))} placeholder="https://linkedin.com/company/..." className={inputClass} /></Field>
+        <Field label="TikTok"><input type="url" value={form.tiktok} onChange={(e) => setForm((f) => ({ ...f, tiktok: e.target.value }))} placeholder="https://tiktok.com/@..." className={inputClass} /></Field>
+      </div></div>
 
       <div className="flex items-center justify-between gap-3 pt-2"><SaveStatusPill state={saveState} /><button type="submit" disabled={saveState === "saving"} className="ml-auto inline-flex items-center justify-center rounded bg-brand px-6 py-3 text-sm font-medium text-surface hover:bg-brand-dark disabled:opacity-60">Save changes</button></div>
     </form>
