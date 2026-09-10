@@ -27,6 +27,12 @@ export async function updateProductReviewAction(id: string, input: { customerNam
   return data;
 }
 
+export async function setProductReviewPublishedAction(id: string, published: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("product_reviews").update({ is_published: published }).eq("id", id);
+  if (error) throw error;
+}
+
 export async function deleteProductReviewAction(id: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("product_reviews").delete().eq("id", id);
