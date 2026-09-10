@@ -9,6 +9,20 @@ html {
 body {
   background-color: #f7f5ef;
   color: #171a18;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+svg,
+video {
+  max-width: 100%;
+}
+
+img,
+picture,
+video {
+  height: auto;
 }
 
 *:focus-visible {
@@ -21,6 +35,22 @@ summary::-webkit-details-marker {
 }
 
 @layer components {
+  /* Shared responsive container: compact phone gutters, then a stable
+     reading width as the viewport grows. */
+  .site-container {
+    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Shared section rhythm. Components can still override this when a
+     deliberately tighter or larger editorial treatment is needed. */
+  .section-padding {
+    @apply py-10 sm:py-12 lg:py-16;
+  }
+
+  .section-major {
+    @apply py-12 sm:py-16 lg:py-20;
+  }
+
   /* Small uppercase mono metadata label -- the recurring "eyebrow" used
      above headings, on product plates and in section frames throughout
      the editorial system. One definition so the tracking/size/color stay
