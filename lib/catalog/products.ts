@@ -69,7 +69,7 @@ export async function getProductBySlug(slug: string): Promise<CatalogProduct | u
   return product ? adaptProduct(product) : undefined;
 }
 export async function getFeaturedProducts(): Promise<CatalogProduct[]> {
-  return (await getAllProducts()).filter((product) => product.featured).slice(0, 16);
+  return (await getAllProducts()).filter((product) => product.featured).slice(0, 50);
 }
 export async function getProductsByCategory(category: CategorySlug): Promise<CatalogProduct[]> { return (await getAllProducts()).filter((product) => product.category === category); }
 export function searchProducts(products: Product[], query: string): Product[] {
