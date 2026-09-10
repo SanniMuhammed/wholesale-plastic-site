@@ -37,7 +37,7 @@ const SWATCH_HEX: Record<ColorKey, string> = {
 };
 
 interface ProductImageProps {
-  product: Product;
+  product: Product & { images?: string[] };
   locale: Locale;
   className?: string;
   sizes?: string;
@@ -45,18 +45,28 @@ interface ProductImageProps {
 
 /** Keep every product image in the same square frame without cropping it. */
 export function ProductImage({ product, locale, className }: ProductImageProps) {
+  const imageSources = product.images?.filter(Boolean) ?? [];
+  const sources = imageSources.length > 0 ? imageSources : product.image ? [product.image] : [];
+  const [imageIndex, setImageIndex] = useState(0);
   const [imageFailed, setImageFailed] = useState(false);
-  const showImage = Boolean(product.image) && !imageFailed;
+  const currentImage = sources[imageIndex];
+  const showImage = Boolean(currentImage) && !imageFailed;
 
   if (showImage) {
     return (
       <div className={cx("relative aspect-square overflow-hidden rounded-lg bg-white", className)}>
         <img
-          src={product.image}
+          src={currentImage}
           alt={product.name[locale]}
           loading="lazy"
           decoding="async"
-          onError={() => setImageFailed(true)}
+          onError={() => {
+            if (imageIndex < sources.length - 1) {
+              setImageIndex((index) => index + 1);
+            } else {
+              setImageFailed(true);
+            }
+          }}
           className="h-full w-full object-contain p-2 transition-transform duration-300 ease-out group-hover:scale-[1.02]"
         />
       </div>
