@@ -15,7 +15,7 @@ export function WholesaleQuoteCta({ locale, dict, section, imageUrl, mobileImage
 
   return (
     <section className="bg-brand-light/45">
-      <div className="mx-auto max-w-content px-4 py-16 sm:px-6">
+      <div className="mx-auto max-w-content px-4 py-12 sm:px-6 sm:py-14">
         <div className="overflow-hidden rounded-xl border border-brand/15 bg-brand p-6 sm:p-8 lg:flex lg:items-center lg:justify-between lg:gap-12">
           <div className="max-w-2xl">
             <p className="eyebrow text-brand-light/75">{copy.eyebrow}</p>
