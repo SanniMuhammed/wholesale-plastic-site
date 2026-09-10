@@ -54,8 +54,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <FeaturedProducts locale={locale} dict={dict} />
       <ShopByBusiness locale={locale} dict={dict} section={startBusinessSection} imageUrl={homepageImage(startBusinessSection, "desktop")} mobileImageUrl={homepageImage(startBusinessSection, "mobile")} />
       <WholesaleQuoteCta locale={locale} dict={dict} section={travelSection} imageUrl={homepageImage(travelSection, "desktop")} mobileImageUrl={homepageImage(travelSection, "mobile")} />
-      <HowItWorksSection locale={locale} dict={dict} section={howItWorksSection} imageUrl={homepageImage(howItWorksSection, "desktop")} mobileImageUrl={homepageImage(howItWorksSection, "mobile")} deliverySection={deliveryTeaserSection} deliveryImageUrl={homepageImage(deliveryTeaserSection, "desktop")} deliveryMobileImageUrl={homepageImage(deliveryTeaserSection, "mobile")} />
-      <FinalCta locale={locale} dict={dict} imageUrl={finalCtaImage} section={finalCtaSection} />
+      <HowItWorksSection
+        locale={locale}
+        dict={dict}
+        section={howItWorksSection}
+        imageUrl={homepageImage(howItWorksSection, "desktop")}
+        mobileImageUrl={homepageImage(howItWorksSection, "mobile")}
+        deliverySection={deliveryTeaserSection}
+        deliveryImageUrl={finalCtaImage}
+        deliveryMobileImageUrl={finalCtaImage}
+      />
+      <FinalCta locale={locale} dict={dict} section={finalCtaSection} />
     </>
   );
 }
