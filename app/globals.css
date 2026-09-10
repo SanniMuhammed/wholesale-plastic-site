@@ -65,17 +65,46 @@ summary::-webkit-details-marker {
   html,
   body {
     width: 100%;
-    min-height: 100%;
+    min-height: 0;
+    overflow: hidden !important;
   }
 
-  body {
-    overflow: visible;
-    zoom: 0.62;
+  /* The order-summary page has a screen-only title/intro above the receipt.
+     Hide those and print only the actual order receipt. */
+  .order-summary-page > h1,
+  .order-summary-page > p {
+    display: none !important;
   }
 
-  section,
-  li {
+  .order-summary-page {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* The client root contains the printable receipt and the screen-only form.
+     Make it the only print flow and scale the complete receipt down as one unit. */
+  .order-summary-page > div:last-child {
+    display: block !important;
+    width: 200% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    zoom: 0.5;
+  }
+
+  /* Never force the whole receipt section onto a new page. Individual rows
+     can stay together, while the receipt itself is allowed to paginate during
+     layout before the 50% zoom is applied. */
+  .order-summary-page section,
+  .order-summary-page li {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .order-summary-page li {
     break-inside: avoid;
+    page-break-inside: avoid;
   }
 }
 
