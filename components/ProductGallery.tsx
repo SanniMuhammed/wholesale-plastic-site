@@ -15,11 +15,6 @@ export function ProductGallery({ images, name, locale }: { images: string[]; nam
     thumbnailRefs.current[active]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   }, [active]);
 
-  useEffect(() => {
-    setActive(0);
-    setFailed([]);
-  }, [images.join("|")]);
-
   if (safeImages.length === 0) return null;
 
   const available = safeImages
