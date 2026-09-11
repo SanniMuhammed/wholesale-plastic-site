@@ -34,13 +34,13 @@ export function AddToOrderButton({ slug, productName, dict, className, fullWidth
         <button type="button" onClick={() => removeItem(slug)} aria-label={`Remove ${productName} from order`} title={dict.common.removeFromOrder} className="inline-flex h-full w-11 shrink-0 items-center justify-center transition-colors hover:bg-brand-soft active:bg-brand active:text-surface">
           <Trash2 size={16} strokeWidth={2} />
         </button>
-        <button type="button" onClick={() => quantity > 1 ? updateQuantity(slug, quantity - 1) : removeItem(slug)} aria-label={`Decrease ${productName} quantity`} title="Decrease quantity" className="inline-flex h-full w-10 shrink-0 items-center justify-center border-x border-brand/20 transition-colors hover:bg-brand-soft active:bg-brand active:text-surface active:border-brand">
+        <button type="button" onClick={() => quantity > 1 ? updateQuantity(slug, quantity - 1) : removeItem(slug)} aria-label={`Decrease ${productName} quantity`} title="Decrease quantity" className="inline-flex h-full w-10 shrink-0 items-center justify-center border-x border-brand/20 transition-colors hover:bg-brand-soft active:border-accent active:bg-accent active:text-surface">
           <Minus size={15} strokeWidth={2.25} />
         </button>
         <span className="flex min-w-0 flex-1 items-center justify-center px-1 text-xs font-semibold tabular-nums">
           {quantity} in order
         </span>
-        <button type="button" onClick={() => addItem(slug, 1)} aria-label={`Increase ${productName} quantity`} title="Increase quantity" className="inline-flex h-full w-11 shrink-0 items-center justify-center border-l border-brand/20 transition-colors hover:bg-brand-soft active:bg-brand active:text-surface active:border-brand">
+        <button type="button" onClick={() => addItem(slug, 1)} aria-label={`Increase ${productName} quantity`} title="Increase quantity" className="inline-flex h-full w-11 shrink-0 items-center justify-center border-l border-brand/20 transition-colors hover:bg-brand-soft active:border-accent active:bg-accent active:text-surface">
           <Plus size={16} strokeWidth={2.25} />
         </button>
       </div>
