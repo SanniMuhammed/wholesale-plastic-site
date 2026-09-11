@@ -164,6 +164,11 @@ export function OrderSummaryClient({
     }, REMOVE_ANIMATION_MS);
   }
 
+  function handleClearAll() {
+    clear();
+    setRemovingSlugs(new Set());
+  }
+
   function handlePrint() {
     window.print();
   }
@@ -375,7 +380,7 @@ export function OrderSummaryClient({
                 </ul>
 
                 <div className="mt-2 border-t-2 border-ink/10 pt-5">
-                  <div className="flex items-end justify-between gap-4">
+                  <div className="flex flex-wrap items-end justify-between gap-4">
                     <div>
                       <p className="text-xs font-medium uppercase tracking-wider text-muted">
                         {isFrench ? "Total de la commande" : "Order total"}
@@ -384,13 +389,24 @@ export function OrderSummaryClient({
                         {isFrench ? `${totalQuantity} articles` : `${totalQuantity} items`}
                       </p>
                     </div>
-                    <p className="font-display text-2xl font-semibold tracking-tight text-ink">
-                      {hasUnpricedItems
-                        ? isFrench
-                          ? "Prix sur demande"
-                          : "Price on request"
-                        : formatPrice(orderTotal, locale)}
-                    </p>
+                    <div className="flex items-center gap-3">
+                      <p className="font-display text-2xl font-semibold tracking-tight text-ink">
+                        {hasUnpricedItems
+                          ? isFrench
+                            ? "Prix sur demande"
+                            : "Price on request"
+                          : formatPrice(orderTotal, locale)}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleClearAll}
+                        className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border px-3 text-xs font-semibold text-ink-soft transition-colors hover:border-brand hover:bg-brand-light hover:text-brand active:scale-[0.98] print:hidden"
+                        aria-label={isFrench ? "Vider toute la commande" : "Clear all orders"}
+                      >
+                        <Trash2 size={14} />
+                        {isFrench ? "Tout vider" : "Clear all"}
+                      </button>
+                    </div>
                   </div>
                   {hasUnpricedItems && (
                     <p className="mt-2 text-right text-xs leading-5 text-muted">
