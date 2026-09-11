@@ -127,7 +127,7 @@ summary::-webkit-details-marker {
   }
 
   .order-summary-page aside,
-  .order-summary-page .print\\:hidden {
+  .order-summary-page .print\:hidden {
     display: none !important;
   }
 
@@ -154,11 +154,11 @@ summary::-webkit-details-marker {
     page-break-inside: avoid !important;
   }
 
-  .order-summary-page .print\\:block {
+  .order-summary-page .print\:block {
     display: block !important;
   }
 
-  .order-summary-page .print\\:inline {
+  .order-summary-page .print\:inline {
     display: inline !important;
   }
 
@@ -171,9 +171,9 @@ summary::-webkit-details-marker {
     color: #131a22 !important;
   }
 
-  .order-summary-page .text-surface\\/70,
-  .order-summary-page .text-surface\\/75,
-  .order-summary-page .text-surface\\/90 {
+  .order-summary-page .text-surface\/70,
+  .order-summary-page .text-surface\/75,
+  .order-summary-page .text-surface\/90 {
     color: rgba(255, 255, 255, 0.96) !important;
   }
 
