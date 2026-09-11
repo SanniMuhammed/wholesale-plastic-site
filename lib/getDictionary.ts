@@ -31,9 +31,11 @@ export function getDictionary(locale: Locale): Dictionary {
     },
     hero: {
       ...base.hero,
-      supporting: isFrench ? "Vente en gros • Nigeria & international • Livraison nationale" : "Wholesale • Nigeria & International • Nationwide Delivery",
-      title: isFrench ? "Achetez des produits plastiques en gros directement chez nous" : "Buy Wholesale Plastic Products Directly From Us",
-      subtitle: isFrench ? "Pour les entreprises au Nigeria et au-delà. Choisissez vos produits, indiquez les quantités et la destination, et nous nous occupons du reste." : "For businesses in Nigeria and beyond. Choose what you need, tell us your quantities and destination, and we'll handle the rest.",
+      supporting: isFrench ? "Vente en gros • Nigeria & international" : "Wholesale • Nigeria & International",
+      title: isFrench ? "Produits plastiques en gros, directement chez nous" : "Wholesale Plastic Products, Direct From Us",
+      subtitle: isFrench ? "Des produits de qualité pour détaillants, distributeurs et entreprises — avec livraison partout au Nigeria et commandes internationales." : "Quality plastic products for retailers, distributors and businesses — with delivery across Nigeria and international orders.",
+      primaryCta: isFrench ? "Voir les produits" : "Explore Products",
+      secondaryCta: isFrench ? "Voir la commande" : "Build Your Order",
     },
     trustBar: { ...base.trustBar, items: isFrench ? ["Basé au Nigeria", "Livraison partout au Nigeria", "Commandes internationales", "Assistance WhatsApp"] : ["Based in Nigeria", "Delivery Anywhere in Nigeria", "International Orders", "WhatsApp Support"] },
     travel: {
@@ -67,7 +69,7 @@ export function getDictionary(locale: Locale): Dictionary {
       ...base.deliveryPage,
       title: isFrench ? "Livraison partout au Nigeria et au-delà" : "Delivery Across Nigeria & Beyond",
       intro: isFrench ? "Nous livrons les commandes en gros partout au Nigeria et coordonnons l'expédition pour les clients à l'étranger. Voici comment fonctionne le processus." : "We deliver wholesale orders anywhere in Nigeria and coordinate shipping for customers outside Nigeria. Here's how the process works.",
-      steps: isFrench ? ["Vous envoyez votre liste de produits", "Nous confirmons la disponibilité", "Nous préparons votre devis", "Nous confirmons votre destination et l'option de livraison", "Vous confirmez la commande", "Nous préparons les marchandises", "La livraison ou l'expédition est organisée", "Vous recevez votre marchandise"] : ["You send your product list", "We confirm availability", "We prepare your quotation", "We confirm your destination and delivery option", "You confirm the order", "We prepare the goods", "Delivery or shipment is arranged", "You receive your goods"],
+      steps: isFrench ? ["Vous envoyez votre liste de produits", "Nous confirmons la disponibilité", "Nous préparons votre devis", "Nous confirmons votre destination et l'option de livraison", "Vous confirmez la commande", "Nous préparons les marchandises", "La livraison ou l'expédition est organisée", "Vous recevez votre marchandise"] : ["You send your product list", "We confirm availability", "We prepare your quotation", "We confirm your destination and delivery option", "You confirm the order", "Nous confirmons votre commande", "Nous préparons les marchandises", "La livraison ou l'expédition est organisée", "Vous recevez votre marchandise"],
       note: isFrench ? "Les livraisons au Nigeria peuvent être organisées partout dans le pays. Pour les destinations à l'étranger, notre équipe confirmera l'option d'expédition, le coût et le délai pour votre commande." : "Nigeria deliveries can be arranged nationwide. For destinations outside Nigeria, our team will confirm the available shipping option, cost and timeline for your order.",
     },
     aboutPage: { ...base.aboutPage, sections: base.aboutPage.sections.map((section, index) => index === 2 ? { ...section, body: isFrench ? "Décrivez les détaillants, commerçants et entreprises avec lesquels vous travaillez au Nigeria et au-delà." : "Describe the retailers, traders and businesses you work with across Nigeria and beyond." } : section) },
