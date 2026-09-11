@@ -23,14 +23,14 @@ export function HeroVisual({ dict, categoryImages, heroImage, mobileHeroImage }:
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[68%_center] transition-transform duration-700 min-[640px]:object-[68%_center]"
+            className="object-cover object-[62%_center] transition-transform duration-700 min-[640px]:object-[68%_center]"
           />
         </picture>
 
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,245,239,0.96)_0%,rgba(247,245,239,0.86)_30%,rgba(247,245,239,0.48)_52%,rgba(247,245,239,0.12)_72%,rgba(247,245,239,0)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_48%,rgba(247,245,239,0.22)_0%,rgba(247,245,239,0)_54%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(27,27,23,0.02)_0%,rgba(27,27,23,0)_58%,rgba(27,27,23,0.16)_100%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(247,245,239,0.98)_0%,rgba(247,245,239,0.9)_28%,rgba(247,245,239,0.58)_50%,rgba(247,245,239,0.18)_72%,rgba(247,245,239,0)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_44%,rgba(255,255,255,0.2)_0%,rgba(255,255,255,0)_52%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(27,27,23,0.03)_0%,rgba(27,27,23,0)_62%,rgba(27,27,23,0.2)_100%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/15 to-transparent" />
         <span className="sr-only">Wholesale plastic products in Nigeria</span>
       </div>
     );
