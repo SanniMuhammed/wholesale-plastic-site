@@ -84,7 +84,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
       <div className="mt-5 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.82fr)] lg:gap-12 xl:gap-16">
         <div className="lg:sticky lg:top-24">
-          <ProductGallery images={product.images} name={product.name[locale]} locale={locale} />
+          <ProductGallery key={product.slug} images={product.images} name={product.name[locale]} locale={locale} />
           {product.wholesaleOnly && <div className="mt-3"><span className="rounded-full border border-brand/30 bg-brand-light px-3 py-1.5 text-xs font-medium text-brand">{dict.common.wholesaleOrdersOnly}</span></div>}
         </div>
 
