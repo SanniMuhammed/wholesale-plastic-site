@@ -4,12 +4,14 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   background-color: #ffffff;
   color: #131a22;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 img,
@@ -23,6 +25,14 @@ img,
 picture,
 video {
   height: auto;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
 }
 
 *:focus-visible {
@@ -53,6 +63,20 @@ summary::-webkit-details-marker {
 
   .rule-row {
     @apply flex items-baseline justify-between gap-4 border-b border-border py-3;
+  }
+}
+
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 639px) and (display-mode: standalone) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 
@@ -103,7 +127,7 @@ summary::-webkit-details-marker {
   }
 
   .order-summary-page aside,
-  .order-summary-page .print\:hidden {
+  .order-summary-page .print\\:hidden {
     display: none !important;
   }
 
@@ -130,11 +154,11 @@ summary::-webkit-details-marker {
     page-break-inside: avoid !important;
   }
 
-  .order-summary-page .print\:block {
+  .order-summary-page .print\\:block {
     display: block !important;
   }
 
-  .order-summary-page .print\:inline {
+  .order-summary-page .print\\:inline {
     display: inline !important;
   }
 
@@ -147,9 +171,9 @@ summary::-webkit-details-marker {
     color: #131a22 !important;
   }
 
-  .order-summary-page .text-surface\/70,
-  .order-summary-page .text-surface\/75,
-  .order-summary-page .text-surface\/90 {
+  .order-summary-page .text-surface\\/70,
+  .order-summary-page .text-surface\\/75,
+  .order-summary-page .text-surface\\/90 {
     color: rgba(255, 255, 255, 0.96) !important;
   }
 
