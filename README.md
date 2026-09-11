@@ -142,7 +142,7 @@ The production company address is:
 
 ## Deployment
 
-The GitHub repository is connected to Vercel. Changes merged into `main` are picked up by the production project automatically.
+The GitHub repository is connected to Vercel. Changes pushed to `main` are picked up by the production project automatically.
 
 Before merging a larger change:
 
