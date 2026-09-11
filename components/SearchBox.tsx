@@ -153,17 +153,17 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
           autoComplete="off"
           aria-autocomplete="list"
           aria-controls="navbar-search-results"
-          className="h-10 w-full rounded-lg border border-border bg-surface pl-10 pr-10 text-sm text-ink shadow-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 sm:h-11 sm:text-[13px] [&::-webkit-search-cancel-button]:appearance-none"
+          className="h-10 w-full rounded-lg border border-border bg-surface pl-10 pr-10 text-base text-ink shadow-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 sm:h-11 sm:text-[13px] [&::-webkit-search-cancel-button]:appearance-none"
         />
         {query && (
-          <button type="button" onClick={() => setQuery("")} className="absolute right-2.5 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:bg-brand-light hover:text-brand" aria-label="Clear search">
+          <button type="button" onClick={() => setQuery("")} className="absolute right-1.5 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:bg-brand-light hover:text-brand" aria-label="Clear search">
             <X size={15} />
           </button>
         )}
       </form>
 
       {open && (
-        <div id="navbar-search-results" role="listbox" className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 overflow-hidden rounded-xl border border-border bg-surface shadow-[0_12px_35px_rgba(19,25,33,0.18)]">
+        <div id="navbar-search-results" role="listbox" className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 max-h-[min(70vh,28rem)] overflow-y-auto overscroll-contain rounded-xl border border-border bg-surface shadow-[0_12px_35px_rgba(19,25,33,0.18)]">
           {loading ? (
             <div className="flex items-center gap-2 px-4 py-4 text-sm text-muted"><Loader2 size={16} className="animate-spin" /> Searching…</div>
           ) : results.length > 0 ? (
@@ -177,7 +177,7 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
                   aria-selected={index === activeIndex}
                   onMouseEnter={() => setActiveIndex(index)}
                   onClick={() => setOpen(false)}
-                  className={`flex items-center gap-3 border-b border-border px-3 py-2.5 transition-colors ${index === activeIndex ? "bg-brand-light" : "hover:bg-brand-light/70"}`}
+                  className={`flex min-h-14 items-center gap-3 border-b border-border px-3 py-2.5 transition-colors ${index === activeIndex ? "bg-brand-light" : "hover:bg-brand-light/70"}`}
                 >
                   <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-md bg-brand-light">
                     {result.image ? <Image src={result.image} alt="" fill sizes="44px" className="object-contain" /> : <div className="flex h-full items-center justify-center text-muted"><Search size={15} /></div>}
@@ -188,7 +188,7 @@ export function SearchBox({ locale, dict, initialQuery = "" }: SearchBoxProps) {
                   </div>
                 </Link>
               ))}
-              <Link href={`${base}/products?q=${encodeURIComponent(query.trim())}`} onClick={() => setOpen(false)} className="flex items-center justify-between px-4 py-3 text-xs font-bold text-brand hover:bg-brand-light">
+              <Link href={`${base}/products?q=${encodeURIComponent(query.trim())}`} onClick={() => setOpen(false)} className="flex min-h-12 items-center justify-between px-4 py-3 text-xs font-bold text-brand hover:bg-brand-light">
                 <span>{dict.common.exploreProducts}</span><span aria-hidden="true">→</span>
               </Link>
             </>
