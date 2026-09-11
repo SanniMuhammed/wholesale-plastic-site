@@ -35,19 +35,26 @@ export function ProductCard({
     : null;
 
   return (
-    <article className="group flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-surface transition-all duration-200 hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted">
+    <article className="group flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted">
       <Link href={href} className="block shrink-0 overflow-hidden rounded-t-lg">
         <ProductImage
           product={product}
           locale={locale}
-          className="rounded-none rounded-t-lg"
+          className="rounded-none rounded-t-lg transition-transform duration-300 group-hover:scale-[1.015]"
         />
       </Link>
 
       <div className="flex flex-1 flex-col p-3 sm:p-4">
-        <p className="eyebrow min-h-[1.1rem] text-brand/70">
-          {dict.categories[product.category]}
-        </p>
+        <div className="flex min-h-[1.2rem] items-center justify-between gap-2">
+          <p className="eyebrow truncate text-brand/70">
+            {dict.categories[product.category]}
+          </p>
+          {product.capacity && (
+            <span className="shrink-0 rounded-full border border-border bg-surface px-2 py-0.5 text-[10px] font-semibold text-ink">
+              {product.capacity}
+            </span>
+          )}
+        </div>
 
         <Link
           href={href}
