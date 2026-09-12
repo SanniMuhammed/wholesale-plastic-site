@@ -1,10 +1,9 @@
-import Link from "next/link";
-import type { MouseEvent } from "react";
 import type { CatalogProduct } from "@/lib/catalog/products";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/getDictionary";
 import { ProductImage } from "@/components/ProductImage";
 import { AddToOrderButton } from "@/components/AddToOrderButton";
+import { ProductLink } from "@/components/ProductLink";
 
 export function ProductCard({
   product,
@@ -35,20 +34,15 @@ export function ProductCard({
       })}`
     : null;
 
-  function handleProductClick(event: MouseEvent<HTMLAnchorElement>) {
-    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  }
-
   return (
     <article className="group flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-lifted">
-      <Link href={href} onClick={handleProductClick} className="block shrink-0 overflow-hidden rounded-t-lg">
+      <ProductLink href={href} className="block shrink-0 overflow-hidden rounded-t-lg">
         <ProductImage
           product={product}
           locale={locale}
           className="rounded-none rounded-t-lg transition-transform duration-300 group-hover:scale-[1.015]"
         />
-      </Link>
+      </ProductLink>
 
       <div className="flex flex-1 flex-col p-3 sm:p-4">
         <div className="flex min-h-[1.2rem] items-center justify-between gap-2">
@@ -62,13 +56,12 @@ export function ProductCard({
           )}
         </div>
 
-        <Link
+        <ProductLink
           href={href}
-          onClick={handleProductClick}
           className="mt-1 line-clamp-2 min-h-[2.65rem] font-display text-[15px] font-semibold leading-snug text-ink transition-colors group-hover:text-brand sm:text-base"
         >
           {product.name[locale]}
-        </Link>
+        </ProductLink>
 
         <div className="mt-auto border-t border-border/70 pt-3">
           <div className="min-h-[3.25rem]">
