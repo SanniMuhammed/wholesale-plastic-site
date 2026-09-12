@@ -35,7 +35,6 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     } catch {
       // Malformed or unavailable storage -- start with an empty order.
     }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHydrated(true);
   }, []);
 
