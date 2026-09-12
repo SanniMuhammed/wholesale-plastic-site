@@ -19,11 +19,38 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     const supabase = await createClient();
     const { data } = await supabase.from("site_settings").select("navigation,footer,translations,seo").eq("id",1).single();
     if (!data) return defaultSiteSettings;
+
+    const navigation = data.navigation ?? {};
+    const footer = data.footer ?? {};
+    const translations = data.translations ?? {};
+    const seo = data.seo ?? {};
+
     return {
-      navigation: { ...defaultSiteSettings.navigation, ...(data.navigation ?? {}) },
-      footer: { ...defaultSiteSettings.footer, ...(data.footer ?? {}) },
-      translations: { ...defaultSiteSettings.translations, ...(data.translations ?? {}) },
-      seo: { ...defaultSiteSettings.seo, ...(data.seo ?? {}) },
+      navigation: {
+        ...defaultSiteSettings.navigation,
+        ...navigation,
+        en: { ...defaultSiteSettings.navigation.en, ...(navigation.en ?? {}) },
+        fr: { ...defaultSiteSettings.navigation.fr, ...(navigation.fr ?? {}) },
+        links: Array.isArray(navigation.links) ? navigation.links : defaultSiteSettings.navigation.links,
+      },
+      footer: {
+        ...defaultSiteSettings.footer,
+        ...footer,
+        en: { ...defaultSiteSettings.footer.en, ...(footer.en ?? {}) },
+        fr: { ...defaultSiteSettings.footer.fr, ...(footer.fr ?? {}) },
+      },
+      translations: {
+        ...defaultSiteSettings.translations,
+        ...translations,
+        en: { ...defaultSiteSettings.translations.en, ...(translations.en ?? {}) },
+        fr: { ...defaultSiteSettings.translations.fr, ...(translations.fr ?? {}) },
+      },
+      seo: {
+        ...defaultSiteSettings.seo,
+        ...seo,
+        en: { ...defaultSiteSettings.seo.en, ...(seo.en ?? {}) },
+        fr: { ...defaultSiteSettings.seo.fr, ...(seo.fr ?? {}) },
+      },
     };
   } catch { return defaultSiteSettings; }
 }
