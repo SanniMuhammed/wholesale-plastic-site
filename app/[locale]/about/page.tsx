@@ -29,9 +29,34 @@ const DEFAULT_ABOUT: Record<Locale, AboutContent> = {
 function parseAbout(value: string, fallback: AboutContent): AboutContent {
   try {
     const parsed = JSON.parse(value);
-    if (parsed?.intro && Array.isArray(parsed.sections) && parsed.sections.length === 4) return parsed;
+    if (
+      parsed?.intro &&
+      Array.isArray(parsed.sections) &&
+      parsed.sections.length === 4 &&
+      parsed.sections.every((section: unknown) => {
+        if (!section || typeof section !== "object") return false;
+        const item = section as { heading?: unknown; body?: unknown };
+        return typeof item.heading === "string" && typeof item.body === "string";
+      })
+    ) {
+      return parsed as AboutContent;
+    }
   } catch {}
   return fallback;
+}
+
+async function getAboutContentSafely(locale: Locale): Promise<AboutContent> {
+  const fallback = DEFAULT_ABOUT[locale];
+  try {
+    const content = await Promise.race([
+      getWholesaleContent(),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 1500)),
+    ]);
+    if (!content) return fallback;
+    return parseAbout(content[locale === "fr" ? "body_fr" : "body_en"] ?? "", fallback);
+  } catch {
+    return fallback;
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -46,8 +71,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   if (!isLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
-  const content = await getWholesaleContent().catch(() => null);
-  const about = parseAbout(content?.[locale === "fr" ? "body_fr" : "body_en"] ?? "", DEFAULT_ABOUT[locale]);
+  const about = await getAboutContentSafely(locale);
 
   return (
     <div className="mx-auto max-w-content px-4 py-10 sm:px-6 sm:py-14">
