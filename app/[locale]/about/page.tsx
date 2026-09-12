@@ -2,9 +2,30 @@ import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/getDictionary";
 import { getWholesaleContent } from "@/lib/cms/settings";
-import { DEFAULT_ABOUT } from "@/components/admin/AboutContentForm";
 
 type AboutContent = { intro: string; sections: Array<{ heading: string; body: string }> };
+
+const DEFAULT_ABOUT: Record<Locale, AboutContent> = {
+  en: {
+    intro: "A Nigerian wholesale plastic supplier helping businesses source products from Nigeria without unnecessary travel.",
+    sections: [
+      { heading: "Where We're Based", body: "Sherinab Venture LTD is based in Saki, Oyo State, Nigeria, supplying plastic products to businesses." },
+      { heading: "What We Supply", body: "We offer buckets, basins, bowls, containers and other plastic products for wholesale purchasing." },
+      { heading: "Who We Serve", body: "We support retailers, market traders, distributors and entrepreneurs who want to source from Nigeria." },
+      { heading: "Our Approach", body: "Choose your products, tell us your quantities and destination, then our team helps confirm the order and delivery details." },
+    ],
+  },
+  fr: {
+    intro: "Un fournisseur nigérian de produits plastiques en gros, au service des entreprises qui souhaitent s'approvisionner depuis le Nigeria.",
+    sections: [
+      { heading: "Notre implantation", body: "Sherinab Venture LTD est basée à Saki, dans l'État d'Oyo, au Nigeria, et fournit des produits plastiques aux entreprises." },
+      { heading: "Ce que nous fournissons", body: "Nous proposons des seaux, bassines, bols, contenants et autres produits plastiques pour l'approvisionnement en gros." },
+      { heading: "À qui nous nous adressons", body: "Nous accompagnons détaillants, commerçants, distributeurs et entrepreneurs qui souhaitent s'approvisionner depuis le Nigeria." },
+      { heading: "Notre approche", body: "Choisissez vos produits, indiquez vos quantités et votre destination, puis notre équipe vous aide à confirmer la commande et la livraison." },
+    ],
+  },
+};
+
 function parseAbout(value: string, fallback: AboutContent): AboutContent {
   try {
     const parsed = JSON.parse(value);
@@ -26,8 +47,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const locale = rawLocale as Locale;
   const dict = getDictionary(locale);
   const content = await getWholesaleContent().catch(() => null);
-  const fallback = locale === "fr" ? DEFAULT_ABOUT.fr : DEFAULT_ABOUT.en;
-  const about = parseAbout(content?.[locale === "fr" ? "body_fr" : "body_en"] ?? "", fallback);
+  const about = parseAbout(content?.[locale === "fr" ? "body_fr" : "body_en"] ?? "", DEFAULT_ABOUT[locale]);
 
   return (
     <div className="mx-auto max-w-content px-4 py-10 sm:px-6 sm:py-14">
